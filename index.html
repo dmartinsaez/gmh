@@ -447,7 +447,7 @@ function normalizar(str) {
     .replace(/ph/g,'f').replace(/th/g,'t').replace(/ch/g,'c')
     .replace(/[gx]/g,'j').replace(/[vb]/g,'b')
     .replace(/[iy]/g,'i').replace(/[cq]/g,'c').replace(/[cz]/g,'c')
-    .replace(/\s|-/g,'').replace(/(.)\1+/g,'$1');
+    .replace(/\s|-/g,'').replace(/(.)\1+/g,'$1')
     .replace(/mpt/g,'nt')  // <-- equivalencia añadida
     .replace(/\b(s)(?=[a-z])/g,'es');
 
