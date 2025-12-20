@@ -207,7 +207,7 @@
     .btn-copiar:hover {
       background: #e2e2e2;
     }
-    /* --- Centrado del buscador y botón --- */
+    /* --- Centrado del buscador --- */
 #buscador-container {
   text-align: center;
   margin: 25px 0;
@@ -216,6 +216,29 @@
 #buscador-container button {
   margin-left: 5px;
 }
+
+    .btn-todas-container {
+  text-align: center;       /* centra el botón horizontalmente */
+  margin: 20px 0 40px 0;    /* espacio arriba y abajo */
+}
+
+.btn-todas-container button {
+  padding: 10px 20px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 8px;
+  background-color: #1f6fb2;
+  color: white;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-todas-container button:hover {
+  background-color: #164f80;
+  transform: translateY(-2px); /* efecto sutil */
+}
+
     /* Contenedor central para evitar estiramiento en pantallas grandes */
 .contenedor {
   max-width: 1200px;
@@ -403,9 +426,13 @@ Este documentario incluye las transcripciones de todas las noticias sobre las ó
   <button onclick="buscar()">Buscar</button>
   <p id="resultado-busqueda"></p>
 </div>
-    <button id="btn-toggle" onclick="toggleTodas(event)">
+    
+    <!-- DONDE PONGAS ESTO el botón de Mostrar todas las NOTICIAS -->
+<div class="btn-todas-container">
+  <button id="btn-toggle" onclick="toggleTodas(event)">
     Mostrar todas las noticias
   </button>
+</div>
 
 <div id="tabla-funciones"></div> <!-- DONDE PONGAS ESTO SE INSERTA LA TABLA CON FUENTES -->
     
