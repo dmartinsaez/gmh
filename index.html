@@ -217,27 +217,32 @@
   margin-left: 5px;
 }
 
-    .btn-todas-container {
+        /* DESDE AQUÍ: DISEÑO DEL BOTÓN 'Mostrar todas...' */
+.btn-todas-container {
   text-align: center;       /* centra el botón horizontalmente */
   margin: 20px 0 40px 0;    /* espacio arriba y abajo */
 }
 
 .btn-todas-container button {
-  padding: 10px 20px;
-  font-size: 1em;
-  font-weight: bold;
+  min-width: 250px;          /* ancho mínimo para destacar */
+  width: auto;               /* se adapta a pantallas pequeñas */
+  padding: 10px 0;           /* altura cómoda */
+  font-size: 0.95em;         
+  font-weight: 600;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 6px;
   background-color: #1f6fb2;
   color: white;
   border: none;
-  transition: all 0.3s ease;
+  transition: background-color 0.25s ease;
 }
 
 .btn-todas-container button:hover {
   background-color: #164f80;
-  transform: translateY(-2px); /* efecto sutil */
+  transform: none;           /* sin movimientos bruscos */
 }
+    /* HASTA AQUÍ */
+
 
     /* Contenedor central para evitar estiramiento en pantallas grandes */
 .contenedor {
