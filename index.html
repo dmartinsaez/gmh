@@ -222,12 +222,13 @@
   text-align: center;       /* centra el botón horizontalmente */
   margin: 20px 0 40px 0;    /* espacio arriba y abajo */
 }
-
+    
 .btn-todas-container button {
-  min-width: 250px;          /* ancho mínimo para destacar */
-  width: auto;               /* se adapta a pantallas pequeñas */
-  padding: 10px 0;           /* altura cómoda */
-  font-size: 0.95em;         
+  width: 50%;           /* ocupa la mitad del contenedor */
+  min-width: 250px;     /* nunca más pequeño que esto */
+  max-width: 400px;     /* no demasiado grande en pantallas enormes */
+  padding: 12px 0;      /* más alto para destacarlo */
+  font-size: 1em;
   font-weight: 600;
   cursor: pointer;
   border-radius: 6px;
@@ -239,8 +240,8 @@
 
 .btn-todas-container button:hover {
   background-color: #164f80;
-  transform: none;           /* sin movimientos bruscos */
 }
+
     /* HASTA AQUÍ */
 
 
