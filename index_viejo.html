@@ -288,6 +288,24 @@
   margin-left: 0; /* quita el desplazamiento causado por el ul */
 }
 
+    /* Botones que apuntan a otra noticia */
+.btn-ver-referencia {
+  background-color: #6c757d; /* gris oscuro */
+  color: white;
+}
+
+.btn-ver-referencia:hover {
+  background-color: #495057; /* gris más oscuro al pasar el ratón */
+}
+
+    /* Centrar botones dentro de la tabla */
+td button.btn-trans,
+td button.btn-ver-referencia {
+  display: block;   /* convierte el botón en bloque */
+  margin: 0 auto;   /* margen automático a izquierda y derecha */
+}
+
+
   </style>
 </head>
 
@@ -298,7 +316,7 @@
 <h1>Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)</h1>
 
 <p class="intro-centrada">
-Este documentario incluye las transcripciones de todas las noticias sobre las óperas realizadas en el Coliseo del Buen Retiro de Madrid durante este periodo, publicadas en la <em>Gaceta de Madrid</em> y en el <em>Mercurio histórico y político</em>, que hemos editado de forma crítica situándolas en su contexto celebrativo y performativo, para lo cual hemos reconstruido el calendario de representaciones indicando el año y día de la representación, el título de las óperas, los libretistas y compositores, la ocasión festiva y las fuentes consultadas. En total, hemos podido identificar más de 300 noches de ópera, sobre las cuales hemos identificado más de 140 noticias distintas (sin contar las repetidas en ambas gacetas).</p>
+Este documentario incluye las transcripciones de todas las noticias sobre las óperas realizadas en el Coliseo del Buen Retiro de Madrid durante este periodo, publicadas en la <em>Gaceta de Madrid</em> y en el <em>Mercurio histórico y político</em>, que hemos editado de forma crítica situándolas en su contexto celebrativo y performativo. Para ello, hemos reconstruido el calendario de representaciones indicando el año y día de la representación, el título de las óperas, los libretistas y compositores, la ocasión festiva y las fuentes consultadas. En total, hemos podido identificar más de 300 noches de ópera, sobre las cuales hemos hallado más de 140 noticias distintas (sin contar las repetidas en ambas gacetas), que informan de una o más fechas de representaciones, cubriendo al menos 165 del total.</p>
 
   <p class="nota-autor">
   Este recurso ha sido creado por Daniel Martín Sáez (Universidad de Salamanca) en el marco del proyecto LexiMus-USAL (2023–2026), financiado por el Ministerio de Ciencia e Innovación de España, PID2022-139589NB-C33.
@@ -307,21 +325,23 @@ Este documentario incluye las transcripciones de todas las noticias sobre las ó
 
 <div class="intro-recuadro">
 
-  <h3 class="acordeon">Herramientas</h3>
+  <h3 class="acordeon">Herramientas interactivas</h3>
   <div class="panel">
-          <p>Para facilitar la consulta del documentario, hemos incluido tres herramientas:</p>
+          <p>Para facilitar la consulta del documentario, hemos incluido cuatro herramientas interactivas:</p>
           <ul>
             <li>El <strong>Buscador</strong>, que permite identificar términos, sintagmas y fragmentos léxicos en todas las noticias, contar sus ocurrencias y consultarlas en su contexto, desplegando únicamente las noticias donde aparecen.</li>
             <li>El botón <strong>Mostrar todas las noticias</strong>, que permite mostrar u ocultar todas las noticias a la vez dentro del calendario.</li>
-            <li>El botón <strong>Ver noticia</strong>, que permite mostrar u ocultar cada noticia de manera individual.</li>
+            <li>El botón <strong>Ver noticia</strong>, que permite mostrar u ocultar cada noticia nueva de manera individual.</li>
+           <li>El botón <strong>Véase la noticia nº x</strong>, con un color distinto, que permite visualizar de manera clara las noticias ya citadas donde se recogen varias fechas o rangos de fechas, alcanzando al menos 165 del total.</li>
+
           </ul>
   </div>     
   
-  <h3 class="acordeon">Criterios de normalización</h3>
+  <h3 class="acordeon">Búsqueda lexicográfica y criterios de normalización</h3>
   <div class="panel">            
-          <p>Se ha respetado en todo momento la grafía de la época, excluyendo únicamente el uso de cursivas, que a veces perjudica el análisis computacional. Además, para mejorar la búsqueda lexicográfica, se han adoptado cinco medidas básicas:</p>
+          <p>Dado que se ha respetado en todo momento la grafía de la época, para facilitar la búsqueda lexicográfica se han adoptado cinco medidas básicas:</p>
             <ul>
-            <li>Aunque se han mantenido los acentos, los diacríticos y el uso de mayúsculas y minúsculas, el buscador no distingue estos parámetros, lo que permite realizar búsquedas con facilidad (e. g., “ópera”, “opera” y “Opera” se consideran equivalentes).</li> 
+            <li>Aunque se han mantenido los acentos, los diacríticos, las cursivas y el uso de mayúsculas y minúsculas, el buscador no distingue estos parámetros, lo que permite realizar búsquedas con facilidad (e. g., “ópera”, “opera” y “Opera” se consideran equivalentes).</li> 
             <li>Tampoco distingue entre palabras completas o incompletas, lo cual permite buscar por fragmentos léxicos (e. g., "celebr" sirve para hallar palabras como "celebridad", "celebrar", "celebraron", etc.).</li>
             <li>Además, identifica las letras duplicadas (e. g., "assistieron" es equivalente a "asistieron"), de modo que el estudioso no debe preocuparse por estas diferencias de grafía.</li>
             <li>Por el mismo motivo, identifica letras que tienden a confundirse en el siglo XVIII, como la 'g', la 'j' y la 'x' (e. g., "artaxerxes" puede hallarse buscando "Artajerjes"), o la 'b' y la 'v' (e. g., "haver" puede hallarse buscando "haber"), junto a otras muchas típicas del periodo: la 'i' y la 'y', la 'c' y la 'q', la 'th' y la 't', la 'ph' y la 'f', la 'ch' y la 'c', la 'c' y la 'z' (e. g., el buscador identifica "cristal", "christal" y "Crystàl", o "voces" y "vozes").</li>
@@ -329,12 +349,12 @@ Este documentario incluye las transcripciones de todas las noticias sobre las ó
             </ul>
   </div> 
             
-  <h3 class="acordeon">Fuentes, referencias y abreviaturas</h3>
+  <h3 class="acordeon">Fuentes, transcripción, referencias y abreviaturas</h3>
   <div class="panel">    
           
             <p>Para la elaboración del calendario, cada una de las fechas introducidas se ha corroborado en una diversidad de fuentes y referencias:</p>
             <ul>
-              <li>Las noticias pertenecen a la <em>Gaceta de Madrid</em> y el <em>Mercurio histórico y político</em>, que hemos identificado y transcrito manualmente a partir de las digitalizaciones de la Hemeroteca Digital de la Biblioteca Nacional de España.</li>
+              <li>Las noticias pertenecen a la <em>Gaceta de Madrid</em> y el <em>Mercurio histórico y político</em>, que hemos identificado y transcrito manualmente a partir de las digitalizaciones de la Hemeroteca Digital de la Biblioteca Nacional de España. Hemos mantenido la grafía de la época por su interés histórico, incluyendo el uso de cursivas y acentos. Además, hemos incluido entre corchetes aclaraciones cuando lo hemos considerado necesario (por ejemplo, para clarificar las fechas concretas cuando su cita resulta confusa con expresiones como "la semana pasada", "el viernes pasado", etc.).</li>
               <li>Además, hemos recurrido a otras ediciones de fuentes y estudios para la reconstrucción del calendario. La mayoría de fechas y ocasiones festivas, así como otros datos adicionales, se publicaron en Daniel Martín Sáez, “Calendario festivo, fuentes y artistas de las óperas y serenatas organizadas por Farinelli para la corte de Fernando VI y Bárbara de Braganza”, en Luigi Verdi (ed.): <em>Mito, Storia & Sogno di Farinelli</em>, LIM, Lucca, 2021, pp. 265-307, cuya tabla final hemos mejorado sustancialmente.</li>
               <li>Todo ello lo indicamos en la tabla con abreviaturas, indicando a continuación los números de página:
               AL = Correspondencia entre el duque de Huéscar y Ordeñana, 7 de enero de 1749 (Madrid), Archivo de la Casa de Alba, Caja 105;
@@ -389,226 +409,246 @@ Este documentario incluye las transcripciones de todas las noticias sobre las ó
 </div>
 
 <div id="tabla-funciones"></div> <!-- DONDE PONGAS ESTO SE INSERTA LA TABLA CON FUENTES -->
-
-
+    
 <script>
-/* --------- VARIABLE GLOBAL PARA TOGGLE TODAS --------- */
+/* ---------- VARIABLES GLOBALES ---------- */
 let todasVisibles = false;
+transMap = {};
 
-/* --------- TABLA Y BÚSQUEDA (sin cambios funcionales) --------- */
-fetch('datos.json')
-  .then(response => response.json())
-  .then(data => {
-    const tablaDiv = document.getElementById('tabla-funciones');
-    let tabla = '<table><tr><th>Año</th><th>Nº</th><th>Día</th><th>Título</th><th>Libreto</th><th>Compositor</th><th>Ocasión</th><th>Fuentes</th></tr>';
-
-    let ultimaFuente = '';
-
-    data.forEach((f, idx) => {
-      const fuente = f['Fuentes[a]'] && f['Fuentes[a]'].trim() !== ''
-        ? (ultimaFuente = f['Fuentes[a]'])
-        : ultimaFuente;
-
-      // Fila principal
-      tabla += `<tr>
-        <td>${f['Año']}</td>
-        <td>${f['Nº']}</td>
-        <td>${f['Día']}</td>
-        <td><em>${f['Título']}</em></td>
-        <td>${f['Libreto']}</td>
-        <td>${f['Compositor']}</td>
-        <td>${f['Ocasión']}</td>
-        <td>${fuente}</td>
-      </tr>`;
-
-      // Fila extra para transcripción si existe
-      if (f['Transcripción']) {
-        tabla += `<tr>
-          <td colspan="8">
-            <div style="text-align:center; margin: 8px 0;">
-              <button class="btn-trans" onclick="toggleTrans(${idx}, this)">Ver noticia</button>
-            </div>
-            <div id="trans-${idx}" class="transcripcion">
-              ${f['Transcripción'].split(/(?<=\.\s)(?=\[\d+\])/g).map(t => `<p>${t.trim()}</p>`).join('')}
-            </div>
-          </td>
-        </tr>`;
-      }
-    });
-
-    // ¡Aquí sí! Después de terminar el forEach
-    tablaDiv.innerHTML = tabla;
-  });
-
-
-/* --------- FUNCIONES DE TRANSCRIPCIÓN --------- */
-function toggleTrans(idx, boton) {
-  const div = document.getElementById(`trans-${idx}`);
-
-  const visible = div.style.display === 'block';
-
+/* ---------- FUNCIONES DE TRANSCRIPCIÓN ---------- */
+function toggleTrans(boton, divId) {
+  const div = document.getElementById(divId);
+  const visible = getComputedStyle(div).display !== 'none';
   div.style.display = visible ? 'none' : 'block';
-  boton.textContent = visible
-    ? 'Ver noticia'
-    : 'Ocultar noticia';
+  const textoOriginal = boton.getAttribute('data-text-original');
+  boton.textContent = visible ? textoOriginal : 'Ocultar noticia';
 }
-  
+
 function toggleTodas(event) {
-  const divs = document.querySelectorAll('.transcripcion');
   todasVisibles = !todasVisibles;
-
-  divs.forEach(div => {
+  document.querySelectorAll('.transcripcion').forEach(div => {
     div.style.display = todasVisibles ? 'block' : 'none';
+
+const boton = div.previousElementSibling;
+if (boton && boton.classList.contains('btn-trans')) {
+  const textoOriginal = boton.getAttribute('data-text-original');
+  boton.textContent = todasVisibles ? 'Ocultar noticia' : textoOriginal;
+}
+
+    
   });
-
-  event.target.textContent = todasVisibles
-    ? 'Ocultar todas las noticias'
-    : 'Mostrar todas las noticias';
+  event.target.textContent = todasVisibles ? 'Ocultar todas las noticias' : 'Mostrar todas las noticias';
 }
 
-
-/* --------- BÚSQUEDA CON CONTEO DE RESULTADOS --------- */
-// Normaliza un string para la búsqueda histórica
+/* ---------- FUNCIONES DE NORMALIZACIÓN Y BÚSQUEDA ---------- */
 function normalizar(str) {
-  return str
-    .toLowerCase()
-    .normalize('NFD')                  // separa acentos
-    .replace(/[\u0300-\u036f]/g, '')  // quita acentos
-    .replace(/ph/g, 'f')               // ph → f
-    .replace(/th/g, 't')
-    .replace(/ch/g, 'c')
-    .replace(/[gx]/g, 'j')
-    .replace(/[vb]/g, 'b')
-    .replace(/[iy]/g, 'i')
-    .replace(/[cq]/g, 'c')
-    .replace(/[cz]/g, 'c')
-    .replace(/\s|-/g, '')             // ignora espacios y guiones
-    .replace(/(.)\1+/g, '$1');        // elimina duplicados
+  return str.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/ph/g,'f').replace(/th/g,'t').replace(/ch/g,'c')
+    .replace(/[gx]/g,'j').replace(/[vb]/g,'b')
+    .replace(/[iy]/g,'i').replace(/[cq]/g,'c').replace(/[cz]/g,'c')
+    .replace(/\s|-/g,'').replace(/(.)\1+/g,'$1');
 }
 
+function marcarBusqueda(div, palabraNorm) {
+  function normTexto(str) { return normalizar(str); }
+  let contador = 0;
 
+  function recorrerNodo(nodo) {
+    if (nodo.nodeType === Node.TEXT_NODE) {
+      const textoNorm = normTexto(nodo.textContent);
+      let indices = [], start = 0;
+      while (start <= textoNorm.length - palabraNorm.length) {
+        if (textoNorm.slice(start, start + palabraNorm.length) === palabraNorm) {
+          indices.push(start);
+          start += palabraNorm.length;
+        } else start++;
+      }
+      if (!indices.length) return;
+      contador += indices.length;
+      let nuevoHTML = '', origIdx = 0;
+      indices.forEach(idxNorm => {
+        let startOrig = origIdx;
+        while (startOrig < nodo.textContent.length && normTexto(nodo.textContent.slice(0, startOrig)).length < idxNorm) startOrig++;
+        let endOrig = startOrig;
+        while (endOrig < nodo.textContent.length && normTexto(nodo.textContent.slice(startOrig, endOrig)).length < palabraNorm.length) endOrig++;
+        nuevoHTML += nodo.textContent.slice(origIdx,startOrig) + '<mark>' + nodo.textContent.slice(startOrig,endOrig) + '</mark>';
+        origIdx = endOrig;
+      });
+      nuevoHTML += nodo.textContent.slice(origIdx);
+      const span = document.createElement('span');
+      span.innerHTML = nuevoHTML;
+      nodo.replaceWith(span);
+    } else if (nodo.nodeType === Node.ELEMENT_NODE) {
+      nodo.childNodes.forEach(recorrerNodo);
+    }
+  }
+
+  div.childNodes.forEach(recorrerNodo);
+  return contador;
+}
 
 function buscar() {
   const palabra = document.getElementById('buscar').value.trim();
   const info = document.getElementById('resultado-busqueda');
   if (!palabra) {
     info.textContent = '';
+    document.querySelectorAll('.transcripcion').forEach(div => div.style.display='none');
     return;
   }
-
   const palabraNorm = normalizar(palabra);
-  let contadorTotal = 0;
-
+  let total = 0;
   document.querySelectorAll('.transcripcion').forEach(div => {
-    const textoOriginal = div.textContent;
-    const textoNorm = normalizar(textoOriginal);
-
-    let indices = [];
-    let start = 0;
-
-    // Buscamos coincidencias en el texto normalizado
-    while (start <= textoNorm.length - palabraNorm.length) {
-      if (textoNorm.slice(start, start + palabraNorm.length) === palabraNorm) {
-        indices.push(start);
-        start += palabraNorm.length;
-      } else {
-        start++;
-      }
-    }
-
-    if (indices.length > 0) {
-      contadorTotal += indices.length;
-
-      // Aplicar <mark> al texto original usando offsets
-      let marcado = '';
-      let origIdx = 0;
-
-      indices.forEach((normIdx, i) => {
-        // Buscar el inicio en el texto original comparando normalizado
-        let startOrig = origIdx;
-        while (startOrig < textoOriginal.length && normalizar(textoOriginal.slice(0, startOrig)) .length < normIdx) {
-          startOrig++;
-        }
-
-        // Calcular fin aproximado
-        let endOrig = startOrig;
-        while (endOrig < textoOriginal.length && normalizar(textoOriginal.slice(startOrig, endOrig)) .length < palabraNorm.length) {
-          endOrig++;
-        }
-
-        // Añadir texto antes + marcado
-        marcado += textoOriginal.slice(origIdx, startOrig);
-        marcado += '<mark>' + textoOriginal.slice(startOrig, endOrig) + '</mark>';
-        origIdx = endOrig;
-      });
-
-      // Añadir el resto del texto
-      marcado += textoOriginal.slice(origIdx);
-
-      div.innerHTML = marcado;
-      div.style.display = 'block';
-    } else {
-      div.innerHTML = textoOriginal;
-      div.style.display = 'none';
-    }
+    div.innerHTML = div.getAttribute('data-original');
+    div.style.display='none';
+    total += marcarBusqueda(div, palabraNorm);
+    if (div.querySelector('mark')) div.style.display='block';
   });
-
-  info.textContent = contadorTotal === 1
-    ? '1 resultado encontrado'
-    : `${contadorTotal} resultados encontrados`;
+  info.textContent = total === 1 ? '1 resultado encontrado' : `${total} resultados encontrados`;
 }
 
-  // Permitir búsqueda al presionar Enter
-document.getElementById('buscar').addEventListener('keydown', function(event) {
-  if (event.key === 'Enter') {
-    buscar();
+document.getElementById('buscar').addEventListener('keydown', e => { if(e.key==='Enter') buscar(); });
+
+/* ---------- CONSTRUCCIÓN DE LA TABLA ---------- */
+fetch('archivo.json')
+  .then(r => r.json())
+  .then(data => construirTablaSegura(data));
+
+function construirTablaSegura(data) {
+  let html = '';
+  let i = 0;
+  
+const seenTrans = {};
+
+
+  
+  while (i < data.length) {
+    const fila = data[i];
+    const añoActual = fila.Año || '';
+
+    // Contar cuántas filas tienen el mismo año
+    let filasMismoAño = 0;
+    for (let j = i; j < data.length && (data[j].Año || '') === añoActual; j++) filasMismoAño++;
+
+for (let k = 0; k < filasMismoAño; k++) {
+    const f = data[i + k];
+    html += '<tr>';
+    html += `<td>${f.Año}</td>`;  // <--- Añadido
+    html += `
+        <td>${f['Nº'] || ''}</td>
+        <td>${f['Día'] || ''}</td>
+        <td>${f['Título'] || ''}</td>
+        <td>${f['Libreto'] || ''}</td>
+        <td>${f['Compositor'] || ''}</td>
+        <td>${f['Ocasión'] || ''}</td>
+        <td>${f['Fuentes'] || ''}</td>
+    </tr>`;
+
+
+if (f.Transcripción && f.Transcripción.trim()) {
+  const transHTML = f.Transcripción
+    .split(/(?<=\.\s)(?=\[\d+\])/g)
+    .map(t => `<p>${t.trim()}</p>`).join('');
+  const transDivId = `trans-${i + k}`;
+
+  if (seenTrans[transHTML]) {
+    const origen = seenTrans[transHTML];
+    html += `
+    <tr>
+      <td colspan="8">
+        <button class="btn-trans btn-ver-referencia" data-target="trans-${origen}">
+          Véase la noticia nº ${origen + 1}
+        </button>
+      </td>
+    </tr>`;
+  } else {
+    seenTrans[transHTML] = i + k;
+    html += `
+    <tr>
+      <td colspan="8">
+        <button class="btn-trans" data-text-original="Ver noticia" onclick="toggleTrans(this,'${transDivId}')">
+          Ver noticia
+        </button>
+        <div id="${transDivId}" class="transcripcion" style="display:none; text-align:left;" data-original='${transHTML.replace(/'/g,"&#39;")}'>
+          ${transHTML}
+        </div>
+      </td>
+    </tr>`;
   }
+}
+
+
+    }
+    i += filasMismoAño;
+  }
+
+  document.getElementById('tabla-funciones').innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>Año</th><th>Nº</th><th>Día</th><th>Título</th>
+          <th>Libreto</th><th>Compositor</th><th>Ocasión</th><th>Fuentes</th>
+        </tr>
+      </thead>
+      <tbody>${html}</tbody>
+    </table>`;
+}
+
+
+/* ---------- ACORDEONES ---------- */
+document.querySelectorAll('.acordeon').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const panel = btn.nextElementSibling;
+    document.querySelectorAll('.panel').forEach(p=>{if(p!==panel)p.classList.remove('abierto')});
+    document.querySelectorAll('.acordeon').forEach(b=>{if(b!==btn)b.classList.remove('abierto')});
+    panel.classList.toggle('abierto');
+    btn.classList.toggle('abierto');
+  });
 });
 
-
-/* --------- CITACIÓN AUTOMÁTICA --------- */
+/* ---------- CITAS ---------- */
 const autor = "Martín Sáez, Daniel";
 const titulo = "Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)";
 const institucion = "Universidad de Salamanca";
 const year = new Date().getFullYear();
 const url = window.location.href;
 
-document.getElementById('cita-apa').textContent =
-  `${autor}. (${year}). ${titulo}. ${institucion}. ${url}`;
+document.getElementById('cita-apa').textContent = `${autor}. (${year}). ${titulo}. ${institucion}. ${url}`;
+document.getElementById('cita-chicago').textContent = `${autor}. “${titulo}.” ${institucion}, ${year}. ${url}.`;
+document.getElementById('cita-mla').textContent = `${autor}. ${titulo}. ${institucion}, ${year}. Web. ${url}.`;
+function copiar(id){navigator.clipboard.writeText(document.getElementById(id).textContent);}
 
-document.getElementById('cita-chicago').textContent =
-  `${autor}. “${titulo}.” ${institucion}, ${year}. ${url}.`;
 
-document.getElementById('cita-mla').textContent =
-  `${autor}. ${titulo}. ${institucion}, ${year}. Web. ${url}.`;
 
-function copiar(id) {
-  navigator.clipboard.writeText(document.getElementById(id).textContent);
-}
+// ---------- BOTONES "Véase la noticia nº x" ----------
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('btn-ver-referencia')) {
+    const targetId = e.target.getAttribute('data-target');
+    const div = document.getElementById(targetId);
+    if (div) {
+      const botonOriginal = div.previousElementSibling; // botón "Ver noticia" original
+      const isVisible = getComputedStyle(div).display !== 'none';
 
-document.querySelectorAll('.acordeon').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const panel = btn.nextElementSibling;
+      // Alternar visibilidad
+      div.style.display = isVisible ? 'none' : 'block';
 
-    // Cerrar todos los paneles primero
-    document.querySelectorAll('.panel').forEach(p => {
-      if (p !== panel) p.classList.remove('abierto');
-    });
-    document.querySelectorAll('.acordeon').forEach(b => {
-      if (b !== btn) b.classList.remove('abierto');
-    });
+      // Cambiar texto del botón original
+      if (botonOriginal && botonOriginal.classList.contains('btn-trans')) {
+        botonOriginal.textContent = isVisible ? 'Ver noticia' : 'Ocultar noticia';
+      }
 
-    // Abrir o cerrar el panel clicado
-    panel.classList.toggle('abierto');
-    btn.classList.toggle('abierto'); // <-- Esta línea es nueva
-  });
+      // Resaltar temporalmente
+      div.scrollIntoView({behavior: "smooth", block: "center"});
+      div.style.position = 'relative';
+      div.style.boxShadow = '0 0 0 3px #1f6fb2 inset';
+      setTimeout(()=> div.style.boxShadow='', 2000);
+    }
+  }
 });
 
 
-
-
-  
 </script>
+
 
 </div>
 </body>
