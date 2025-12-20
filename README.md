@@ -10,7 +10,7 @@ El recurso reúne, edita críticamente y contextualiza las noticias publicadas e
 
 La versión pública del documentario está disponible en:
 
-👉 **[https://dmartinsaez.github.io/gacetas/](https://dmartinsaez.github.io/gacetas/)**
+👉 **[https://dmartinsaez.github.io/gacetas/](https://dmartinsaez.github.io/gmh/)**
 
 ---
 
