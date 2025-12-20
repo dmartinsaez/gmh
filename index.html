@@ -449,8 +449,8 @@ function normalizar(str) {
     .replace(/[iy]/g,'i').replace(/[cq]/g,'c').replace(/[cz]/g,'c')
     .replace(/\s|-/g,'').replace(/(.)\1+/g,'$1')
     .replace(/mpt/g,'nt')  // <-- equivalencia añadida
-    .replace(/\b(s)(?=[a-z])/g,'es');
-
+    .replace(/^es(?=[a-z])/,'s'); // <-- cambio mínimo: "escena" → "scena"
+    ;
 
 }
 
