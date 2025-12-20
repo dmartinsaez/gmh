@@ -224,22 +224,22 @@
 }
     
 .btn-todas-container button {
-  width: 50%;           /* ocupa la mitad del contenedor */
-  min-width: 250px;     /* nunca más pequeño que esto */
-  max-width: 400px;     /* no demasiado grande en pantallas enormes */
-  padding: 12px 0;      /* más alto para destacarlo */
-  font-size: 1em;
-  font-weight: 600;
+  width: auto;             /* no ocupar todo el contenedor */
+  padding: 8px 20px;       /* tamaño más moderado */
+  font-size: 0.95em;       /* ligeramente más pequeño que “Ver noticia” */
+  font-weight: 500;
   cursor: pointer;
   border-radius: 6px;
-  background-color: #1f6fb2;
+  background-color: #28a745; /* verde distinto */
   color: white;
-  border: none;
-  transition: background-color 0.25s ease;
+  border: 1px solid #1e7e34; /* borde para diferenciarlo */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* sombra suave */
+  transition: all 0.25s ease;
 }
 
 .btn-todas-container button:hover {
-  background-color: #164f80;
+  background-color: #1e7e34;  /* verde más oscuro al pasar ratón */
+  transform: translateY(-1px); /* ligero efecto */
 }
 
     /* HASTA AQUÍ */
