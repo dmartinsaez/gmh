@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title>Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)</title>
+
+  <style>
+    body {
+      font-family: "Georgia", "Times New Roman", serif;
+      padding: 30px;
+      background-color: #f4f4f4;
+      color: #2b2b2b;
+    }
+    /* Título general */
+    h1 {
+      color: #1f2d3d; 
+      font-size: 1.3em; /* tamaño del título */
+      margin-bottom: 0.8em;
+      text-align: center; /* Centrado */
+      line-height: 1.4; /* ↑ interlineado más amplio */
+    
+      max-width: 980px;          /* Limita el ancho del título */
+      margin: 0 auto 1em auto;   /* Centrado y espacio inferior */
+    }
+
+  /* Texto bajo el título, centrado */
+        .intro-centrada {
+        text-align: center;
+        max-width: 1000px;
+        margin: 0 auto;
+            line-height: 1.2; /* ↑ interlineado */
+
+      }
+
+      /* h2 = epígrafes */
+    .intro-recuadro h2 {
+    font-size: 1.25em;
+    color: #1f2d3d;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 4px;
+    }
+        /* Texto de epígrafes de Herramientas y Criterios de normalización */
+        .intro-recuadro p,
+        .intro-recuadro li {
+          line-height: 1.4; /* ajusta el interlineado */
+        }
+    
+/* Acordeones unificados */
+.intro-recuadro .acordeon {
+ font-size: 1em; /* antes 1.25em o similar */
+  cursor: pointer;
+  background-color: #e9ecef;
+  padding: 6px 12px;      /* menos espacio interno */
+  border-radius: 5px;
+  margin-top: 6px;        /* menos espacio arriba */
+  margin-bottom: 0;
+  border-bottom: 1px solid #ddd;
+  position: relative; /* <-- importante para que la flecha se posicione dentro */
+  user-select: none;  /* opcional: evita selección de texto al hacer click */
+}
+
+.intro-recuadro .acordeon::after {
+  content: '▼';
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: transform 0.3s ease;
+}
+.intro-recuadro .acordeon.abierto::after {
+  transform: translateY(-50%) rotate(-180deg);
+}
+
+
+      
+      .intro-recuadro .panel {
+        display: block;  /* siempre block */
+        max-height: 0;   /* cerrado por defecto */
+        overflow: hidden;
+        padding: 0 20px;
+        background-color: #ffffff;
+        border-radius: 0 0 5px 5px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        margin-bottom: 15px;
+        transition: max-height 0.3s ease, padding 0.3s ease;
+      }
+
+      .intro-recuadro .panel.abierto {
+        max-height: 2000px;
+        padding: 15px 20px;
+      }
+
+        .acordeon:hover {
+        background-color: #d0e2f0; /* cambia ligeramente el fondo */
+        color: #0f3c61;             /* opcional: cambia color del texto */
+      }
+        .intro-recuadro .acordeon.abierto::after {
+        transform: rotate(-180deg);
+        }
+
+
+    p {
+      max-width: 1100px;
+      line-height: 1.6;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 25px;
+      background: white;
+      font-family: Arial, sans-serif;
+      font-size: 0.95em;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px 10px;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #e9ecef;
+      text-align: left;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #fafafa;
+    }
+
+    .btn-trans {
+      padding: 4px 9px;
+      font-size: 0.85em;
+      cursor: pointer;
+      background-color: #1f6fb2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+
+    .btn-trans:hover {
+      background-color: #164f80;
+    }
+
+    .transcripcion {
+      display: none;
+      background-color: #fffdf7;
+      padding: 12px 16px;
+      border-left: 4px solid #d4a017;
+      margin-top: 8px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    #buscar {
+      width: 35%;
+      padding: 8px;
+      font-size: 1em;
+      margin-right: 8px;
+    }
+
+    #resultado-busqueda {
+  margin: 10px auto 0;
+  font-weight: bold;
+  color: #1f6fb2;
+  text-align: center;
+  width: 45%;           /* MISMO ancho que el input */
+}
+
+    mark {
+      background-color: #ffe58a;
+      padding: 0 2px;
+    }
+
+    #info, #cita {
+      margin-top: 30px;
+      font-size: 0.9em;
+      color: #444;
+      max-width: 1100px;
+    }
+
+    #cita {
+      background: #ffffff;
+      border-left: 5px solid #1f6fb2;
+      padding: 15px 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    .cita-bloque {
+      margin-bottom: 12px;
+    }
+
+    .btn-copiar {
+      margin-top: 4px;
+      font-size: 0.8em;
+      padding: 3px 8px;
+      border: 1px solid #ccc;
+      background: #f5f5f5;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .btn-copiar:hover {
+      background: #e2e2e2;
+    }
+    /* --- Centrado del buscador y botón --- */
+#buscador-container {
+  text-align: center;
+  margin: 25px 0;
+}
+
+#buscador-container button {
+  margin-left: 5px;
+}
+    /* Contenedor central para evitar estiramiento en pantallas grandes */
+.contenedor {
+  max-width: 1200px;
+  margin: 0 auto;      /* Centra el contenido */
+}
+    /* Texto de la introducción más grande */
+.introduccion p {
+  font-size: 1em;
+}
+
+    .intro-recuadro {
+  background-color: #ffffff;               /* fondo blanco */
+  padding: 15px 20px;                      /* espacio interno */
+  border-radius: 10px;                     /* esquinas redondeadas */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);/* sombra suave */
+  margin-bottom: 30px;                     /* separación del resto de contenido */
+}
+
+.intro-recuadro p {
+  font-size: 1.1em;                        /* texto más grande */
+  line-height: 1.6;
+}
+
+   
+.intro-recuadro .nota-autor { /* Aquí decides cómo aparece la nota de autoría: Este recurso ha sido creado... */
+  padding-top: 12px;
+  border-top: 1px solid #ddd;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: #555;
+  text-align: center;
+  max-width: 980px;
+  margin: 20px auto 0;   /* Centrado horizontal y margen superior */
+}
+
+    
+.buscador-recuadro {
+  background-color: #ffffff;                 /* fondo blanco */
+  padding: 25px 30px;                        /* espacio interno */
+  border-radius: 10px;                       /* esquinas redondeadas */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);  /* sombra suave */
+  margin-bottom: 30px;                       /* separación del resto de contenido */
+  text-align: center;                         /* todo centrado dentro */
+    margin-top: 30px; /* espacio sobre el buscador */
+}
+
+.buscador-recuadro input[type="text"] {
+  width: 45%;
+  padding: 8px;
+  font-size: 1em;
+  margin-right: 8px;
+}
+
+.buscador-recuadro button {
+  margin: 5px 0 0 5px;
+  padding: 6px 12px;
+  font-size: 0.95em;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#resultado-busqueda {
+  margin: 15px auto 0;
+  font-weight: bold;
+  color: #1f6fb2;
+  text-align: center;
+  width: 45%;       /* igual ancho que input */
+}
+    .intro-recuadro ul + p {
+  margin-left: 0; /* quita el desplazamiento causado por el ul */
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="contenedor">
+
+<div class="intro-recuadro">
+<h1>Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)</h1>
+
+<p class="intro-centrada">
+Este documentario incluye las transcripciones de todas las noticias sobre las óperas realizadas en el Coliseo del Buen Retiro de Madrid durante este periodo, publicadas en la <em>Gaceta de Madrid</em> y en el <em>Mercurio histórico y político</em>, que hemos editado de forma crítica situándolas en su contexto celebrativo y performativo, para lo cual hemos reconstruido el calendario de representaciones indicando el año y día de la representación, el título de las óperas, los libretistas y compositores, la ocasión festiva y las fuentes consultadas. En total, hemos podido identificar más de 300 noches de ópera, sobre las cuales hemos identificado más de 140 noticias distintas (sin contar las repetidas en ambas gacetas).</p>
+
+  <p class="nota-autor">
+  Este recurso ha sido creado por Daniel Martín Sáez (Universidad de Salamanca) en el marco del proyecto LexiMus-USAL (2023–2026), financiado por el Ministerio de Ciencia e Innovación de España, PID2022-139589NB-C33.
+</p>
+  </div>
+
+<div class="intro-recuadro">
+
+  <h3 class="acordeon">Herramientas</h3>
+  <div class="panel">
+          <p>Para facilitar la consulta del documentario, hemos incluido tres herramientas:</p>
+          <ul>
+            <li>El <strong>Buscador</strong>, que permite identificar términos, sintagmas y fragmentos léxicos en todas las noticias, contar sus ocurrencias y consultarlas en su contexto, desplegando únicamente las noticias donde aparecen.</li>
+            <li>El botón <strong>Mostrar todas las noticias</strong>, que permite mostrar u ocultar todas las noticias a la vez dentro del calendario.</li>
+            <li>El botón <strong>Ver noticia</strong>, que permite mostrar u ocultar cada noticia de manera individual.</li>
+          </ul>
+  </div>     
+  
+  <h3 class="acordeon">Criterios de normalización</h3>
+  <div class="panel">            
+          <p>Se ha respetado en todo momento la grafía de la época, excluyendo únicamente el uso de cursivas, que a veces perjudica el análisis computacional. Además, para mejorar la búsqueda lexicográfica, se han adoptado cinco medidas básicas:</p>
+            <ul>
+            <li>Aunque se han mantenido los acentos, los diacríticos y el uso de mayúsculas y minúsculas, el buscador no distingue estos parámetros, lo que permite realizar búsquedas con facilidad (e. g., “ópera”, “opera” y “Opera” se consideran equivalentes).</li> 
+            <li>Tampoco distingue entre palabras completas o incompletas, lo cual permite buscar por fragmentos léxicos (e. g., "celebr" sirve para hallar palabras como "celebridad", "celebrar", "celebraron", etc.).</li>
+            <li>Además, identifica las letras duplicadas (e. g., "assistieron" es equivalente a "asistieron"), de modo que el estudioso no debe preocuparse por estas diferencias de grafía.</li>
+            <li>Por el mismo motivo, identifica letras que tienden a confundirse en el siglo XVIII, como la 'g', la 'j' y la 'x' (e. g., "artaxerxes" puede hallarse buscando "Artajerjes"), o la 'b' y la 'v' (e. g., "haver" puede hallarse buscando "haber"), junto a otras muchas típicas del periodo: la 'i' y la 'y', la 'c' y la 'q', la 'th' y la 't', la 'ph' y la 'f', la 'ch' y la 'c', la 'c' y la 'z' (e. g., el buscador identifica "cristal", "christal" y "Crystàl", o "voces" y "vozes").</li>
+             <li>Finalmente, no contempla guiones ni espacios que aparecen a menudo en este tipo de fuentes (e. g., "cumple-años" y "cumple años" puede encontrarse buscando "cumpleaños").</li>
+            </ul>
+  </div> 
+            
+  <h3 class="acordeon">Fuentes, referencias y abreviaturas</h3>
+  <div class="panel">    
+          
+            <p>Para la elaboración del calendario, cada una de las fechas introducidas se ha corroborado en una diversidad de fuentes y referencias:</p>
+            <ul>
+              <li>Las noticias pertenecen a la <em>Gaceta de Madrid</em> y el <em>Mercurio histórico y político</em>, que hemos identificado y transcrito manualmente a partir de las digitalizaciones de la Hemeroteca Digital de la Biblioteca Nacional de España.</li>
+              <li>Además, hemos recurrido a otras ediciones de fuentes y estudios para la reconstrucción del calendario. La mayoría de fechas y ocasiones festivas, así como otros datos adicionales, se publicaron en Daniel Martín Sáez, “Calendario festivo, fuentes y artistas de las óperas y serenatas organizadas por Farinelli para la corte de Fernando VI y Bárbara de Braganza”, en Luigi Verdi (ed.): <em>Mito, Storia & Sogno di Farinelli</em>, LIM, Lucca, 2021, pp. 265-307, cuya tabla final hemos mejorado sustancialmente.</li>
+              <li>Todo ello lo indicamos en la tabla con abreviaturas, indicando a continuación los números de página:
+              AL = Correspondencia entre el duque de Huéscar y Ordeñana, 7 de enero de 1749 (Madrid), Archivo de la Casa de Alba, Caja 105;
+              C = Cartas de María Antonia a Isabel de Farnesio cit. en Emilio Cotarelo y Mori:
+              <em>Orígenes y establecimiento de la ópera en España hasta 1800</em>, Tip. de la ‘Revista de Arch. Bibl. y Museos’, Madrid, 1917;
+              CH = Correspondencia entre Carvajal y Huéscar ed. en Didier Ozanam (ed.):
+              <em>La diplomacia de Fernando VI</em>, CSIC, Madrid, 1975;
+              EH = <em>Misión en París</em>. Correspondencia particular entre el Marqués de la Ensenada y el Duque de Huéscar,
+              ed. Didier Ozanam & Diego Téllez Alarcia, IER, Logroño, 2010;
+              F = Carlo Broschi Farinelli: <em>Fiestas reales</em>, Turner, Madrid, 1992;
+              GM = <em>Gaceta de Madrid</em>;
+              K = Benjamin Keene: <em>The Private Correspondence</em>, Cambridge University Press, Cambridge, 1933;
+              MH = <em>Mercurio histórico y político</em>;
+              R = Francisco de Rávago: <em>Correspondencia reservada e inédita</em>, Aguilar, Madrid, 1936;
+              SE = Sara Erro, <em>La música en la Real Cámara durante el reinado de Fernando VI y María Bárbara de Braganza (1746-1759)</em>, Tesis doctoral, UCM, Madrid, 2023.</li>
+            </ul>
+          
+            <p>En el apartado "Compositores", los números entre paréntesis indican los actos de la ópera compuestos por cada compositor.</p>
+  </div>
+    
+  <h2 class="acordeon">Cómo citar este recurso</h2>
+  <div class="panel">
+
+              <div class="cita-bloque">
+                <strong>APA</strong><br>
+                <span id="cita-apa"></span><br>
+                <button class="btn-copiar" onclick="copiar('cita-apa')">Copiar</button>
+              </div>
+                <div class="cita-bloque">
+                <strong>Chicago</strong><br>
+                <span id="cita-chicago"></span><br>
+                <button class="btn-copiar" onclick="copiar('cita-chicago')">Copiar</button>
+              </div>
+            
+              <div class="cita-bloque">
+                <strong>MLA</strong><br>
+                <span id="cita-mla"></span><br>
+                <button class="btn-copiar" onclick="copiar('cita-mla')">Copiar</button>
+              </div>
+  </div>
+</div>
+
+<div class="buscador-recuadro"> <!-- DONDE PONGAS ESTO SE INSERTA EL BUSCADOR -->
+  <strong>BUSCADOR</strong><br><br>
+  <input type="text" id="buscar" placeholder="Escriba la palabra o sintagma que desea buscar...">
+  <button onclick="buscar()">Buscar</button>
+  <br><br>
+  <button id="btn-toggle" onclick="toggleTodas(event)">
+    Mostrar todas las noticias
+  </button>
+  <p id="resultado-busqueda"></p>
+</div>
+
+<div id="tabla-funciones"></div> <!-- DONDE PONGAS ESTO SE INSERTA LA TABLA CON FUENTES -->
+
+
+<script>
+/* --------- VARIABLE GLOBAL PARA TOGGLE TODAS --------- */
+let todasVisibles = false;
+
+/* --------- TABLA Y BÚSQUEDA (sin cambios funcionales) --------- */
+fetch('datos.json')
+  .then(response => response.json())
+  .then(data => {
+    const tablaDiv = document.getElementById('tabla-funciones');
+    let tabla = '<table><tr><th>Año</th><th>Nº</th><th>Día</th><th>Título</th><th>Libreto</th><th>Compositor</th><th>Ocasión</th><th>Fuentes</th></tr>';
+
+    let ultimaFuente = '';
+
+    data.forEach((f, idx) => {
+      const fuente = f['Fuentes[a]'] && f['Fuentes[a]'].trim() !== ''
+        ? (ultimaFuente = f['Fuentes[a]'])
+        : ultimaFuente;
+
+      // Fila principal
+      tabla += `<tr>
+        <td>${f['Año']}</td>
+        <td>${f['Nº']}</td>
+        <td>${f['Día']}</td>
+        <td><em>${f['Título']}</em></td>
+        <td>${f['Libreto']}</td>
+        <td>${f['Compositor']}</td>
+        <td>${f['Ocasión']}</td>
+        <td>${fuente}</td>
+      </tr>`;
+
+      // Fila extra para transcripción si existe
+      if (f['Transcripción']) {
+        tabla += `<tr>
+          <td colspan="8">
+            <div style="text-align:center; margin: 8px 0;">
+              <button class="btn-trans" onclick="toggleTrans(${idx}, this)">Ver noticia</button>
+            </div>
+            <div id="trans-${idx}" class="transcripcion">
+              ${f['Transcripción'].split(/(?<=\.\s)(?=\[\d+\])/g).map(t => `<p>${t.trim()}</p>`).join('')}
+            </div>
+          </td>
+        </tr>`;
+      }
+    });
+
+    // ¡Aquí sí! Después de terminar el forEach
+    tablaDiv.innerHTML = tabla;
+  });
+
+
+/* --------- FUNCIONES DE TRANSCRIPCIÓN --------- */
+function toggleTrans(idx, boton) {
+  const div = document.getElementById(`trans-${idx}`);
+
+  const visible = div.style.display === 'block';
+
+  div.style.display = visible ? 'none' : 'block';
+  boton.textContent = visible
+    ? 'Ver noticia'
+    : 'Ocultar noticia';
+}
+  
+function toggleTodas(event) {
+  const divs = document.querySelectorAll('.transcripcion');
+  todasVisibles = !todasVisibles;
+
+  divs.forEach(div => {
+    div.style.display = todasVisibles ? 'block' : 'none';
+  });
+
+  event.target.textContent = todasVisibles
+    ? 'Ocultar todas las noticias'
+    : 'Mostrar todas las noticias';
+}
+
+
+/* --------- BÚSQUEDA CON CONTEO DE RESULTADOS --------- */
+// Normaliza un string para la búsqueda histórica
+function normalizar(str) {
+  return str
+    .toLowerCase()
+    .normalize('NFD')                  // separa acentos
+    .replace(/[\u0300-\u036f]/g, '')  // quita acentos
+    .replace(/ph/g, 'f')               // ph → f
+    .replace(/th/g, 't')
+    .replace(/ch/g, 'c')
+    .replace(/[gx]/g, 'j')
+    .replace(/[vb]/g, 'b')
+    .replace(/[iy]/g, 'i')
+    .replace(/[cq]/g, 'c')
+    .replace(/[cz]/g, 'c')
+    .replace(/\s|-/g, '')             // ignora espacios y guiones
+    .replace(/(.)\1+/g, '$1');        // elimina duplicados
+}
+
+
+
+function buscar() {
+  const palabra = document.getElementById('buscar').value.trim();
+  const info = document.getElementById('resultado-busqueda');
+  if (!palabra) {
+    info.textContent = '';
+    return;
+  }
+
+  const palabraNorm = normalizar(palabra);
+  let contadorTotal = 0;
+
+  document.querySelectorAll('.transcripcion').forEach(div => {
+    const textoOriginal = div.textContent;
+    const textoNorm = normalizar(textoOriginal);
+
+    let indices = [];
+    let start = 0;
+
+    // Buscamos coincidencias en el texto normalizado
+    while (start <= textoNorm.length - palabraNorm.length) {
+      if (textoNorm.slice(start, start + palabraNorm.length) === palabraNorm) {
+        indices.push(start);
+        start += palabraNorm.length;
+      } else {
+        start++;
+      }
+    }
+
+    if (indices.length > 0) {
+      contadorTotal += indices.length;
+
+      // Aplicar <mark> al texto original usando offsets
+      let marcado = '';
+      let origIdx = 0;
+
+      indices.forEach((normIdx, i) => {
+        // Buscar el inicio en el texto original comparando normalizado
+        let startOrig = origIdx;
+        while (startOrig < textoOriginal.length && normalizar(textoOriginal.slice(0, startOrig)) .length < normIdx) {
+          startOrig++;
+        }
+
+        // Calcular fin aproximado
+        let endOrig = startOrig;
+        while (endOrig < textoOriginal.length && normalizar(textoOriginal.slice(startOrig, endOrig)) .length < palabraNorm.length) {
+          endOrig++;
+        }
+
+        // Añadir texto antes + marcado
+        marcado += textoOriginal.slice(origIdx, startOrig);
+        marcado += '<mark>' + textoOriginal.slice(startOrig, endOrig) + '</mark>';
+        origIdx = endOrig;
+      });
+
+      // Añadir el resto del texto
+      marcado += textoOriginal.slice(origIdx);
+
+      div.innerHTML = marcado;
+      div.style.display = 'block';
+    } else {
+      div.innerHTML = textoOriginal;
+      div.style.display = 'none';
+    }
+  });
+
+  info.textContent = contadorTotal === 1
+    ? '1 resultado encontrado'
+    : `${contadorTotal} resultados encontrados`;
+}
+
+  // Permitir búsqueda al presionar Enter
+document.getElementById('buscar').addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') {
+    buscar();
+  }
+});
+
+
+/* --------- CITACIÓN AUTOMÁTICA --------- */
+const autor = "Martín Sáez, Daniel";
+const titulo = "Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)";
+const institucion = "Universidad de Salamanca";
+const year = new Date().getFullYear();
+const url = window.location.href;
+
+document.getElementById('cita-apa').textContent =
+  `${autor}. (${year}). ${titulo}. ${institucion}. ${url}`;
+
+document.getElementById('cita-chicago').textContent =
+  `${autor}. “${titulo}.” ${institucion}, ${year}. ${url}.`;
+
+document.getElementById('cita-mla').textContent =
+  `${autor}. ${titulo}. ${institucion}, ${year}. Web. ${url}.`;
+
+function copiar(id) {
+  navigator.clipboard.writeText(document.getElementById(id).textContent);
+}
+
+document.querySelectorAll('.acordeon').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const panel = btn.nextElementSibling;
+
+    // Cerrar todos los paneles primero
+    document.querySelectorAll('.panel').forEach(p => {
+      if (p !== panel) p.classList.remove('abierto');
+    });
+    document.querySelectorAll('.acordeon').forEach(b => {
+      if (b !== btn) b.classList.remove('abierto');
+    });
+
+    // Abrir o cerrar el panel clicado
+    panel.classList.toggle('abierto');
+    btn.classList.toggle('abierto'); // <-- Esta línea es nueva
+  });
+});
+
+
+
+
+  
+</script>
+
+</div>
+</body>
+</html>
