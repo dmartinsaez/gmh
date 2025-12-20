@@ -222,26 +222,25 @@
   text-align: center;       /* centra el botón horizontalmente */
   margin: 20px 0 40px 0;    /* espacio arriba y abajo */
 }
-    
 .btn-todas-container button {
-  width: auto;             /* no ocupar todo el contenedor */
-  padding: 8px 20px;       /* tamaño más moderado */
-  font-size: 0.95em;       /* ligeramente más pequeño que “Ver noticia” */
-  font-weight: 500;
+  display: inline-block;             /* para poder controlar ancho */
+  min-width: 220px;                  /* más largo que los botones normales */
+  padding: 10px 25px;                /* altura y relleno cómodo */
+  font-size: 1em;                    /* tamaño legible */
+  font-weight: 600;                  /* un poco más fuerte que normal */
   cursor: pointer;
-  border-radius: 6px;
-  background-color: #28a745; /* verde distinto */
+  border-radius: 8px;                /* esquinas suaves */
+  background: linear-gradient(145deg, #28a745, #218838); /* degradado verde elegante */
   color: white;
-  border: 1px solid #1e7e34; /* borde para diferenciarlo */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* sombra suave */
-  transition: all 0.25s ease;
+  border: 1px solid #1e7e34;        /* borde más oscuro que el degradado */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12); /* sombra suave para “levantar” el botón */
+  transition: all 0.3s ease;
 }
-
 .btn-todas-container button:hover {
-  background-color: #1e7e34;  /* verde más oscuro al pasar ratón */
-  transform: translateY(-1px); /* ligero efecto */
+  background: linear-gradient(145deg, #218838, #1c6c2c); /* degradado más oscuro al pasar ratón */
+  transform: translateY(-2px);    /* ligero efecto de elevación */
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15); /* sombra más marcada */
 }
-
     /* HASTA AQUÍ */
 
 
