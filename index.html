@@ -533,22 +533,9 @@ td button.btn-ver-referencia {
 </div>
 
     <!-- DONDE PONGAS ESTO el botón de Mostrar todas las NOTICIAS -->
-<div class="btn-todas-tabla" style="text-align:center; margin-bottom:10px;">
-  <button id="btn-toggle" onclick="toggleTodas(event)" style="
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      font-size: 1em;
-      font-weight: 500;
-      border-radius: 8px;
-      background-color: #4da6ff;
-      color: #ffffff;
-      border: 1px solid #3399ff;
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-      transition: background-color 0.2s ease;
-  ">
+<div class="btn-todas-container">
+  <button id="btn-toggle" onclick="toggleTodas(event)">
+    <!-- Icono de ojo SVG -->
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
       <path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
       <circle cx="12" cy="12" r="2.5"/>
@@ -556,7 +543,6 @@ td button.btn-ver-referencia {
     Mostrar todas las noticias
   </button>
 </div>
-
   <div id="tabla-funciones"></div>  <!-- DONDE PONGAS ESTO SE INSERTA LA TABLA CON FUENTES -->
 </div>
     
