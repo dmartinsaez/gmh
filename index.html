@@ -76,29 +76,28 @@
 }
 
 
-      
 .intro-recuadro .panel {
-    display: block;
-    max-height: 0;
+    display: block;  
+    max-height: 0;   
     overflow: hidden;
-    padding: 15px 20px;                 /* espacio interno */
+    padding: 0 20px;            /* sin padding arriba/abajo cuando está cerrado */
     background-color: #ffffff;
     border-radius: 0 0 5px 5px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    margin: 0 auto 15px auto;           /* centrar horizontalmente */
+    margin-bottom: 0;            /* no espacio extra cerrado */
     transition: max-height 0.3s ease, padding 0.3s ease;
-
-    text-align: justify;                /* texto justificado */
-    max-width: 850px;                   /* ancho máximo del panel */
-    width: 100%;                        /* ancho flexible hasta el max */
-    box-sizing: border-box;             /* padding incluido en el ancho */
+    text-align: justify;         /* texto justificado */
+    max-width: 850px;            /* ancho máximo del panel */
+    width: 100%;                 /* flexible hasta el máximo */
+    box-sizing: border-box;
 }
 
+.intro-recuadro .panel.abierto {
+    max-height: 2000px;
+    padding: 15px 20px;          /* padding vertical solo al abrirse */
+    margin-bottom: 15px;         /* margen solo cuando está abierto */
+}
 
-      .intro-recuadro .panel.abierto {
-        max-height: 2000px;
-        padding: 15px 20px;
-      }
 
         .acordeon:hover {
         background-color: #d0e2f0; /* cambia ligeramente el fondo */
