@@ -396,36 +396,6 @@ td button.btn-ver-referencia {
   margin-bottom: 1em;            /* espacio entre párrafos */
 }
 
-    /* Botón flotante sobre la tabla */
-.btn-todas-flotante {
-    position: fixed;
-    top: 100px;   /* distancia desde la parte superior de la ventana */
-    right: 30px;  /* distancia desde el borde derecho */
-    z-index: 999;
-}
-
-
-
-.btn-todas-flotante button {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  font-size: 0.95em;
-  border-radius: 6px;
-  background-color: #4da6ff;
-  color: white;
-  border: 1px solid #3399ff;
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-  transition: background-color 0.2s;
-}
-
-.btn-todas-flotante button:hover {
-  background-color: #3399ff;
-}
-
-
   </style>
 </head>
 
@@ -562,8 +532,6 @@ td button.btn-ver-referencia {
   <p id="resultado-busqueda"></p>
 </div>
 
-
-    
     <!-- DONDE PONGAS ESTO el botón de Mostrar todas las NOTICIAS -->
 <div class="btn-todas-container">
 <button id="btn-toggle" onclick="toggleTodas(event)">
@@ -574,22 +542,8 @@ td button.btn-ver-referencia {
   </svg>
   Mostrar todas las noticias
 </button>
-
 </div>
-
-<!-- Contenedor de la tabla -->
-<div id="tabla-funciones-container" style="position: relative;">
-  <div class="btn-todas-flotante">
-    <button id="btn-toggle" onclick="toggleTodas(event)">
-      <!-- Icono de ojo SVG -->
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
-        <circle cx="12" cy="12" r="2.5"/>
-      </svg>
-      Mostrar todas las noticias
-    </button>
-  </div>
-
+    
   <div id="tabla-funciones"></div>  <!-- DONDE PONGAS ESTO SE INSERTA LA TABLA CON FUENTES -->
 </div>
     
