@@ -210,25 +210,28 @@
   margin: 2px 0 2px 0;    /* espacio arriba y abajo */
 }
 .btn-todas-container button {
-  display: inline-block;             /* permite controlar el ancho */
-  width: 60%;                      /* largo */
-  padding: 7px 0;                   /* altura cómoda y uniforme */
-  font-size: 1em;                    /* legible */
-  font-weight: 500;                  /* ligeramente más destacado */
+  display: inline-flex;        /* para alinear icono y texto */
+  align-items: center;
+  justify-content: center;
+  gap: 8px;                    /* espacio entre icono y texto */
+  width: 65%;                   
+  padding: 10px 0;              
+  font-size: 1em;               
+  font-weight: 500;             
   cursor: pointer;
-  border-radius: 0px;                /* esquinas suaves */
-  background-color: #555555;         /* gris oscuro */
-  color: white;                      /* texto blanco para contraste */
-  border: 1px solid #1f1f1f;        /* borde un poco más oscuro */
-  text-align: center;                /* centrado del texto */
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* sombra muy ligera */
+  border-radius: 8px;           /* bordes redondeados */
+  background-color: #4da6ff;    /* azul claro */
+  color: #ffffff;               
+  border: 1px solid #3399ff;    
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .btn-todas-container button:hover {
-  background-color: #262a2f;         /* ligeramente más oscuro al pasar ratón */
-  transform: translateY(-1px);       /* efecto sutil de elevación */
+  background-color: #3399ff;    
+  transform: translateY(-2px);  /* sutil elevación */
 }
+
     /* HASTA AQUÍ */
 
 
@@ -481,9 +484,15 @@ Este documentario incluye las transcripciones de todas las noticias sobre las ó
     
     <!-- DONDE PONGAS ESTO el botón de Mostrar todas las NOTICIAS -->
 <div class="btn-todas-container">
-  <button id="btn-toggle" onclick="toggleTodas(event)">
-    Mostrar todas las noticias
-  </button>
+<button id="btn-toggle" onclick="toggleTodas(event)">
+  <!-- Icono de ojo SVG -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+    <circle cx="12" cy="12" r="2.5"/>
+  </svg>
+  Mostrar todas las noticias
+</button>
+
 </div>
 
 <div id="tabla-funciones"></div> <!-- DONDE PONGAS ESTO SE INSERTA LA TABLA CON FUENTES -->
