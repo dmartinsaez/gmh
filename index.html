@@ -50,18 +50,20 @@
     
 /* Acordeones unificados */
 .intro-recuadro .acordeon {
- font-size: 1em; /* antes 1.25em o similar */
+  max-width: 700px;      /* ancho del botón */
+  width: 100%;
+  margin: 6px auto 0;    /* centra el botón horizontalmente */
+  padding: 6px 12px;
+  font-size: 1em;
   cursor: pointer;
   background-color: #e9ecef;
-  padding: 6px 12px;      /* menos espacio interno */
   border-radius: 5px;
-  margin-top: 6px;        /* menos espacio arriba */
-  margin-bottom: 0;
   border-bottom: 1px solid #ddd;
-  position: relative; /* <-- importante para que la flecha se posicione dentro */
-  user-select: none;  /* opcional: evita selección de texto al hacer click */
-    text-align: center;
+  position: relative;
+  user-select: none;
+  text-align: center;
 }
+
 
 .intro-recuadro .acordeon::after {
   content: '▼';
