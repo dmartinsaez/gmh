@@ -219,30 +219,28 @@
   text-align: center;       /* centra el botón horizontalmente */
   margin: 2px 0 2px 0;    /* espacio arriba y abajo */
 }
+
 .btn-todas-container button {
   display: inline-flex;        /* para alinear icono y texto */
   align-items: center;
   justify-content: center;
-  gap: 8px;                    /* espacio entre icono y texto */
-  width: 65%;                   
-  padding: 10px 0;              
-  font-size: 1em;               
+  gap: 6px;                    /* menos espacio entre icono y texto */
+  width: auto;                  /* que no sea tan ancho */
+  padding: 6px 12px;            /* más pequeño */
+  font-size: 0.9em;             /* letra más pequeña */
   font-weight: 500;             
   cursor: pointer;
-  border-radius: 8px;           /* bordes redondeados */
-  background-color: #4da6ff;    /* azul claro */
+  border-radius: 6px;           /* esquinas ligeramente redondeadas */
+  background-color: #4da6ff;    
   color: #ffffff;               
   border: 1px solid #3399ff;    
-  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .btn-todas-container button:hover {
   background-color: #3399ff;    
-  /* transform: translateY(-2px); */  /* eliminada para que no se mueva */
 }
-
-
 
 
     /* Contenedor central para evitar estiramiento en pantallas grandes */
@@ -536,13 +534,14 @@ td button.btn-ver-referencia {
 <div class="btn-todas-container">
   <button id="btn-toggle" onclick="toggleTodas(event)">
     <!-- Icono de ojo SVG -->
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
       <path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
       <circle cx="12" cy="12" r="2.5"/>
     </svg>
     Mostrar todas las noticias
   </button>
 </div>
+
   <div id="tabla-funciones"></div>  <!-- DONDE PONGAS ESTO SE INSERTA LA TABLA CON FUENTES -->
 </div>
     
