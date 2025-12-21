@@ -398,11 +398,12 @@ td button.btn-ver-referencia {
 
     /* Botón flotante sobre la tabla */
 .btn-todas-flotante {
-  position: absolute;      /* lo hace flotante respecto al contenedor */
-  top: 10px;               /* distancia desde la parte superior de la tabla */
-  right: 10px;             /* pegado al borde derecho */
-  z-index: 10;             /* que quede encima de la tabla */
+  position: absolute; /* o fixed si quieres que permanezca visible al hacer scroll */
+  top: 10px;          /* distancia desde el borde superior del contenedor */
+  right: -70px;       /* distancia desde el borde derecho del contenedor */
+  z-index: 10;        /* para que quede encima de la tabla */
 }
+
 
 .btn-todas-flotante button {
   display: inline-flex;
