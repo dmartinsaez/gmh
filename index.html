@@ -333,6 +333,25 @@ td button.btn-ver-referencia {
   display: block;   /* convierte el botón en bloque */
   margin: 0 auto;   /* margen automático a izquierda y derecha */
 }
+    
+    /* ICONO DEL BUSCADOR */
+    .input-icon {
+  position: relative;
+  display: inline-block;
+}
+.input-icon input {
+  padding-left: 30px; /* espacio para el icono */
+}
+.input-icon .icono-buscar {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+      /* ICONO DEL BUSCADOR */
 
 
   </style>
@@ -426,12 +445,19 @@ Este documentario incluye las transcripciones de todas las noticias sobre las ó
   </div>
 </div>
 
-<div class="buscador-recuadro"> <!-- DONDE PONGAS ESTO SE INSERTA EL BUSCADOR -->
+<div class="buscador-recuadro">
   <strong>BUSCADOR</strong><br><br>
-  <input type="text" id="buscar" placeholder="Escriba la palabra o sintagma que desea buscar...">
+  <div class="input-icon">
+    <input type="text" id="buscar" placeholder="Escriba la palabra o sintagma que desea buscar...">
+    <svg class="icono-buscar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="7" stroke="#555" stroke-width="2" fill="none"/>
+      <line x1="16" y1="16" x2="22" y2="22" stroke="#555" stroke-width="2"/>
+    </svg>
+  </div>
   <button onclick="buscar()">Buscar</button>
   <p id="resultado-busqueda"></p>
 </div>
+
     
     <!-- DONDE PONGAS ESTO el botón de Mostrar todas las NOTICIAS -->
 <div class="btn-todas-container">
