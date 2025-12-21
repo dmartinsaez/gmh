@@ -77,19 +77,23 @@
 
 
       
-      .intro-recuadro .panel {
-        display: block;  /* siempre block */
-        max-height: 0;   /* cerrado por defecto */
-        overflow: hidden;
-        padding: 0 20px;
-        background-color: #ffffff;
-        border-radius: 0 0 5px 5px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-        margin-bottom: 15px;
-        transition: max-height 0.3s ease, padding 0.3s ease;
-            text-align: justify; /* <-- esto hace que el texto dentro de los acordeones quede justificado */
-            max-width: 850px;      /* límite de ancho */
-      }
+.intro-recuadro .panel {
+    display: block;
+    max-height: 0;
+    overflow: hidden;
+    padding: 15px 20px;                 /* espacio interno */
+    background-color: #ffffff;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    margin: 0 auto 15px auto;           /* centrar horizontalmente */
+    transition: max-height 0.3s ease, padding 0.3s ease;
+
+    text-align: justify;                /* texto justificado */
+    max-width: 850px;                   /* ancho máximo del panel */
+    width: 100%;                        /* ancho flexible hasta el max */
+    box-sizing: border-box;             /* padding incluido en el ancho */
+}
+
 
       .intro-recuadro .panel.abierto {
         max-height: 2000px;
