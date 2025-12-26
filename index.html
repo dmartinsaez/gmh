@@ -6,21 +6,24 @@
   <title>Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)</title>
 
   <style>
-
-.intro-decorativa {
-  float: left;
-  width: 180px;          /* ancho fijo */
-  height: auto;          /* mantiene proporción */
-  margin: 0 20px 20px 0; /* espacio a la derecha y abajo */
-  opacity: 0.6;          /* sutil, ajustable */
-  pointer-events: none;
+    
+.intro-con-decoracion {
+  position: relative;
+  padding-left: 220px; /* espacio para la imagen */
+  background-image: url('https://raw.githubusercontent.com/dmartinsaez/gmh/main/farinelli.jpg');
+  background-size: auto 100%;    /* altura completa del bloque */
+  background-repeat: no-repeat;
+  background-position: left center; /* se recorta por la izquierda */
+  opacity: 1;                     /* no transparenta la imagen */
 }
 
 @media (max-width: 768px) {
-  .intro-decorativa {
-    display: none;       /* se oculta en móviles */
+  .intro-con-decoracion {
+    background: none;    /* se quita en móviles */
+    padding-left: 0;     /* texto ocupa todo el ancho */
   }
 }
+
 
 
 
@@ -418,14 +421,7 @@ td button.btn-ver-referencia {
 <body>
   <div class="contenedor">
 
-<div class="intro-recuadro">
-<h1>Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)</h1>
-
-<div class="intro-justificado">
-  <img src="https://raw.githubusercontent.com/dmartinsaez/gmh/main/farinelli.jpg"
-       alt=""
-       class="intro-decorativa">
-
+<div class="intro-justificado intro-con-decoracion">
   <p>
     <!-- Pergamino -->
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#1f6fb2" viewBox="0 0 24 24" style="vertical-align: middle; margin-right:6px;">
@@ -458,6 +454,7 @@ td button.btn-ver-referencia {
     En total, hemos podido identificar más de 300 noches de ópera, sobre las cuales hemos hallado más de 140 noticias distintas (sin contar las repetidas en ambas gacetas), que informan de una o más fechas de representaciones, cubriendo al menos 165 del total.
   </p>
 </div>
+
 
 
 
