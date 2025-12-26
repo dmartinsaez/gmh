@@ -20,12 +20,14 @@
 
 .intro-con-decoracion img {
   flex-shrink: 0;
-  width: 300px;           /* ancho fijo o relativo */
-  height: 100%;           /* ocupa toda la altura de la nube */
-  object-fit: cover;      /* recorta si hace falta */
-  object-position: right center; /* recorta por la izquierda */
+  width: 300px;
+  height: auto;            /* altura automática según el texto */
+  align-self: stretch;     /* fuerza que se estire al alto del contenedor flex */
+  object-fit: cover;
+  object-position: right center;
   border-radius: 10px;
 }
+
 
 .texto-intro {
   flex: 1;                /* ocupa todo el espacio restante */
