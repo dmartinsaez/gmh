@@ -163,6 +163,23 @@
         transform: rotate(-180deg);
         }
 
+    @media (max-width: 600px) {
+  .intro-recuadro {
+    padding: 15px 10px; /* un poco menos para móvil */
+  }
+
+  .intro-recuadro .acordeon,
+  .intro-recuadro .panel {
+    max-width: 100%;    /* ocupar todo el ancho del contenedor */
+    margin: 6px 0;      /* centrado automático ya no hace falta */
+  }
+
+  .intro-recuadro .panel {
+    padding: 10px;      /* más compacto en móvil */
+  }
+}
+
+
 
     p {
       max-width: 1100px;
