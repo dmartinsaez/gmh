@@ -9,26 +9,25 @@
 
 .intro-con-decoracion {
   display: flex;
-  align-items: stretch; /* estira los hijos al mismo alto */
+  gap: 20px;            /* espacio entre imagen y texto */
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   overflow: hidden;
+  align-items: flex-start; /* evita que la imagen estire todo */
 }
 
 .intro-con-decoracion img {
-  height: auto;       /* deja que la altura se adapte a su contenido */
-  width: auto;
-  max-height: 100%;   /* nunca supera la altura del contenedor */
-  object-fit: cover;  /* recorta si es necesario, sin deformar */
-  flex-shrink: 0;     /* no dejar que se reduzca */
+  width: 200px;          /* ancho fijo */
+  height: auto;          /* mantiene proporción */
+  object-fit: cover;     
+  flex-shrink: 0;
 }
 
 .intro-con-decoracion p {
-  flex: 1;
-  padding: 20px;
-  margin: 0;
+  flex: 1;               /* ocupa el resto del espacio */
 }
+
 
 
 /* Móvil: imagen arriba, texto debajo */
