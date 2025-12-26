@@ -14,28 +14,46 @@
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   padding: 15px;
-  align-items: flex-start;
-  flex-wrap: wrap; /* permite que en móviles se apilen */
+  align-items: stretch;  /* que la imagen y el texto tengan la misma altura */
+  flex-wrap: wrap; 
 }
 
 .intro-con-decoracion img {
   flex-shrink: 0;
-  width: auto;
-  height: 300px; /* Ajusta según altura deseada */
-  object-fit: cover;
+  width: 300px;           /* ancho fijo o relativo */
+  height: 100%;           /* ocupa toda la altura de la nube */
+  object-fit: cover;      /* recorta si hace falta */
+  object-position: right center; /* recorta por la izquierda */
   border-radius: 10px;
 }
 
 .texto-intro {
-  flex: 1;           /* ocupa el resto del espacio */
+  flex: 1;                /* ocupa todo el espacio restante */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 }
 
+
 .texto-intro p {
   margin-bottom: 1em;
   line-height: 1.5;
+}
+@media (max-width: 600px) {
+  .intro-con-decoracion {
+    flex-direction: column; /* imagen arriba, texto abajo */
+    align-items: center;
+  }
+
+  .intro-con-decoracion img {
+    width: 100%;            /* ocupa todo el ancho disponible */
+    height: 200px;          /* altura fija para móvil */
+    object-position: center center;
+  }
+
+  .texto-intro {
+    width: 100%;
+  }
 }
 
 
