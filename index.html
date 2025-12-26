@@ -7,25 +7,29 @@
 
   <style>
 
-    .intro-con-decoracion {
+.intro-con-decoracion {
   display: flex;
-  background-color: #ffffff;
+  align-items: stretch; /* estira los hijos al mismo alto */
+  background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   overflow: hidden;
 }
 
 .intro-con-decoracion img {
-  width: auto;       /* Mantiene proporción */
-  height: 100%;      /* Ocupa todo el alto del contenedor */
-  border-radius: 10px 0 0 10px; /* redondea solo la parte izquierda */
+  height: auto;       /* deja que la altura se adapte a su contenido */
+  width: auto;
+  max-height: 100%;   /* nunca supera la altura del contenedor */
+  object-fit: cover;  /* recorta si es necesario, sin deformar */
+  flex-shrink: 0;     /* no dejar que se reduzca */
 }
 
 .intro-con-decoracion p {
+  flex: 1;
   padding: 20px;
   margin: 0;
-  flex: 1;           /* texto ocupa el resto del espacio */
 }
+
 
 /* Móvil: imagen arriba, texto debajo */
 @media (max-width: 600px) {
