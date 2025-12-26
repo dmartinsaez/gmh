@@ -9,25 +9,46 @@
 
 .intro-con-decoracion {
   display: flex;
-  gap: 20px;            /* espacio entre imagen y texto */
+  gap: 20px;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  overflow: hidden;
-  align-items: flex-start; /* evita que la imagen estire todo */
+  padding: 15px;
+  align-items: flex-start;
+  flex-wrap: wrap; /* permite que en móviles se apilen */
 }
 
 .intro-con-decoracion img {
-  width: 200px;          /* ancho fijo */
-  height: auto;          /* mantiene proporción */
-  object-fit: cover;     
   flex-shrink: 0;
+  width: auto;
+  height: 300px; /* Ajusta según altura deseada */
+  object-fit: cover;
+  border-radius: 10px;
 }
 
-.intro-con-decoracion p {
-  flex: 1;               /* ocupa el resto del espacio */
+.texto-intro {
+  flex: 1;           /* ocupa el resto del espacio */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
+.texto-intro p {
+  margin-bottom: 1em;
+  line-height: 1.5;
+}
+
+/* Responsive: en pantallas pequeñas apilar */
+@media (max-width: 900px) {
+  .intro-con-decoracion {
+    flex-direction: column;
+  }
+  .intro-con-decoracion img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px 10px 0 0;
+  }
+}
 
 
 /* Móvil: imagen arriba, texto debajo */
@@ -447,39 +468,20 @@ td button.btn-ver-referencia {
     organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)
   </h1>
 
+
 <div class="intro-con-decoracion">
   <img src="https://raw.githubusercontent.com/dmartinsaez/gmh/main/farinelli.jpg" alt="Farinelli">
-  <p>
-    <!-- Pergamino -->
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#1f6fb2" viewBox="0 0 24 24" style="vertical-align: middle; margin-right:6px;">
-      <path d="M4 2H20V22H4V2Z" stroke="#1f6fb2" stroke-width="2" fill="none"/>
-      <line x1="6" y1="6" x2="18" y2="6" stroke="#1f6fb2" stroke-width="2"/>
-      <line x1="6" y1="10" x2="18" y2="10" stroke="#1f6fb2" stroke-width="2"/>
-      <line x1="6" y1="14" x2="18" y2="14" stroke="#1f6fb2" stroke-width="2"/>
-    </svg>
-    Este documentario incluye las transcripciones de todas las noticias sobre las óperas realizadas en el Coliseo del Buen Retiro de Madrid durante este periodo, publicadas en la <em>Gaceta de Madrid</em> y en el <em>Mercurio histórico y político</em>, que hemos editado de forma crítica situándolas en su contexto celebrativo y performativo.
-  </p>
-
-  <p>
-    <!-- Calendario -->
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#1f6fb2" viewBox="0 0 24 24" style="vertical-align: middle; margin-right:6px;">
-      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="#1f6fb2" stroke-width="2" fill="none"/>
-      <line x1="3" y1="10" x2="21" y2="10" stroke="#1f6fb2" stroke-width="2"/>
-      <line x1="8" y1="2" x2="8" y2="6" stroke="#1f6fb2" stroke-width="2"/>
-      <line x1="16" y1="2" x2="16" y2="6" stroke="#1f6fb2" stroke-width="2"/>
-    </svg>
-    Para ello, hemos reconstruido el calendario de representaciones indicando el año y día de la representación, el título de las óperas, los libretistas y compositores, la ocasión festiva y las fuentes consultadas.
-  </p>
-
-  <p>
-    <!-- Gráfico -->
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#1f6fb2" viewBox="0 0 24 24" style="vertical-align: middle; margin-right:6px;">
-      <rect x="4" y="10" width="4" height="10" stroke="#1f6fb2" stroke-width="2" fill="none"/>
-      <rect x="10" y="6" width="4" height="14" stroke="#1f6fb2" stroke-width="2" fill="none"/>
-      <rect x="16" y="2" width="4" height="18" stroke="#1f6fb2" stroke-width="2" fill="none"/>
-    </svg>
-    En total, hemos podido identificar más de 300 noches de ópera, sobre las cuales hemos hallado más de 140 noticias distintas (sin contar las repetidas en ambas gacetas), que informan de una o más fechas de representaciones, cubriendo al menos 165 del total.
-  </p>
+  <div class="texto-intro">
+    <p>
+      Este documentario incluye las transcripciones de todas las noticias sobre las óperas realizadas en el Coliseo del Buen Retiro de Madrid durante este periodo, publicadas en la <em>Gaceta de Madrid</em> y en el <em>Mercurio histórico y político</em>, que hemos editado de forma crítica situándolas en su contexto celebrativo y performativo.
+    </p>
+    <p>
+      Para ello, hemos reconstruido el calendario de representaciones indicando el año y día de la representación, el título de las óperas, los libretistas y compositores, la ocasión festiva y las fuentes consultadas.
+    </p>
+    <p>
+      En total, hemos podido identificar más de 300 noches de ópera, sobre las cuales hemos hallado más de 140 noticias distintas (sin contar las repetidas en ambas gacetas), que informan de una o más fechas de representaciones, cubriendo al menos 165 del total.
+    </p>
+  </div>
 </div>
 
 
