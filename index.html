@@ -9,12 +9,26 @@
     
 .intro-con-decoracion {
   position: relative;
-  padding-left: 220px;
+  padding: 20px 25px 20px 20px; /* solo padding normal para el texto */
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.intro-con-decoracion::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20px;  /* margen desde el borde de la nube */
+  width: 200px; /* ancho de la imagen */
+  height: 100%;
   background-image: url('https://raw.githubusercontent.com/dmartinsaez/gmh/main/farinelli.jpg');
-  background-size: auto 100%;
+  background-size: contain;
   background-repeat: no-repeat;
-  background-position: left center;
-  opacity: 1;
+  background-position: center top;
+  pointer-events: none; /* evita que interfiera con el texto */
+}
+
 
   /* Agregamos la "nube blanca" */
   background-color: #ffffff;
