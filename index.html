@@ -7,28 +7,21 @@
 
   <style>
 
-.intro-justificado {
-  display: flex;
-  align-items: flex-start;   /* alinea la imagen al inicio */
-  gap: 20px;                 /* espacio entre imagen y texto */
-}
-
 .intro-decorativa {
-  flex-shrink: 0;            /* evita que se encoja */
-  width: 200px;               /* ancho fijo */
-  height: auto;               /* mantiene proporción */
-  opacity: 1;
+  float: left;
+  width: 180px;          /* ancho fijo */
+  height: auto;          /* mantiene proporción */
+  margin: 0 20px 20px 0; /* espacio a la derecha y abajo */
+  opacity: 0.6;          /* sutil, ajustable */
   pointer-events: none;
 }
 
 @media (max-width: 768px) {
-  .intro-justificado {
-    display: block;          /* en móviles vuelve al bloque normal */
-  }
   .intro-decorativa {
-    display: none;
+    display: none;       /* se oculta en móviles */
   }
 }
+
 
 
     body {
