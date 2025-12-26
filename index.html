@@ -6,6 +6,22 @@
   <title>Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)</title>
 
   <style>
+    .intro-decorativa {  /* IMAGEN */
+  display: block;
+  max-width: 300px;       /* tamaño máximo deseado */
+  width: 50%;             /* ancho relativo al contenedor */
+  height: auto;           /* mantiene proporción */
+  margin: 0 auto 20px auto;
+  opacity: 0.3;           
+  pointer-events: none;   
+}
+
+@media (max-width: 768px) {
+  .intro-decorativa {
+    display: none;       
+  }
+}
+
     body {
       font-family: "Georgia", "Times New Roman", serif;
       padding: 30px;
