@@ -161,6 +161,16 @@
         mostrarDiccionario();
     });
 
+    // Añadimos el normalizador para la gráfica de cobertura
+    function normalizarLema(str) {
+        return str.toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .replace(/ph/g,'f').replace(/th/g,'t').replace(/ch/g,'c')
+            .replace(/[gx]/g,'j').replace(/[vb]/g,'b')
+            .replace(/[iy]/g,'i').replace(/[cq]/g,'c').replace(/[cz]/g,'c')
+            .replace(/mpt/g,'nt').replace(/escena/g, 'scena');
+    }
+
     function procesarDatos() {
         let setUnicasBrutas = new Set();
         let setUnicasNetas = new Set();
@@ -181,8 +191,11 @@
                 palabrasBrutasPorAño[item.Año]++;
 
                 if (!EXCLUIDAS.includes(pLimpia)) {
-                    setUnicasNetas.add(pLimpia);
-                    vocabularioNeto[pLimpia] = (vocabularioNeto[pLimpia] || 0) + 1;
+                    // Normalizamos al calcular el crítico
+                    let lemaNormalizado = normalizarLema(pLimpia); 
+                    
+                    setUnicasNetas.add(lemaNormalizado);
+                    vocabularioNeto[lemaNormalizado] = (vocabularioNeto[lemaNormalizado] || 0) + 1;
                     palabrasNetasPorAño[item.Año]++;
                     totalNetasGlobal++;
                 }
@@ -215,19 +228,27 @@
 
         const sortedFrequencies = Object.values(vocabularioNeto).sort((a, b) => b - a);
         let cumulativeFrequency = 0;
-        const cumulativeData = sortedFrequencies.slice(0, 50).map((freq, index) => {
+        
+        // Arreglo del eje X y anclaje en el origen (0,0)
+        const dataY = [0];
+        const etiquetasX = [0];
+
+        sortedFrequencies.slice(0, 50).forEach((freq, index) => {
             cumulativeFrequency += freq;
-            return { x: index + 1, y: (cumulativeFrequency / totalNetasGlobal) * 100 };
+            dataY.push((cumulativeFrequency / totalNetasGlobal) * 100);
+            etiquetasX.push(index + 1);
         });
 
         new Chart(document.getElementById('chartCobertura'), {
             type: 'line',
             data: {
+                labels: etiquetasX,
                 datasets: [{
                     label: 'Cobertura acumulada',
-                    data: cumulativeData,
+                    data: dataY,
                     borderColor: '#0000FF',
-                    backgroundColor: '#0000FF',
+                    pointBackgroundColor: '#0000FF',
+                    backgroundColor: 'transparent', // Quita el cuadrado de la leyenda
                     borderWidth: 2,
                     pointRadius: 4,
                     fill: false,
@@ -238,12 +259,14 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    x: { type: 'linear', min: 0, max: 50, title: { display: true, text: 'Número de lemas agrupados más frecuentes' }, grid: { borderDash: [5, 5] } },
+                    x: { title: { display: true, text: 'Número de lemas agrupados más frecuentes' }, grid: { borderDash: [5, 5] } },
                     y: { min: 0, max: 55, title: { display: true, text: 'Porcentaje del corpus (%)' }, grid: { borderDash: [5, 5] } }
                 },
-                plugins: { title: { display: true, text: 'CONCENTRACIÓN LÉXICA Y DISPERSIÓN' } }
+                // Leyenda oculta por estética, título claro
+                plugins: { legend: { display: false }, title: { display: true, text: 'CONCENTRACIÓN LÉXICA Y DISPERSIÓN' } }
             },
             plugins: [{
+                id: 'lineaRoja',
                 beforeDraw: (chart) => {
                     const ctx = chart.ctx;
                     const yScale = chart.scales.y;
