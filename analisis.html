@@ -3,48 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análisis Estadístico - Ópera Italiana (1747-1758)</title>
+    <title>Estadísticas: Ópera Italiana (1747-1758)</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --azul-real: #1f3d5a; --dorado: #b8860b; --papel: #fdfaf3; --borde: #dcdde1; }
+        :root { --azul: #1a3a5a; --oro: #b8860b; --fondo: #fdfaf3; --borde: #dcdde1; }
         body { font-family: 'Georgia', serif; background-color: #f4f1ea; color: #2c3e50; line-height: 1.7; margin: 0; padding: 40px 20px; }
-        .contenedor { max-width: 1100px; margin: 0 auto; background: var(--papel); padding: 50px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 6px solid var(--azul-real); }
-        h1 { text-align: center; font-size: 1.9em; color: var(--azul-real); margin-bottom: 40px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px double var(--dorado); padding-bottom: 15px; }
-        .seccion-titulo { text-align: center; font-variant: small-caps; color: var(--dorado); border-bottom: 1px solid var(--dorado); margin: 50px 0 30px 0; padding-bottom: 10px; font-size: 1.5em; }
-        .grid-graficos { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 50px; }
-        .card-grafico { background: white; padding: 25px; border: 1px solid var(--borde); border-radius: 8px; }
-        .full-width { grid-column: 1 / -1; }
+        .contenedor { max-width: 1100px; margin: 0 auto; background: var(--fondo); padding: 50px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 6px solid var(--azul); }
+        h1 { text-align: center; font-size: 1.8em; color: var(--azul); margin-bottom: 40px; text-transform: uppercase; border-bottom: 2px double var(--oro); padding-bottom: 15px; }
+        .seccion-titulo { text-align: center; font-variant: small-caps; color: var(--oro); border-bottom: 1px solid var(--oro); margin: 50px 0 25px 0; padding-bottom: 10px; font-size: 1.4em; }
+        
+        /* Controles de orden */
+        .controles { text-align: center; margin-bottom: 20px; }
+        .btn-orden { background: white; border: 1px solid var(--oro); color: var(--oro); padding: 5px 15px; cursor: pointer; font-family: serif; font-variant: small-caps; transition: 0.3s; margin: 0 5px; }
+        .btn-orden:hover { background: var(--oro); color: white; }
+        .btn-orden.active { background: var(--azul); color: white; border-color: var(--azul); }
+
         .lista-container { background: white; border: 1px solid var(--borde); padding: 20px; border-radius: 8px; margin-bottom: 30px; }
         ul { list-style: none; padding: 0; margin: 0; }
         li { padding: 10px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: flex-start; }
-        .tag-año { background: var(--azul-real); color: white; padding: 2px 8px; border-radius: 3px; font-size: 0.75em; margin-left: 5px; font-family: sans-serif; font-weight: bold; }
-        .autores-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        
+        /* Estilo para Títulos */
+        .titulo-opera { font-style: italic; font-weight: bold; color: var(--azul); }
+        .tag-año { background: var(--azul); color: white; padding: 2px 8px; border-radius: 3px; font-size: 0.75em; margin-left: 5px; font-family: sans-serif; }
+        
+        .grid-graficos { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 50px; }
+        .card-grafico { background: white; padding: 25px; border: 1px solid var(--borde); border-radius: 8px; }
+        .full-width { grid-column: 1 / -1; }
         .mes-bloque { margin-bottom: 25px; background: #fff; padding: 15px; border: 1px solid #eee; border-radius: 5px; break-inside: avoid; }
-        .mes-nombre { font-weight: bold; color: var(--azul-real); display: block; border-bottom: 2px solid var(--azul-real); margin-bottom: 12px; text-align: center; text-transform: uppercase; font-size: 0.9em; }
-        .evento-item { font-size: 0.85em; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px dashed #ddd; line-height: 1.4; }
-        @media (max-width: 850px) { .grid-graficos, .autores-grid { grid-template-columns: 1fr; } }
+        .mes-nombre { font-weight: bold; color: var(--azul); border-bottom: 2px solid var(--azul); margin-bottom: 12px; text-align: center; text-transform: uppercase; font-size: 0.9em; display: block;}
     </style>
 </head>
 <body>
 
 <div class="contenedor">
-    <h1>Análisis del Catálogo y Actividad Operística</h1>
+    <h1>Análisis del Catálogo Farinelli (1747-1758)</h1>
 
     <div class="grid-graficos">
-        <div class="card-grafico full-width">
-            <h2 class="seccion-titulo" style="margin-top:0">Frecuencia Anual</h2>
-            <canvas id="chartAnual"></canvas>
-        </div>
-        <div class="card-grafico full-width">
-            <h2 class="seccion-titulo">Distribución Estacional</h2>
-            <canvas id="chartMensual"></canvas>
-        </div>
+        <div class="card-grafico full-width"><canvas id="chartAnual"></canvas></div>
+        <div class="card-grafico full-width"><canvas id="chartMensual"></canvas></div>
     </div>
 
-    <h2 class="seccion-titulo">Catálogo de Óperas Únicas</h2>
+    <h2 class="seccion-titulo">Catálogo de Óperas Representadas</h2>
+    <div class="controles">
+        <span>Ordenar por: </span>
+        <button class="btn-orden active" onclick="reRenderOperas('alfa')">A-Z</button>
+        <button class="btn-orden" onclick="reRenderOperas('año')">Año</button>
+    </div>
     <div id="listaOperas" class="lista-container"></div>
 
-    <div class="autores-grid">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
         <div>
             <h2 class="seccion-titulo">Compositores</h2>
             <div id="listaCompositores" class="lista-container"></div>
@@ -55,63 +62,49 @@
         </div>
     </div>
 
-    <h2 class="seccion-titulo">Calendario de Ocasiones Festivas (Únicas)</h2>
+    <h2 class="seccion-titulo">Calendario de Ocasiones Festivas</h2>
     <div id="calendarioFestivo" class="lista-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;"></div>
 </div>
 
 <script>
+    let globalData = {};
     const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
     fetch('archivo.json').then(r => r.json()).then(data => {
-        const datos = procesarFarinelli(data);
-        renderCharts(datos);
-        renderLists(datos);
+        globalData = procesarFarinelli(data);
+        renderCharts(globalData);
+        reRenderOperas('alfa');
+        renderAutores(globalData.mapComp, 'listaCompositores');
+        renderAutores(globalData.mapLib, 'listaLibretistas');
+        renderCalendario(globalData.mapFest);
     });
 
-    // --- NORMALIZACIÓN SEMÁNTICA DE FESTIVIDADES ---
     function normalizarFestividad(str) {
         if (!str) return [];
-        
-        // Días de la semana y expresiones a ignorar (Lista Negra)
-        const excluir = ["lunes", "martes", "miércoles", "miercoles", "jueves", "viernes", "sábado", "sabado", "domingo", "se repitió", "se repitio"];
-        
-        let partes = str.split(/\+|\by\b|,|;/);
+        const excluir = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo", "se repitió"];
+        let partes = str.split(/\s*\+\s*|,\s*/);
         
         return partes.map(p => {
-            let s = p.trim().toLowerCase();
+            let s = p.trim();
+            if (excluir.some(pal => s.toLowerCase().includes(pal)) || s.includes("“")) return null;
+            let sLimpia = s.replace(/^(la |el |fiesta |festividad |celebración |día |del |de |en |los |las |de la |de los |nuestra |nuestro )+/gi, "").replace(/\.$/, "");
+
+            const low = sLimpia.toLowerCase();
+            // UNIFICACIÓN ESTRICTA ADORACIÓN
+            if (low.includes("adoración") || low.includes("adoracion") || low.includes("reyes")) return "Adoración de los Reyes";
+            if (low.includes("bárbara") || low.includes("barbara")) return "Santo y Cumpleaños de la Reina Bárbara";
+            if (low.includes("dos sicilias")) return "Cumpleaños del Rey de las Dos Sicilias";
+            if (low.includes("portugal")) return "Cumpleaños de la Reina de Portugal (Mariana Victoria de Borbón y Farnesio)";
             
-            // FILTRO: Si es un día de la semana, nota entrecomillada o está en la lista negra, lo descartamos
-            if (excluir.some(palabra => s.includes(palabra)) || s.includes("“") || s.includes("”") || s === "") {
-                return null;
-            }
-
-            // Limpieza de artículos y prefijos
-            s = s.replace(/^(la |el |fiesta |festividad |celebración |celebracion |día |dia |del |de |en |los |las |de la |de los |nuestra |nuestro )+/gi, "");
-            s = s.replace(/\.$/, ""); 
-
-            // Consolidación de eventos idénticos
-            if (s.includes("bárbara") || s.includes("barbara")) return "Santo y Cumpleaños de la Reina Bárbara";
-            if (s.includes("dos sicilias")) return "Cumpleaños del Rey de las Dos Sicilias";
-            if (s.includes("adoración reyes") || s.includes("adoracion reyes")) return "Adoración de los Reyes";
-            if (s.includes("dulcísimo nombre") || s.includes("dulcisimo nombre")) return "Dulcísimo Nombre de Jesús";
-            if (s.includes("purificación") || s.includes("purificacion")) return "Purificación de Nuestra Señora";
-            if (s.includes("expectación") || s.includes("expectacion")) return "Expectación de Nuestra Señora";
-            if (s.includes("pascua")) return "Pascua de Resurrección";
-            if (s.includes("carnaval") || s.includes("carnestolendas")) return "Carnaval";
-            if (s.includes("fernando vi") || s.includes("años del rey")) return "Cumpleaños de Fernando VI";
-            if (s.includes("san juan evangelista") || s.includes("juan v de portugal")) return "Día de San Juan (Rey de Portugal)";
-            if (s.includes("isabel de borbón") || s.includes("isabel maria") || s.includes("isabel de borbon")) return "Cumpleaños de la Infanta Isabel";
-
-            return s.charAt(0).toUpperCase() + s.slice(1).trim();
+            return sLimpia.charAt(0).toUpperCase() + sLimpia.slice(1);
         }).filter(p => p !== null && p.length > 2);
     }
 
     function normalizarTitulo(titulo) {
         if (!titulo) return [];
         let limpio = titulo.replace(/<\/?[^>]+(>|$)/g, "").replace(/\.\.\./g, "").trim();
-        if (limpio.includes("“") || limpio.includes("?") || limpio === "") return [];
-        let partes = limpio.split(/ o |\/| y /);
-        return partes.map(p => {
+        if (limpio.includes("“") || limpio === "") return [];
+        return limpio.split(/ o |\/| y /).map(p => {
             let s = p.trim().replace(/^(La |El |L'|Las |Los )/i, "");
             if (s.toLowerCase().includes("niteti")) s = "Nitteti";
             if (s.toLowerCase().includes("artaxer")) s = "Artaserse";
@@ -120,97 +113,98 @@
     }
 
     function procesarFarinelli(data) {
-        let ultimoTitulo = [];
+        let uTit = [];
         const mapOp = {}, mapComp = {}, mapLib = {}, mapFest = {};
-
         data.forEach(item => {
-            // Títulos
             let tFila = normalizarTitulo(item.Título);
-            if (item.Título && item.Título.includes("...")) {
-                tFila = ultimoTitulo;
-            } else if (tFila.length > 0) {
-                ultimoTitulo = tFila;
-            }
+            if (item.Título && item.Título.includes("...")) tFila = uTit; else if (tFila.length > 0) uTit = tFila;
 
             tFila.forEach(t => {
                 if (!mapOp[t]) mapOp[t] = new Set();
                 mapOp[t].add(item.Año);
-                const extraer = (campo, target) => {
-                    if (item[campo] && item[campo].trim() !== "") {
-                        item[campo].split(/,|y|\//).forEach(n => {
-                            let limpio = n.split('(')[0].trim();
-                            if (limpio.length > 2) {
-                                if (!target[limpio]) target[limpio] = new Set();
-                                target[limpio].add(t);
-                            }
-                        });
+                const regAut = (campo, target) => {
+                    let a = item[campo];
+                    if (a && a.trim() !== "") {
+                        let aut = a.replace(/\([^\)]+\)/g, "").replace(/\s+/g, " ").trim().replace(/ y /g, " / ");
+                        if (!target[aut]) target[aut] = new Set();
+                        target[aut].add(t);
                     }
                 };
-                extraer('Compositor', mapComp);
-                extraer('Libreto', mapLib);
+                regAut('Compositor', mapComp);
+                regAut('Libreto', mapLib);
             });
 
-            // Ocasiones Festivas Únicas
-            const mes = detectarMes(item.Día);
-            if (mes && item.Ocasión) {
-                const ocasiones = normalizarFestividad(item.Ocasión);
-                ocasiones.forEach(occ => {
-                    if (!mapFest[mes]) mapFest[mes] = {};
-                    if (!mapFest[mes][occ]) mapFest[mes][occ] = new Set();
-                    mapFest[mes][occ].add(item.Año);
+            const m = detectarMes(item.Día);
+            if (m && item.Ocasión) {
+                normalizarFestividad(item.Ocasión).forEach(occ => {
+                    if (!mapFest[m]) mapFest[m] = {};
+                    if (!mapFest[m][occ]) mapFest[m][occ] = new Set();
+                    mapFest[m][occ].add(item.Año);
                 });
             }
         });
-        return { data, mapOp, mapComp, mapLib, mapFest };
+        return { mapOp, mapComp, mapLib, mapFest, data };
+    }
+
+    function reRenderOperas(criterio) {
+        const div = document.getElementById('listaOperas');
+        document.querySelectorAll('.btn-orden').forEach(b => b.classList.remove('active'));
+        event?.target?.classList?.add('active');
+
+        let keys = Object.keys(globalData.mapOp);
+        if (criterio === 'alfa') {
+            keys.sort();
+        } else {
+            keys.sort((a, b) => Math.min(...globalData.mapOp[a]) - Math.min(...globalData.mapOp[b]));
+        }
+
+        let h = "<ul>";
+        keys.forEach(k => {
+            h += `<li><span class="titulo-opera">${k}</span> <div>${Array.from(globalData.mapOp[k]).sort().map(a => `<span class="tag-año">${a}</span>`).join('')}</div></li>`;
+        });
+        div.innerHTML = h + "</ul>";
+    }
+
+    function renderAutores(map, id) {
+        let h = "<ul>";
+        Object.keys(map).sort().forEach(k => {
+            // Ponemos los títulos de las obras en cursiva dentro de la descripción del autor
+            const obras = Array.from(map[k]).map(t => `<i>${t}</i>`).join(', ');
+            h += `<li><span><strong>${k}</strong><br><small style="color:#666">Obras: ${obras}</small></span></li>`;
+        });
+        document.getElementById(id).innerHTML = h + "</ul>";
+    }
+
+    function renderCalendario(map) {
+        let h = "";
+        MESES.forEach(m => {
+            if (map[m]) {
+                h += `<div class="mes-bloque"><span class="mes-nombre">${m}</span>`;
+                Object.keys(map[m]).sort().forEach(ev => {
+                    h += `<div style="font-size:0.85em; margin-bottom:10px;"><strong>${ev}</strong><br>${Array.from(map[m][ev]).sort().map(a => `<span class="tag-año" style="background:#d4af37;color:black">${a}</span>`).join('')}</div>`;
+                });
+                h += `</div>`;
+            }
+        });
+        document.getElementById('calendarioFestivo').innerHTML = h;
     }
 
     function detectarMes(s) {
         if (!s) return null;
-        const m = s.toLowerCase();
         const d = { "en.": "Enero", "feb.": "Febrero", "mar.": "Marzo", "ab.": "Abril", "may.": "Mayo", "jun.": "Junio", "jul.": "Julio", "ag.": "Agosto", "sep.": "Septiembre", "oct.": "Octubre", "nov.": "Noviembre", "dic.": "Diciembre" };
-        for (let k in d) if (m.includes(k)) return d[k];
+        for (let k in d) if (s.toLowerCase().includes(k)) return d[k];
         return null;
     }
 
-    function renderLists({ mapOp, mapComp, mapLib, mapFest }) {
-        const renderGeneric = (map, id, isOp = false) => {
-            let h = "<ul>";
-            Object.keys(map).sort().forEach(k => {
-                h += `<li><span><strong>${k}</strong>${!isOp ? '<br><small style="color:#666">Obras: '+Array.from(map[k]).join(', ')+'</small>' : ''}</span> 
-                      <div>${isOp ? Array.from(map[k]).sort().map(a => `<span class="tag-año">${a}</span>`).join('') : ''}</div></li>`;
-            });
-            document.getElementById(id).innerHTML = h + "</ul>";
-        };
-        renderGeneric(mapOp, 'listaOperas', true);
-        renderGeneric(mapComp, 'listaCompositores');
-        renderGeneric(mapLib, 'listaLibretistas');
-
-        let hFest = "";
-        MESES.forEach(m => {
-            if (mapFest[m]) {
-                hFest += `<div class="mes-bloque"><span class="mes-nombre">${m}</span>`;
-                Object.keys(mapFest[m]).sort().forEach(ev => {
-                    hFest += `<div class="evento-item"><strong>${ev}</strong><br>${Array.from(mapFest[m][ev]).sort().map(a => `<span class="tag-año" style="background:#d4af37; color:#000">${a}</span>`).join('')}</div>`;
-                });
-                hFest += `</div>`;
-            }
-        });
-        document.getElementById('calendarioFestivo').innerHTML = hFest;
-    }
-
-    function renderCharts({ data }) {
-        const años = [...new Set(data.map(i => i.Año))].sort();
-        const counts = años.map(a => data.filter(i => i.Año === a).length);
+    function renderCharts(d) {
+        const años = [...new Set(d.data.map(i => i.Año))].sort();
         new Chart(document.getElementById('chartAnual'), {
             type: 'line',
-            data: { labels: años, datasets: [{ label: 'Funciones', data: counts, borderColor: '#1f3d5a', backgroundColor: 'rgba(31,61,90,0.1)', fill: true, tension: 0.3 }] },
-            options: { plugins: { legend: { display: false } } }
+            data: { labels: años, datasets: [{ label: 'Funciones por Año', data: años.map(a => d.data.filter(i => i.Año === a).length), borderColor: '#1a3a5a', tension: 0.3 }] }
         });
-        const mesCounts = MESES.map(m => data.filter(i => detectarMes(i.Día) === m).length);
         new Chart(document.getElementById('chartMensual'), {
             type: 'radar',
-            data: { labels: MESES, datasets: [{ label: 'Actividad', data: mesCounts, backgroundColor: 'rgba(184,134,11,0.2)', borderColor: '#b8860b' }] },
-            options: { plugins: { legend: { display: false } } }
+            data: { labels: MESES, datasets: [{ label: 'Actividad Mensual', data: MESES.map(m => d.data.filter(i => detectarMes(i.Día) === m).length), borderColor: '#b8860b' }] }
         });
     }
 </script>
