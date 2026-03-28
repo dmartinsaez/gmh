@@ -113,8 +113,8 @@
         <div>
             <div class="card-grafica"><canvas id="chartCobertura"></canvas></div>
             <div class="recuadro-metodo">
-                <strong>Metodología de Densidad Léxica:</strong>
-                Calcula qué porcentaje del <strong>contenido informativo neto</strong> (excluyendo todas las stopwords) es cubierto por los lemas más frecuentes. Ilustra la concentración temática del vocabulario clave.
+                <strong>Metodología de Concentración Léxica:</strong>
+                Calcula qué porcentaje de **todo el corpus escrito** es cubierto por los lemas más frecuentes (excluyendo stopwords). Mide la dispersión conceptual: ¿Qué densidad de información clave tienen las crónicas? Se añade una referencia al 50%.
             </div>
         </div>
 
@@ -210,19 +210,19 @@
             options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'DINÁMICA DEL VOLUMEN NARRATIVO ANUAL' } } }
         });
 
-        // --- CÁLCULO DE LA CURVA: CONTENIDO CRÍTICO SOBRE TOTAL NETO ---
+        // --- CÁLCULO DE LA CURVA: CONTENIDO CON SIGNIFICADO SOBRE TOTAL DEL CORPUS (REVERTIDO) ---
         const sortedFrequencies = Object.values(vocabularioNeto).sort((a, b) => b - a);
         let cumulativeFrequency = 0;
         
         const dataY = [0]; 
         const etiquetasX = [0];
 
-        // Tomamos los primeros 50 lemas más frecuentes (excluyendo ya las stopwords)
+        // Tomamos los primeros 50 lemas críticos...
         sortedFrequencies.slice(0, 50).forEach((freq, index) => {
             cumulativeFrequency += freq;
-            // Cálculo: acumulado significativo / TOTAL NETO (sin stopwords)
-            let porcentajeSobreNeto = (cumulativeFrequency / totalNetasGlobal) * 100;
-            dataY.push(porcentajeSobreNeto);
+            // ...pero comparamos contra el TOTAL BRUTO DEL CORPUS (incluyendo stopwords)
+            let porcentajeSobreBruto = (cumulativeFrequency / totalBrutasGlobal) * 100;
+            dataY.push(porcentajeSobreBruto);
             etiquetasX.push(index + 1);
         });
 
@@ -231,26 +231,47 @@
             data: {
                 labels: etiquetasX,
                 datasets: [{
-                    label: 'Cobertura del léxico crítico',
+                    label: 'Cobertura del corpus por lema crítico',
                     data: dataY,
-                    borderColor: '#b8860b',
-                    pointBackgroundColor: '#1a3a5a',
-                    backgroundColor: 'rgba(184, 134, 11, 0.1)',
+                    borderColor: '#0000FF', // Mismo color azul de image_0.png
+                    pointBackgroundColor: '#0000FF',
+                    backgroundColor: 'transparent',
                     borderWidth: 2,
                     pointRadius: 4,
-                    fill: true,
-                    tension: 0.2
+                    fill: false,
+                    tension: 0.1
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    x: { title: { display: true, text: 'Número de lemas críticos (ordenados por frecuencia)' }, grid: { borderDash: [5, 5] } },
-                    y: { min: 0, max: 100, title: { display: true, text: '% sobre el volumen neto (%)' }, grid: { borderDash: [5, 5] } }
+                    x: { title: { display: true, text: 'Número de lemas agrupados más frecuentes' }, grid: { borderDash: [5, 5] } },
+                    // Adaptamos el título para que coincida con image_0.png
+                    y: { min: 0, title: { display: true, text: 'Porcentaje del corpus (%)' }, grid: { borderDash: [5, 5] } }
                 },
-                plugins: { legend: { display: false }, title: { display: true, text: 'CONCENTRACIÓN DE CONTENIDO (EXCLUYENDO STOPWORDS)' } }
-            }
+                plugins: { legend: { display: false }, title: { display: true, text: 'CONCENTRACIÓN LÉXICA Y DISPERSIÓN' } }
+            },
+            // AÑADIMOS LA LÍNEA ROJA DEL 50%
+            plugins: [{
+                id: 'lineaReferencia50',
+                beforeDraw: (chart) => {
+                    const ctx = chart.ctx;
+                    const yScale = chart.scales.y;
+                    const xScale = chart.scales.x;
+                    const y50 = yScale.getPixelForValue(50);
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.strokeStyle = '#FF0000'; // Rojo
+                    ctx.lineWidth = 1;
+                    ctx.setLineDash([5, 5]); // Guiones
+                    ctx.moveTo(xScale.left, y50);
+                    ctx.lineTo(xScale.right, y50);
+                    ctx.stroke();
+                    // Añadimos la etiqueta
+                    ctx.restore();
+                }
+            }]
         });
 
         const top10 = Object.entries(vocabularioNeto).sort((a,b) => b[1]-a[1]).slice(0, 10);
