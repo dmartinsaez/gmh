@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio de Textos - Catálogo Farinelli</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { --azul: #1a3a5a; --oro: #b8860b; --oro-claro: #d4af37; --fondo: #fdfaf3; --borde: #dcdde1; }
+        body { font-family: 'Georgia', serif; background-color: #f4f1ea; color: #2c3e50; line-height: 1.8; margin: 0; padding: 20px; }
+        .contenedor { max-width: 1100px; margin: 0 auto; background: var(--fondo); padding: 40px; border-top: 6px solid var(--oro); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        
+        h1 { text-align: center; font-size: 1.8em; color: var(--azul); text-transform: uppercase; border-bottom: 2px double var(--oro); padding-bottom: 15px; margin-bottom: 30px; }
+        .seccion-titulo { text-align: center; font-variant: small-caps; color: var(--oro); border-bottom: 1px solid var(--oro); margin: 40px 0 20px 0; padding-bottom: 8px; font-size: 1.3em; }
+
+        /* Tabla de Métricas */
+        .tabla-stats { width: 100%; border-collapse: collapse; margin-bottom: 30px; background: white; border-radius: 8px; overflow: hidden; border: 1px solid var(--borde); }
+        .tabla-stats th, .tabla-stats td { padding: 15px; text-align: center; border: 1px solid #eee; }
+        .tabla-stats th { background: var(--azul); color: white; font-weight: normal; font-variant: small-caps; }
+        .num-grande { font-size: 1.5em; font-weight: bold; color: var(--oro); display: block; }
+
+        /* Gráficas */
+        .grid-graficas { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; }
+        .card-grafica { background: white; padding: 20px; border: 1px solid var(--borde); border-radius: 8px; height: 350px; }
+
+        /* Buscador y Nube */
+        .buscador-box { text-align: center; margin-bottom: 30px; background: white; padding: 25px; border-radius: 8px; border: 1px solid var(--borde); }
+        #inputBusqueda { padding: 12px; width: 70%; border: 1px solid var(--oro); border-radius: 4px; font-family: serif; font-size: 1.1em; outline: none; }
+        .word-cloud { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 20px; margin-bottom: 30px; }
+        .word-item { cursor: pointer; transition: 0.2s; border-radius: 4px; padding: 2px 6px; }
+        .word-item:hover { background: var(--azul); color: white !important; }
+
+        /* Lista de Crónicas */
+        .lista-textos { max-height: 700px; overflow-y: scroll; background: white; border: 1px solid var(--borde); border-radius: 8px; padding: 10px; }
+        .texto-card { padding: 30px; border-bottom: 1px solid #eee; transition: 0.3s; }
+        .texto-card:hover { background: #fdfcf4; }
+        .texto-meta { font-size: 0.85em; color: var(--oro); font-weight: bold; margin-bottom: 15px; display: block; border-left: 3px solid var(--oro); padding-left: 10px; }
+        .texto-contenido { font-size: 1.05em; text-align: justify; color: #333; }
+        .resaltado { background: #ffe066; font-weight: bold; color: #000; padding: 0 2px; }
+
+        /* Scrollbars siempre visibles */
+        ::-webkit-scrollbar { width: 10px; height: 10px; display: block; }
+        ::-webkit-scrollbar-thumb { background: var(--oro); border-radius: 5px; }
+        ::-webkit-scrollbar-track { background: #f0f0f0; }
+    </style>
+</head>
+<body>
+
+<div class="contenedor">
+    <h1>Análisis Lingüístico y Narrativo</h1>
+
+    <table class="tabla-stats">
+        <thead>
+            <tr>
+                <th>Vocabulario Distinto</th>
+                <th>Volumen de Texto Total</th>
+                <th>Crónicas Analizadas</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span id="stat-distintas" class="num-grande">-</span> palabras únicas</td>
+                <td><span id="stat-total" class="num-grande">-</span> palabras brutas</td>
+                <td><span id="stat-cronicas" class="num-grande">-</span> documentos</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="grid-graficas">
+        <div class="card-grafica">
+            <canvas id="chartEvolucionTexto"></canvas>
+        </div>
+        <div class="card-grafica">
+            <canvas id="chartTopPalabras"></canvas>
+        </div>
+    </div>
+
+    <h2 class="seccion-titulo">Exploración de Conceptos</h2>
+    <div id="wordCloud" class="word-cloud"></div>
+
+    <div class="buscador-box">
+        <h2 class="seccion-titulo" style="margin-top:0">Buscador Filológico</h2>
+        <input type="text" id="inputBusqueda" placeholder="Busca términos: sumptuoso, relox, Geronymo..." onkeyup="filtrarTextos()">
+        <p style="font-size:0.8em; color:#888; margin-top:10px;">Criterio: Unifica J/G/X, V/B, I/Y, H y tildes según el periodo.</p>
+    </div>
+
+    <div id="listaTextos" class="lista-textos"></div>
+</div>
+
+<script>
+    let globalData = [];
+    let wordFreq = {};
+    let yearFreq = {};
+    const EXCLUIDAS = ["1","11","12","13","14","15","16","17","18","2","20","200","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","420","43","44","45","5","6","60","7","8","9","90","a","al","alguna","algunas","alguno","algunos","algún","ambos","ampleamos","ante","antes","aquel","aquellas","aquellos","aqui","arriba","atras","bajo","bastante","bien","cada","capilla","cierta","ciertas","ciertos","como","con","conseguimos","conseguir","consigo","consigue","consiguen","consigues","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleais","emplean","emplear","empleas","empleo","en","encima","entonces","entre","era","eramos","eran","eras","eres","es","esta","estaba","estado","estais","estamos","estan","este","estoy","fin","fue","fueron","fui","fuimos","gueno","ha","hace","haceis","hacemos","hacen","hacer","haces","hago","han","haviendo","huvo","incluso","intenta","intentais","intentamos","intentan","intentar","intentas","intento","ir","la","largo","las","lo","los","m","mas","mayor","mientras","mio","misma","missa","modo","muchos","muy","nos","nosotros","o","otras","otro","para","pero","podeis","podemos","poder","podria","podriais","podriamos","podrian","podrias","por","por qué","porque","primero desde","puede","pueden","puedo","que","quien","s","sabe","sabeis","sabemos","saben","saber","sabes","se","ser","si","sic","siendo","sin","sobre","sois","solamente","solo","somos","soy","su","sus","tambien","también","teneis","tenemos","tener","tengo","tiempo","tiene","tienen","toda","todo","trabaja","trabajais","trabajamos","trabajan","trabajar","trabajas","trabajo","tras","tribuna","tuvo","tuyo","ultimo","un","una","unas","uno","unos","usa","usais","usamos","usan","usar","usas","uso","va","vais","valor","vamos","van","vaya","verdad","verdadera cierto","verdadero","vosotras","vosotros","voy","y","yo"];
+
+    fetch('archivo.json').then(r => r.json()).then(data => {
+        globalData = data.filter(i => i.Transcripción && i.Transcripción.length > 5);
+        procesarTextos();
+        renderStats();
+        renderCharts();
+        renderCloud();
+        filtrarTextos();
+    });
+
+    function normalizarFilologico(texto) {
+        if (!texto) return "";
+        return texto.toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
+            .replace(/g(?=[eiéí])/g, "j")
+            .replace(/x/g, "j")
+            .replace(/y/g, "i")
+            .replace(/h/g, "")
+            .replace(/v/g, "b")
+            .replace(/ç/g, "z")
+            .trim();
+    }
+
+    function procesarTextos() {
+        let uniqueWords = new Set();
+        let totalCount = 0;
+
+        globalData.forEach(item => {
+            let textoLimpio = item.Transcripción.replace(/<\/?[^>]+(>|$)/g, "").toLowerCase();
+            let palabras = textoLimpio.match(/[a-záéíóúñ0-9]+/gi) || [];
+            
+            if (!yearFreq[item.Año]) yearFreq[item.Año] = 0;
+            yearFreq[item.Año] += palabras.length;
+
+            palabras.forEach(p => {
+                totalCount++;
+                if (!EXCLUIDAS.includes(p) && p.length > 2) {
+                    uniqueWords.add(p);
+                    wordFreq[p] = (wordFreq[p] || 0) + 1;
+                }
+            });
+        });
+
+        document.getElementById('stat-distintas').innerText = uniqueWords.size.toLocaleString();
+        document.getElementById('stat-total').innerText = totalCount.toLocaleString();
+        document.getElementById('stat-cronicas').innerText = globalData.length;
+    }
+
+    function renderCharts() {
+        // Gráfica de volumen por año
+        const años = Object.keys(yearFreq).sort();
+        new Chart(document.getElementById('chartEvolucionTexto'), {
+            type: 'line',
+            data: {
+                labels: años,
+                datasets: [{
+                    label: 'Palabras totales publicadas',
+                    data: años.map(a => yearFreq[a]),
+                    fill: true,
+                    borderColor: '#1a3a5a',
+                    backgroundColor: 'rgba(26, 58, 90, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'VOLUMEN NARRATIVO ANUAL' } } }
+        });
+
+        // Top 10 palabras
+        const top10 = Object.entries(wordFreq).sort((a,b) => b[1]-a[1]).slice(0,10);
+        new Chart(document.getElementById('chartTopPalabras'), {
+            type: 'bar',
+            data: {
+                labels: top10.map(t => t[0].toUpperCase()),
+                datasets: [{
+                    label: 'Frecuencia',
+                    data: top10.map(t => t[1]),
+                    backgroundColor: '#b8860b'
+                }]
+            },
+            options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'TOP 10 CONCEPTOS CLAVE' }, legend: {display: false} } }
+        });
+    }
+
+    function renderCloud() {
+        const topWords = Object.entries(wordFreq).sort((a,b) => b[1]-a[1]).slice(0, 40);
+        const cloud = document.getElementById('wordCloud');
+        topWords.forEach(([word, freq]) => {
+            let span = document.createElement('span');
+            span.className = 'word-item';
+            span.innerText = word;
+            span.style.fontSize = `${Math.min(12 + freq * 1.2, 32)}px`;
+            span.style.color = freq > 10 ? 'var(--azul)' : '#999';
+            span.onclick = () => { document.getElementById('inputBusqueda').value = word; filtrarTextos(); };
+            cloud.appendChild(span);
+        });
+    }
+
+    function filtrarTextos() {
+        const input = document.getElementById('inputBusqueda').value;
+        const queryNorm = normalizarFilologico(input);
+        const container = document.getElementById('listaTextos');
+        container.innerHTML = "";
+
+        globalData.forEach(item => {
+            const transNorm = normalizarFilologico(item.Transcripción);
+            if (queryNorm === "" || transNorm.includes(queryNorm)) {
+                let div = document.createElement('div');
+                div.className = 'texto-card';
+                let contenido = item.Transcripción;
+
+                if (input.length >= 2) {
+                    let pattern = queryNorm.split('').map(char => {
+                        if (char === 'j') return '[j|g|x]';
+                        if (char === 'i') return '[i|y]';
+                        if (char === 'b') return '[b|v]';
+                        if (char === 'z') return '[z|c|ç]';
+                        return char;
+                    }).join('[\\u0300-\\u036f]?h?');
+                    const regex = new RegExp(pattern, "gi");
+                    contenido = contenido.replace(regex, (match) => `<span class="resaltado">${match}</span>`);
+                }
+
+                div.innerHTML = `<span class="texto-meta">${item.Año} | ${item.Título.replace(/<\/?[^>]+(>|$)/g, "")}</span>
+                                 <div class="texto-contenido">${contenido}</div>`;
+                container.appendChild(div);
+            }
+        });
+    }
+</script>
+</body>
+</html>
