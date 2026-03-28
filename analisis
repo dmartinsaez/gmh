@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Estadístico - Ópera en el Buen Retiro</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .contenedor-stats {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #1f6fb2;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .grid-graficos {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .card-grafico {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        .info-panel {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.8em;
+            color: #777;
+        }
+        @media (max-width: 768px) {
+            .grid-graficos { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="contenedor-stats">
+    <h1>Análisis de la Actividad Operística (1747–1758)</h1>
+    
+    <div class="info-panel">
+        <strong>Nota metodológica:</strong> Este panel procesa el <code>archivo.json</code> completando automáticamente los campos vacíos mediante herencia de datos (forward-fill) y normalizando las menciones de compositores y títulos para una visualización precisa.
+    </div>
+
+    <div class="grid-graficos">
+        <div class="card-grafico full-width">
+            <canvas id="chartAnual"></canvas>
+        </div>
+
+        <div class="card-grafico">
+            <canvas id="chartTitulos"></canvas>
+        </div>
+
+        <div class="card-grafico">
+            <canvas id="chartMensual"></canvas>
+        </div>
+    </div>
+
+    <footer>
+        Recurso vinculado al Documentario de prensa de Carlo Broschi Farinelli.
+    </footer>
+</div>
+
+<script>
+    // 1. Cargar datos
+    fetch('archivo.json')
+        .then(response => response.json())
+        .then(data => {
+            const datosLimpios = prepararDatos(data);
+            renderizarGraficos(datosLimpios);
+        });
+
+    // 2. Lógica para rellenar huecos y limpiar HTML
+    function prepararDatos(data) {
+        let ultimoTitulo = "Desconocido";
+        let ultimoCompositor = "Desconocido";
+        
+        return data.map(item => {
+            // Limpiar etiquetas HTML de los títulos
+            if (item.Título && item.Título.trim() !== "") {
+                ultimoTitulo = item.Título.replace(/<\/?[^>]+(>|$)/g, "").replace(/\.\.\./g, "").trim();
+            }
+            if (item.Compositor && item.Compositor.trim() !== "") {
+                ultimoCompositor = item.Compositor;
+            }
+
+            return {
+                ...item,
+                Título: ultimoTitulo,
+                Compositor: ultimoCompositor,
+                Mes: extraerMes(item.Día)
+            };
+        });
+    }
+
+    function extraerMes(str) {
+        if (!str) return "S/D";
+        const s = str.toLowerCase();
+        if (s.includes("en.")) return "Enero";
+        if (s.includes("feb.")) return "Febrero";
+        if (s.includes("mar.")) return "Marzo";
+        if (s.includes("ab.")) return "Abril";
+        if (s.includes("may.")) return "Mayo";
+        if (s.includes("jun.")) return "Junio";
+        if (s.includes("jul.")) return "Julio";
+        if (s.includes("ag.")) return "Agosto";
+        if (s.includes("sep.")) return "Septiembre";
+        if (s.includes("oct.")) return "Octubre";
+        if (s.includes("nov.")) return "Noviembre";
+        if (s.includes("dic.")) return "Diciembre";
+        return "Indeterminado";
+    }
+
+    // 3. Crear los gráficos
+    function renderizarGraficos(data) {
+        
+        // --- PROCESAR ACTIVIDAD ANUAL ---
+        const añosLabel = [...new Set(data.map(i => i.Año))].sort();
+        const añosData = añosLabel.map(a => data.filter(i => i.Año === a).length);
+
+        new Chart(document.getElementById('chartAnual'), {
+            type: 'line',
+            data: {
+                labels: añosLabel,
+                datasets: [{
+                    label: 'Número de Funciones por Año',
+                    data: añosData,
+                    borderColor: '#1f6fb2',
+                    backgroundColor: 'rgba(31, 111, 178, 0.1)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: { plugins: { title: { display: true, text: 'Evolución Temporal de Representaciones' } } }
+        });
+
+        // --- PROCESAR TÍTULOS (TOP 10) ---
+        const conteoTitulos = {};
+        data.forEach(i => { conteoTitulos[i.Título] = (conteoTitulos[i.Título] || 0) + 1; });
+        const titulosSorted = Object.entries(conteoTitulos)
+            .sort((a,b) => b[1] - a[1])
+            .slice(0, 10);
+
+        new Chart(document.getElementById('chartTitulos'), {
+            type: 'bar',
+            data: {
+                labels: titulosSorted.map(t => t[0]),
+                datasets: [{
+                    label: 'Menciones/Funciones',
+                    data: titulosSorted.map(t => t[1]),
+                    backgroundColor: '#d4a017'
+                }]
+            },
+            options: { 
+                indexAxis: 'y',
+                plugins: { title: { display: true, text: 'Top 10 Óperas más Frecuentes' } } 
+            }
+        });
+
+        // --- PROCESAR ESTACIONALIDAD MENSUAL ---
+        const ordenMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        const conteoMeses = {};
+        data.forEach(i => { conteoMeses[i.Mes] = (conteoMeses[i.Mes] || 0) + 1; });
+        
+        new Chart(document.getElementById('chartMensual'), {
+            type: 'radar',
+            data: {
+                labels: ordenMeses,
+                datasets: [{
+                    label: 'Intensidad por Mes',
+                    data: ordenMeses.map(m => conteoMeses[m] || 0),
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    pointBackgroundColor: 'rgb(255, 99, 132)'
+                }]
+            },
+            options: { plugins: { title: { display: true, text: 'Distribución Estacional (Calendario)' } } }
+        });
+    }
+</script>
+
+</body>
+</html>
