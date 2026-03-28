@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laboratorio Lexicográfico - Catálogo Farinelli</title>
+    <title>Análisis Lexicográfico - Catálogo Farinelli</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --azul: #1a3a5a; --oro: #b8860b; --fondo: #fdfaf3; --borde: #dcdde1; --gris-metodo: #f8f9fa; }
@@ -47,7 +47,7 @@
             <div class="recuadro-metodo">
                 <strong>Metodología de Volumen Anual:</strong>
                 <ul>
-                    <li><strong>Volumen Bruto (Gris):</strong> Extensión total del texto tras eliminar etiquetas HTML. Excluye estrictamente las siglas <em>GM</em> y <em>MH</em>.</li>
+                    <li><strong>Volumen Bruto (Gris):</strong> Extensión total del texto tras eliminar etiquetas HTML. Excluye estrictamente las siglas de control editorial (<em>GM</em> y <em>MH</em>). Incluye palabras funcionales.</li>
                     <li><strong>Volumen Crítico (Azul):</strong> Densidad informativa obtenida tras filtrar el ruido gramatical (artículos, preposiciones, conjunciones) mediante el diccionario de exclusión.</li>
                 </ul>
             </div>
@@ -59,7 +59,7 @@
                 <strong>Metodología de Cobertura Léxica:</strong>
                 <ul>
                     <li>Analiza la concentración del vocabulario: muestra cómo los lemas más frecuentes cubren el discurso total.</li>
-                    <li>El cálculo se realiza exclusivamente sobre el <strong>Volumen Crítico</strong>. El eje Y representa el porcentaje acumulado sobre el total de palabras netas.</li>
+                    <li>El cálculo se realiza exclusivamente sobre el <strong>Volumen Crítico</strong>. El eje Y representa el porcentaje acumulado sobre el total de palabras netas globales.</li>
                 </ul>
             </div>
         </div>
@@ -70,7 +70,7 @@
                 <strong>Metodología de Frecuencia de Términos:</strong>
                 <ul>
                     <li>Normalización de todas las formas a minúsculas y eliminación de signos de puntuación adyacentes.</li>
-                    <li>Tokenización estricta de unidades alfanuméricas de al menos 2 caracteres.</li>
+                    <li>Tokenización estricta de unidades alfanuméricas de al menos 2 caracteres, permitiendo capturar términos técnicos breves pero significativos.</li>
                 </ul>
             </div>
         </div>
@@ -78,7 +78,7 @@
 
     <div class="anexo-metodologico">
         <span class="anexo-titulo">Anexo I: Diccionario de Exclusión (Stopwords)</span>
-        <p>Formas gramaticales y siglas de control editorial omitidas para el cálculo del volumen crítico:</p>
+        <p>Formas gramaticales y siglas omitidas para el cálculo del volumen crítico y la cobertura léxica:</p>
         <div id="visualizarExcluidas" class="lista-excluidas"></div>
     </div>
 </div>
@@ -90,7 +90,8 @@
     let palabrasNetasPorAño = {};
     let totalNetasGlobal = 0;
 
-    const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20","200","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","420","43","44","45","5","6","60","7","8","9","90","a","al","alguna","algunas","alguno","algunos","algún","ambos","ampleamos","ante","antes","aquel","aquellas","aquellos","aqui","arriba","atras","bajo","bastante","bien","cada","capilla","cierta","ciertas","ciertos","como","con","conseguimos","conseguir","consigo","consigue","consiguen","consigues","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleais","emplean","emplear","empleas","empleo","en","encima","entonces","entre","era","eramos","eran","eras","eres","es","esta","estaba","estado","estais","estamos","estan","este","estoy","fin","fue","fueron","fui","fuimos","gueno","ha","hace","haceis","hacemos","hacen","hacen","hacer","haces","hago","han","haviendo","huvo","incluso","intenta","intentais","intentamos","intentan","intentar","intentas","intento","ir","la","largo","las","lo","los","m","mas","mayor","mientras","mio","misma","missa","modo","muchos","muy","nos","nosotros","o","otras","otro","para","pero","podeis","podemos","poder","podria","podriais","podriamos","podrian","podrias","por","por qué","porque","primero desde","puede","pueden","puedo","que","quien","s","sabe","sabeis","sabemos","saben","saber","sabes","se","ser","si","sic","siendo","sin","sobre","sois","solamente","solo","somos","soy","su","sus","tambien","también","teneis","tenemos","tener","tengo","tiempo","tiene","tienen","toda","todo","trabaja","trabajais","trabajamos","trabajamos","trabajan","trabajar","trabajas","trabajo","tras","tribuna","tuvo","tuyo","ultimo","un","una","unas","uno","unos","usa","usais","usamos","usan","usar","usas","uso","va","vais","valor","vamos","van","vaya","verdad","verdadera cierto","verdadero","vosotras","vosotros","voy","y","yo"];
+    // Lista corregida: eliminada la entrada errónea 'verdadera cierto'
+    const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20","200","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","420","43","44","45","5","6","60","7","8","9","90","a","al","alguna","algunas","alguno","algunos","algún","ambos","ampleamos","ante","antes","aquel","aquellas","aquellos","aqui","arriba","atras","bajo","bastante","bien","cada","capilla","cierta","ciertas","ciertos","como","con","conseguimos","conseguir","consigo","consigue","consiguen","consigues","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleais","emplean","emplear","empleas","empleo","en","encima","entonces","entre","era","eramos","eran","eras","eres","es","esta","estaba","estado","estais","estamos","estan","este","estoy","fin","fue","fueron","fui","fuimos","gueno","ha","hace","haceis","hacemos","hacen","hacer","haces","hago","han","haviendo","huvo","incluso","intenta","intentais","intentamos","intentan","intentar","intentas","intento","ir","la","largo","las","lo","los","m","mas","mayor","mientras","mio","misma","missa","modo","muchos","muy","nos","nosotros","o","otras","otro","para","pero","podeis","podemos","poder","podria","podriais","podriamos","podrian","podrias","por","por qué","porque","primero","desde","puede","pueden","puedo","que","quien","s","sabe","sabeis","sabemos","saben","saber","sabes","se","ser","si","sic","siendo","sin","sobre","sois","solamente","solo","somos","soy","su","sus","tambien","también","teneis","tenemos","tener","tengo","tiempo","tiene","tienen","toda","todo","trabaja","trabajais","trabajamos","trabajan","trabajar","trabajas","trabajo","tras","tribuna","tuvo","tuyo","ultimo","un","una","unas","uno","unos","usa","usais","usamos","usan","usar","usas","uso","va","vais","valor","vamos","van","vaya","verdad","verdadera","verdadero","cierto","vosotras","vosotros","voy","y","yo"];
 
     fetch('archivo.json').then(r => r.json()).then(data => {
         let vistos = new Set();
@@ -108,6 +109,10 @@
     function procesarDatos() {
         totalNetasGlobal = 0;
         let setUnicasNetas = new Set();
+        vocabularioNeto = {};
+        palabrasBrutasPorAño = {};
+        palabrasNetasPorAño = {};
+
         rawTextos.forEach(item => {
             let textoSinHTML = item.Transcripción.replace(/<[^>]+>/g, " ");
             let palabras = textoSinHTML.toLowerCase().match(/[a-záéíóúñ]{2,}/gi) || [];
@@ -118,7 +123,9 @@
             palabras.forEach(p => {
                 let pLimpia = p.trim();
                 if (pLimpia === "gm" || pLimpia === "mh") return;
+                
                 palabrasBrutasPorAño[item.Año]++;
+
                 if (!EXCLUIDAS.includes(pLimpia)) {
                     setUnicasNetas.add(pLimpia);
                     vocabularioNeto[pLimpia] = (vocabularioNeto[pLimpia] || 0) + 1;
