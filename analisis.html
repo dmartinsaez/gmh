@@ -14,74 +14,74 @@
         .seccion-titulo { text-align: center; font-variant: small-caps; color: var(--oro); border-bottom: 1px solid var(--oro); margin: 30px 0 15px 0; padding-bottom: 5px; font-size: 1.2em; }
 
         /* SCROLL VISIBLE */
-        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar { width: 10px; }
         ::-webkit-scrollbar-thumb { background: var(--oro); border-radius: 5px; }
-        ::-webkit-scrollbar-track { background: #eee; border-radius: 5px; }
-        * { scrollbar-color: var(--oro) #eee; scrollbar-width: thin; }
+        ::-webkit-scrollbar-track { background: #eee; }
 
-        /* Gráficos */
-        .grid-graficos { display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 30px; }
-        .canvas-container { position: relative; height: 320px; width: 100%; background: white; border: 1px solid var(--borde); border-radius: 8px; padding: 15px; box-sizing: border-box; }
-
-        /* NUEVO HEATMAP ESTILO CALENDARIO */
+        /* HEATMAP ESTILO CALENDARIO */
         .calendar-heatmap { background: white; padding: 20px; border: 1px solid var(--borde); border-radius: 8px; overflow-x: auto; }
-        .heatmap-month-row { display: grid; grid-template-columns: 80px repeat(31, 1fr); gap: 2px; align-items: center; margin-bottom: 3px; }
+        .heatmap-month-row { display: grid; grid-template-columns: 80px repeat(31, 1fr); gap: 2px; align-items: center; margin-bottom: 4px; }
         .heatmap-month-name { font-size: 0.7em; font-weight: bold; color: var(--azul); text-transform: uppercase; }
-        .day-cell { height: 18px; background: #f0f0f0; border-radius: 1px; position: relative; cursor: help; }
-        .day-cell:hover::after { content: attr(data-info); position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--azul); color: white; padding: 4px 8px; border-radius: 3px; font-size: 10px; white-space: nowrap; z-index: 10; }
+        .day-cell { height: 18px; background: #f0f0f0; border-radius: 1px; cursor: pointer; transition: 0.2s; }
+        .day-cell:hover { transform: scale(1.3); z-index: 5; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
+
+        /* Info del día al pulsar */
+        #infoDia { display: none; background: var(--azul); color: white; padding: 15px; border-radius: 8px; margin: 10px auto 30px; max-width: 850px; text-align: center; border-left: 5px solid var(--oro); animation: slideIn 0.3s; }
+        @keyframes slideIn { from { opacity:0; transform: translateY(-10px); } to { opacity:1; transform: translateY(0); } }
 
         /* Catálogo Expansivo */
-        .lista-compacta { max-width: 850px; margin: 0 auto; background: white; border: 1px solid var(--borde); border-radius: 8px; max-height: 500px; overflow-y: scroll; }
-        .opera-header { padding: 12px; display: flex; justify-content: space-between; cursor: pointer; border-bottom: 1px solid #eee; }
+        .lista-compacta { max-width: 850px; margin: 0 auto; background: white; border: 1px solid var(--borde); border-radius: 8px; max-height: 450px; overflow-y: scroll; }
+        .opera-header { padding: 12px; display: flex; justify-content: space-between; cursor: pointer; border-bottom: 1px solid #eee; align-items: center; }
         .titulo-opera { font-style: italic; font-weight: bold; color: var(--azul); }
         .tag-año { background: var(--azul); color: white; padding: 1px 6px; border-radius: 3px; font-size: 0.75em; margin-left: 4px; font-family: sans-serif; }
-        .opera-detalle { display: none; padding: 15px; background: #f9f6ef; font-size: 0.9em; border-bottom: 2px solid var(--oro); }
+        .opera-detalle { display: none; padding: 15px; background: #f9f6ef; font-size: 0.9em; border-bottom: 2px solid var(--oro); line-height: 1.6; }
 
         .btn-orden { background: white; border: 1px solid var(--oro); color: var(--oro); padding: 5px 12px; cursor: pointer; font-variant: small-caps; margin: 0 5px; }
         .btn-orden.active { background: var(--azul); color: white; border-color: var(--azul); }
 
-        #calendarioFestivo { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
+        .grid-graficos { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0; }
+        #calendarioFestivo { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
         .mes-bloque { background: white; padding: 15px; border: 1px solid var(--borde); border-radius: 8px; }
-        .mes-nombre { font-weight: bold; color: var(--azul); border-bottom: 2px solid var(--azul); margin-bottom: 10px; text-align: center; text-transform: uppercase; font-size: 0.9em; display: block; }
     </style>
 </head>
 <body>
 
 <div class="contenedor">
-    <h1>Estadísticas del Catálogo Farinelli</h1>
+    <h1>Estadísticas del Catálogo Farinelli (1747-1758)</h1>
 
-    <div class="grid-graficos">
-        <div class="canvas-container"><canvas id="chartAnual"></canvas></div>
+    <div style="height: 320px; background:white; border:1px solid var(--borde); border-radius:8px; padding:15px; margin-bottom:30px;">
+        <canvas id="chartAnual"></canvas>
     </div>
 
-    <h2 class="seccion-titulo">Mapa de Calor Anual: Ritmo de Representaciones</h2>
-    <div class="calendar-heatmap" id="calendarHeatmap">
-        </div>
+    <h2 class="seccion-titulo">Análisis de Estacionalidad: Mapa de Calor</h2>
+    <p style="text-align: center; font-size: 0.85em; color: #666; margin-top: -10px;">Pulsa en los días más oscuros para ver la causa de la celebración.</p>
+    <div class="calendar-heatmap" id="calendarHeatmap"></div>
+    <div id="infoDia"></div>
 
-    <h2 class="seccion-titulo" style="margin-top:50px">Inventario de Óperas (Haz clic para detalles)</h2>
+    <h2 class="seccion-titulo" style="margin-top:50px">Inventario de Óperas</h2>
     <div style="text-align: center; margin-bottom: 15px;">
-        <button class="btn-orden" id="btn-alfa" onclick="reRenderOperas('alfa')">A-Z</button>
+        <button class="btn-orden" id="btn-alfa" onclick="reRenderOperas('alfa')">Alfabético</button>
         <button class="btn-orden active" id="btn-año" onclick="reRenderOperas('año')">Por Año</button>
     </div>
     <div id="listaOperas" class="lista-compacta"></div>
 
-    <div class="grid-graficos" style="margin-top:40px; grid-template-columns: 1fr 1fr;">
-        <div class="lista-compacta" style="height: 300px; overflow-y: scroll;">
+    <div class="grid-graficos">
+        <div class="lista-compacta" style="height: 300px;">
             <h2 class="seccion-titulo">Compositores</h2>
             <div id="listaCompositores"></div>
         </div>
-        <div class="lista-compacta" style="height: 300px; overflow-y: scroll;">
+        <div class="lista-compacta" style="height: 300px;">
             <h2 class="seccion-titulo">Libretistas</h2>
             <div id="listaLibretistas"></div>
         </div>
     </div>
 
-    <h2 class="seccion-titulo">Calendario Completo de Festividades</h2>
+    <h2 class="seccion-titulo">Efemérides Festivas Completas</h2>
     <div id="calendarioFestivo"></div>
 </div>
 
 <script>
-    let globalData = { mapOp: {}, mapComp: {}, mapLib: {}, mapFest: {}, raw: [], dayMap: {} };
+    let globalData = { mapOp: {}, mapComp: {}, mapLib: {}, mapFest: {}, raw: [], dayStats: {} };
     const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
     const HITOS = { 1750: "Boda Infanta Mª Antonia", 1754: "Muerte Carvajal", 1758: "Muerte Bárbara de Braganza" };
 
@@ -113,12 +113,19 @@
                 globalData.mapOp[t].funciones++;
                 if (item.Ocasión) globalData.mapOp[t].occasions.add(item.Ocasión.split('+')[0].trim());
 
-                // Mapeo para Heatmap de Calendario
+                // Lógica avanzada para el Heatmap (Día -> Ocasiones)
                 const mes = detectarMes(item.Día);
                 const dia = item.Día ? parseInt(item.Día.match(/\d+/)) : null;
                 if (mes && dia) {
                     const key = `${mes}-${dia}`;
-                    globalData.dayMap[key] = (globalData.dayMap[key] || 0) + 1;
+                    if (!globalData.dayStats[key]) globalData.dayStats[key] = { count: 0, occasions: {} };
+                    globalData.dayStats[key].count++;
+                    if (item.Ocasión) {
+                        const o = item.Ocasión.split('+')[0].trim();
+                        if (o.length > 3 && !o.toLowerCase().includes("domingo") && !o.includes("“")) {
+                            globalData.dayStats[key].occasions[o] = (globalData.dayStats[key].occasions[o] || 0) + 1;
+                        }
+                    }
                 }
 
                 const reg = (campo, target) => {
@@ -151,14 +158,37 @@
         MESES.forEach(m => {
             let row = `<div class="heatmap-month-row"><div class="heatmap-month-name">${m}</div>`;
             for (let d = 1; d <= 31; d++) {
-                const val = globalData.dayMap[`${m}-${d}`] || 0;
-                const alpha = Math.min(val / 10, 1);
-                const color = val > 0 ? `rgba(26, 58, 90, ${0.1 + alpha})` : '#f0f0f0';
-                row += `<div class="day-cell" style="background:${color}" data-info="Día ${d}: ${val} funciones totales"></div>`;
+                const stat = globalData.dayStats[`${m}-${d}`];
+                const count = stat ? stat.count : 0;
+                const alpha = Math.min(count / 10, 1);
+                const color = count > 0 ? `rgba(26, 58, 90, ${0.15 + alpha})` : '#f0f0f0';
+                row += `<div class="day-cell" style="background:${color}" onclick="verDetalleDia('${m}', ${d})"></div>`;
             }
-            row += `</div>`;
-            container.innerHTML += row;
+            container.innerHTML += row + `</div>`;
         });
+    }
+
+    function verDetalleDia(mes, dia) {
+        const stat = globalData.dayStats[`${mes}-${dia}`];
+        const infoDiv = document.getElementById('infoDia');
+        infoDiv.style.display = 'block';
+        
+        if (!stat || stat.count === 0) {
+            infoDiv.innerHTML = `<strong>${dia} de ${mes}:</strong> No se registran funciones operísticas en este día.`;
+            return;
+        }
+
+        // Encontrar la ocasión más repetida
+        let topOcc = "Función ordinaria o sin ocasión específica";
+        let max = 0;
+        for (let o in stat.occasions) {
+            if (stat.occasions[o] > max) { max = stat.occasions[o]; topOcc = o; }
+        }
+
+        infoDiv.innerHTML = `
+            <strong>${dia} de ${mes}:</strong> ${stat.count} funciones históricas registradas.<br>
+            <span style="color:var(--oro); font-variant: small-caps;">Causa principal:</span> ${topOcc}
+        `;
     }
 
     function toggleDetalle(id) {
@@ -183,10 +213,10 @@
                     <div>${Array.from(globalData.mapOp[k].años).sort().map(a => `<span class="tag-año">${a}</span>`).join('')}</div>
                 </div>
                 <div class="opera-detalle" id="det-${i}">
-                    <strong>Compositores:</strong> ${globalData.mapOp[k].comp}<br>
-                    <strong>Libretistas:</strong> ${globalData.mapOp[k].lib}<br>
-                    <strong>Noches registradas:</strong> ${globalData.mapOp[k].funciones}<br>
-                    <strong>Ocasiones:</strong> ${Array.from(globalData.mapOp[k].occasions).join(', ')}
+                    <strong>Compositor/es:</strong> ${globalData.mapOp[k].comp}<br>
+                    <strong>Libretista/s:</strong> ${globalData.mapOp[k].lib}<br>
+                    <strong>Frecuencia:</strong> ${globalData.mapOp[k].funciones} noches en cartel.<br>
+                    <strong>Motivos:</strong> ${Array.from(globalData.mapOp[k].occasions).join(', ')}
                 </div>
             </div>`).join('');
     }
@@ -205,7 +235,7 @@
         let h = "";
         MESES.forEach(m => {
             if (globalData.mapFest[m]) {
-                h += `<div class="mes-bloque"><span class="mes-nombre">${m}</span>`;
+                h += `<div class="mes-bloque"><span style="font-weight:bold; color:var(--azul); border-bottom:2px solid var(--azul); display:block; text-align:center; margin-bottom:10px; text-transform:uppercase; font-size:0.85em;">${m}</span>`;
                 Object.keys(globalData.mapFest[m]).sort().forEach(ev => {
                     h += `<div style="font-size:0.8em; margin-bottom:8px;"><strong>${ev}</strong><br>${Array.from(globalData.mapFest[m][ev]).sort().map(a => `<span class="tag-año" style="background:#d4af37;color:black;">${a}</span>`).join('')}</div>`;
                 });
@@ -227,7 +257,7 @@
         new Chart(document.getElementById('chartAnual').getContext('2d'), {
             type: 'line',
             data: { labels: años, datasets: [{ label: 'Funciones', data: años.map(a => globalData.raw.filter(i => i.Año === a).length), borderColor: '#1a3a5a', backgroundColor: 'rgba(26,58,90,0.1)', fill: true, tension: 0.3 }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'INTENSIDAD OPERÍSTICA ANUAL' }, tooltip: { callbacks: { afterLabel: (c) => HITOS[c.label] ? '✦ ' + HITOS[c.label] : '' } } } }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'INTENSIDAD ANUAL' }, tooltip: { callbacks: { afterLabel: (c) => HITOS[c.label] ? '✦ ' + HITOS[c.label] : '' } } } }
         });
     }
 </script>
