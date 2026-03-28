@@ -9,9 +9,19 @@
         :root { --azul: #1a3a5a; --oro: #b8860b; --fondo: #fdfaf3; --borde: #dcdde1; --gris-metodo: #f8f9fa; }
         body { font-family: 'Georgia', serif; background-color: #f4f1ea; color: #2c3e50; line-height: 1.8; margin: 0; padding: 20px; }
         
-        /* Contenedor sin línea superior, idéntico a los otros */
         .contenedor { max-width: 1200px; margin: 0 auto; background: var(--fondo); padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        h1 { text-align: center; font-size: 1.6em; color: var(--azul); text-transform: uppercase; border-bottom: 2px double var(--oro); padding-bottom: 15px; margin-bottom: 30px; }
+        
+        /* TÍTULO PRINCIPAL UNIFICADO */
+        h1 {
+            color: var(--azul); 
+            font-size: 1.3em; 
+            margin: 0 auto 0.8em auto;
+            text-align: center; 
+            line-height: 1.4; 
+            max-width: 850px;          
+            border-bottom: 2px double var(--oro);
+            padding-bottom: 15px;
+        }
 
         /* --- ESTILOS DE NAVEGACIÓN --- */
         .nav-farinelli {
@@ -71,7 +81,9 @@
 <body>
 
 <div class="contenedor">
-    <h1>Análisis Lexicográfico de las Crónicas</h1>
+    <h1>
+        Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)
+    </h1>
 
     <nav class="nav-farinelli">
         <a href="index.html">Documentario</a>
@@ -182,7 +194,6 @@
         document.getElementById('m-unicas-bruto').innerText = setUnicasBrutas.size.toLocaleString();
         document.getElementById('m-unicas-neto').innerText = setUnicasNetas.size.toLocaleString() + " (Críticas)";
         
-        // Texto final con el total de palabras excluidas
         let totalExcluidas = totalBrutasGlobal - totalNetasGlobal;
         document.getElementById('totalExcluidasTxt').innerText = "Total de palabras excluidas: " + totalExcluidas.toLocaleString();
     }
