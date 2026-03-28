@@ -8,21 +8,66 @@
     <style>
         :root { --azul: #1a3a5a; --oro: #b8860b; --fondo: #fdfaf3; --borde: #dcdde1; --gris-metodo: #f8f9fa; }
         body { font-family: 'Georgia', serif; background-color: #f4f1ea; color: #2c3e50; line-height: 1.8; margin: 0; padding: 20px; }
+        
         .contenedor { max-width: 1200px; margin: 0 auto; background: var(--fondo); padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        h1 { color: var(--azul); font-size: 1.3em; margin: 0 auto 0.8em auto; text-align: center; border-bottom: 2px double var(--oro); padding-bottom: 15px; }
-        .nav-farinelli { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; font-family: sans-serif; font-size: 0.85em; text-transform: uppercase; }
-        .nav-farinelli a { text-decoration: none; color: var(--azul); font-weight: bold; padding: 5px 10px; transition: 0.3s; }
-        .nav-farinelli .active { border: 1px solid var(--azul); background: var(--azul); color: white !important; border-radius: 4px; }
+        
+        h1 {
+            color: var(--azul); 
+            font-size: 1.3em; 
+            margin: 0 auto 0.8em auto;
+            text-align: center; 
+            line-height: 1.4; 
+            max-width: 850px;           
+            border-bottom: 2px double var(--oro);
+            padding-bottom: 15px;
+        }
+
+        .nav-farinelli {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            font-family: sans-serif;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .nav-farinelli a {
+            text-decoration: none;
+            color: var(--azul);
+            font-weight: bold;
+            padding: 5px 10px;
+            border: 1px solid transparent;
+            transition: 0.3s;
+        }
+        .nav-farinelli a:hover {
+            color: var(--oro);
+            border-bottom: 1px solid var(--oro);
+        }
+        .nav-farinelli .active {
+            border: 1px solid var(--azul);
+            background: var(--azul);
+            color: white !important;
+            border-radius: 4px;
+        }
+
         .metricas-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px; }
         .metrica-card { background: white; padding: 20px; border: 1px solid var(--borde); border-radius: 8px; text-align: center; }
-        .metrica-val-grande { font-size: 2.2em; font-weight: bold; color: var(--azul); display: block; }
-        .metrica-lab { font-size: 0.75em; text-transform: uppercase; color: var(--oro); font-weight: bold; margin-top: 10px; display: block; }
+        .metrica-val-grande { font-size: 2.2em; font-weight: bold; color: var(--azul); display: block; line-height: 1; }
+        .metrica-val-sub { font-size: 1.1em; color: #666; display: block; margin-top: 5px; border-top: 1px solid #eee; padding-top: 5px; }
+        .metrica-lab { font-size: 0.75em; text-transform: uppercase; color: var(--oro); font-weight: bold; letter-spacing: 1px; display: block; margin-top: 10px; }
+
         .grid-graficas { display: grid; grid-template-columns: 1fr; gap: 40px; margin-bottom: 30px; }
-        .card-grafica { background: white; padding: 25px; border: 1px solid var(--borde); border-radius: 8px; height: 480px; position: relative; }
-        .recuadro-metodo { background-color: var(--gris-metodo); border-left: 5px solid var(--azul); padding: 15px 20px; margin-bottom: 20px; font-size: 0.9em; border: 1px solid #e9ecef; }
+        .card-grafica { background: white; padding: 25px; border: 1px solid var(--borde); border-radius: 8px; height: 450px; position: relative; }
+        
+        .recuadro-metodo { background-color: var(--gris-metodo); border-left: 5px solid var(--azul); padding: 15px 20px; margin-top: -10px; margin-bottom: 20px; font-size: 0.9em; border: 1px solid #e9ecef; border-radius: 0 8px 8px 0; }
+        .recuadro-metodo strong { color: var(--azul); font-variant: small-caps; }
+
         .anexo-metodologico { margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--borde); font-size: 0.85em; color: #666; }
-        .lista-excluidas { background: white; padding: 20px; border: 1px solid #eee; border-radius: 8px; max-height: 200px; overflow-y: auto; font-family: monospace; }
-        .palabra-tag { display: inline-block; background: #f4f4f4; padding: 2px 6px; margin: 2px; border-radius: 4px; border: 1px solid #ddd; }
+        .lista-excluidas { background: white; padding: 20px; border: 1px solid #eee; border-radius: 8px; line-height: 1.6; text-align: justify; max-height: 200px; overflow-y: auto; font-family: monospace; }
+        .palabra-tag { display: inline-block; background: #f4f4f4; padding: 2px 6px; margin: 2px; border-radius: 4px; border: 1px solid #ddd; color: #444; }
+
+        @media (max-width: 900px) { .metricas-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -39,28 +84,42 @@
     <div class="metricas-grid">
         <div class="metrica-card">
             <span class="metrica-val-grande" id="m-total-bruto">0</span>
-            <span class="metrica-lab">Volumen Total (Bruto)</span>
+            <span class="metrica-val-sub" id="m-total-neto">0 (Crítico)</span>
+            <span class="metrica-lab">Volumen Total de Palabras</span>
         </div>
         <div class="metrica-card">
-            <span class="metrica-val-grande" id="m-total-neto">0</span>
-            <span class="metrica-lab">Volumen Crítico (Sin Stopwords)</span>
+            <span class="metrica-val-grande" id="m-unicas-bruto">0</span>
+            <span class="metrica-val-sub" id="m-unicas-neto">0 (Críticas)</span>
+            <span class="metrica-lab">Vocabulario Único (Formas)</span>
         </div>
     </div>
 
     <div class="grid-graficas">
         <div>
-            <div class="card-grafica"><canvas id="chartCobertura"></canvas></div>
+            <div class="card-grafica"><canvas id="chartEvolucionAnual"></canvas></div>
             <div class="recuadro-metodo">
-                <strong>Análisis de concentración:</strong> Esta gráfica mide cuánto ocupan los términos más frecuentes sobre el <strong>total del léxico neto</strong> (excluyendo partículas gramaticales).
+                <strong>Metodología de Volumen Anual:</strong> Muestra la densidad de información relevante (Crítico) por año tras filtrar las partículas gramaticales.
             </div>
         </div>
+
+        <div>
+            <div class="card-grafica"><canvas id="chartCobertura"></canvas></div>
+            <div class="recuadro-metodo">
+                <strong>Concentración Léxica Neta:</strong> Porcentaje que suman los términos más frecuentes sobre el <strong>total del léxico neto</strong> (sin stopwords).
+            </div>
+        </div>
+
         <div>
             <div class="card-grafica"><canvas id="chartTop10"></canvas></div>
+            <div class="recuadro-metodo">
+                <strong>Ranking de Frecuencia:</strong> Los 10 términos de léxico pleno más repetidos.
+            </div>
         </div>
     </div>
 
     <div class="anexo-metodologico">
-        <span id="totalExcluidasTxt"></span>
+        <span class="anexo-titulo">Anexo I: Diccionario de Exclusión (Partículas Gramaticales)</span>
+        <span id="totalExcluidasTxt" style="display:block; margin-bottom:10px; color:var(--oro); font-weight:bold;"></span>
         <div id="visualizarExcluidas" class="lista-excluidas"></div>
     </div>
 </div>
@@ -68,58 +127,86 @@
 <script>
     let rawTextos = []; 
     let vocabularioNeto = {};
+    let palabrasNetasPorAño = {};
     let totalBrutasGlobal = 0;
     let totalNetasGlobal = 0;
 
     const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20","200","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","420","43","44","45","5","6","60","7","8","9","90","a","al","alguna","algunas","alguno","algunos","algún","ambos","ampleamos","ante","antes","aquel","aquellas","aquellos","aqui","arriba","atras","bajo","bastante","bien","cada","capilla","cierta","ciertas","ciertos","como","con","conseguimos","conseguir","consigo","consigue","consiguen","consigues","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleais","emplean","emplear","empleas","empleo","en","encima","entonces","entre","era","eramos","eran","eras","eres","es","esta","estaba","estado","estais","estamos","estan","este","estoy","fin","fue","fueron","fui","fuimos","gueno","ha","hace","haceis","hacemos","hacen","hacer","haces","hago","han","haviendo","huvo","incluso","intenta","intentais","intentamos","intentan","intentar","intentas","intento","ir","la","largo","las","lo","los","m","mas","mayor","mientras","mio","misma","missa","modo","muchos","muy","nos","nosotros","o","otras","otro","para","pero","podeis","podemos","poder","podria","podriais","podriamos","podrian","podrias","por","por qué","porque","primero","desde","puede","pueden","puedo","que","quien","s","sabe","sabeis","sabemos","saben","saber","sabes","se","ser","si","sic","siendo","sin","sobre","sois","solamente","solo","somos","soy","su","sus","tambien","también","teneis","tenemos","tener","tengo","tiempo","tiene","tienen","toda","todo","trabaja","trabajais","trabajamos","trabajan","trabajar","trabajas","trabajo","tras","tribuna","tuvo","tuyo","ultimo","un","una","unas","uno","unos","usa","usais","usamos","usan","usar","usas","uso","va","vais","valor","vamos","van","vaya","verdad","verdadera","verdadero","cierto","vosotras","vosotros","voy","y","yo"];
 
     fetch('archivo.json').then(r => r.json()).then(data => {
-        // DEDUPLICACIÓN: Evita contar dos veces el mismo texto exacto
         let vistos = new Set();
         rawTextos = data.filter(item => {
             if (!item.Transcripción || item.Transcripción.trim().length === 0) return false;
-            let textoLimpio = item.Transcripción.trim();
-            if (vistos.has(textoLimpio)) return false;
-            vistos.add(textoLimpio);
+            let txt = item.Transcripción.trim();
+            if (vistos.has(txt)) return false;
+            vistos.add(txt);
             return true;
         });
-        
         procesarDatos();
         renderCharts();
         mostrarDiccionario();
     });
 
     function procesarDatos() {
+        let setUnicasBrutas = new Set();
+        let setUnicasNetas = new Set();
+
         rawTextos.forEach(item => {
-            // Limpieza de HTML y extracción de palabras (mínimo 2 letras)
+            let año = item.Año || "S/D";
+            if (!palabrasNetasPorAño[año]) palabrasNetasPorAño[año] = 0;
+
             let palabras = item.Transcripción.replace(/<[^>]+>/g, " ").toLowerCase().match(/[a-záéíóúñ]{2,}/gi) || [];
+            
             palabras.forEach(p => {
                 let pLimpia = p.trim();
                 totalBrutasGlobal++;
+                setUnicasBrutas.add(pLimpia);
+
                 if (!EXCLUIDAS.includes(pLimpia)) {
-                    vocabularioNeto[pLimpia] = (vocabularioNeto[pLimpia] || 0) + 1;
                     totalNetasGlobal++;
+                    setUnicasNetas.add(pLimpia);
+                    vocabularioNeto[pLimpia] = (vocabularioNeto[pLimpia] || 0) + 1;
+                    palabrasNetasPorAño[año]++;
                 }
             });
         });
+
         document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
-        document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString();
+        document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString() + " (Crítico)";
+        document.getElementById('m-unicas-bruto').innerText = setUnicasBrutas.size.toLocaleString();
+        document.getElementById('m-unicas-neto').innerText = setUnicasNetas.size.toLocaleString() + " (Críticas)";
         document.getElementById('totalExcluidasTxt').innerText = "Stopwords excluidas: " + (totalBrutasGlobal - totalNetasGlobal).toLocaleString();
     }
 
     function renderCharts() {
-        const sortedFrequencies = Object.values(vocabularioNeto).sort((a, b) => b - a);
-        let cumulativeFrequency = 0;
-        const dataY = [0]; 
-        const etiquetasX = [0];
+        // 1. Evolución Anual (Neto)
+        const años = Object.keys(palabrasNetasPorAño).sort();
+        new Chart(document.getElementById('chartEvolucionAnual'), {
+            type: 'line',
+            data: {
+                labels: años,
+                datasets: [{
+                    label: 'Volumen Crítico',
+                    data: años.map(a => palabrasNetasPorAño[a]),
+                    borderColor: '#1a3a5a',
+                    backgroundColor: 'rgba(26,58,90,0.1)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'EVOLUCIÓN ANUAL DEL LÉXICO CRÍTICO' } } }
+        });
 
+        // 2. Concentración Léxica Neta
+        const sortedFrequencies = Object.values(vocabularioNeto).sort((a, b) => b - a);
+        let cumulative = 0;
+        const dataY = [0]; const etiquetasX = [0];
         sortedFrequencies.slice(0, 50).forEach((freq, index) => {
-            cumulativeFrequency += freq;
-            dataY.push((cumulativeFrequency / totalNetasGlobal) * 100);
+            cumulative += freq;
+            dataY.push((cumulative / totalNetasGlobal) * 100);
             etiquetasX.push(index + 1);
         });
 
-        // Gráfico de Cobertura Neta
         new Chart(document.getElementById('chartCobertura'), {
             type: 'line',
             data: {
@@ -134,51 +221,33 @@
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { title: { display: true, text: 'Número de lemas (sin stopwords)' } },
-                    y: { min: 0, title: { display: true, text: 'Porcentaje del contenido neto (%)' } }
-                },
-                plugins: { title: { display: true, text: 'CONCENTRACIÓN LÉXICA (LÉXICO NETO)' } }
+                responsive: true, maintainAspectRatio: false,
+                scales: { y: { min: 0, max: 100 } },
+                plugins: { title: { display: true, text: 'CONCENTRACIÓN LÉXICA (CONTENIDO NETO)' } }
             },
             plugins: [{
                 id: 'linea50',
                 beforeDraw: (chart) => {
                     const ctx = chart.ctx;
                     const y50 = chart.scales.y.getPixelForValue(50);
-                    ctx.save();
-                    ctx.strokeStyle = 'red';
-                    ctx.setLineDash([5, 5]);
-                    ctx.beginPath();
-                    ctx.moveTo(chart.scales.x.left, y50);
-                    ctx.lineTo(chart.scales.x.right, y50);
-                    ctx.stroke();
-                    ctx.restore();
+                    ctx.save(); ctx.strokeStyle = 'red'; ctx.setLineDash([5, 5]);
+                    ctx.beginPath(); ctx.moveTo(chart.scales.x.left, y50);
+                    ctx.lineTo(chart.scales.x.right, y50); ctx.stroke(); ctx.restore();
                 }
             }]
         });
 
-        // Gráfico de Top 10
+        // 3. Top 10 corregido
         const top10 = Object.entries(vocabularioNeto).sort((a,b) => b[1]-a[1]).slice(0, 10);
         new Chart(document.getElementById('chartTop10'), {
             type: 'bar',
             data: {
                 labels: top10.map(t => t[0].toUpperCase()),
-                datasets: [{ 
-                    label: 'Frecuencia',
-                    data: top10.map(t => t[1]), 
-                    backgroundColor: '#1a3a5a' 
-                }]
+                datasets: [{ data: top10.map(t => t[1]), backgroundColor: '#1a3a5a' }]
             },
             options: { 
-                indexAxis: 'y', 
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { 
-                    title: { display: true, text: 'TOP 10 TÉRMINOS NETOS' },
-                    legend: { display: false }
-                } 
+                indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false }, title: { display: true, text: 'TOP 10 TÉRMINOS NETOS' } }
             }
         });
     }
