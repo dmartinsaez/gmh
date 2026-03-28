@@ -8,7 +8,6 @@
     <style>
         :root { --azul: #1a3a5a; --oro: #b8860b; --fondo: #fdfaf3; --borde: #dcdde1; }
         
-        /* Diseño idéntico a textos.html (Compacto) */
         body { font-family: 'Georgia', serif; background-color: #f4f1ea; color: #2c3e50; margin: 0; padding: 20px; }
         
         .contenedor { max-width: 1100px; margin: 0 auto; background: var(--fondo); padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
@@ -33,9 +32,6 @@
         @media (max-width: 600px) { .nav-farinelli { flex-direction: column; align-items: center; gap: 5px; } }
 
         .seccion-titulo { text-align: center; font-variant: small-caps; color: var(--oro); border-bottom: 1px solid var(--oro); margin: 30px 0 15px 0; padding-bottom: 5px; font-size: 1.2em; }
-        ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-thumb { background: var(--oro); border-radius: 5px; }
-        ::-webkit-scrollbar-track { background: #eee; }
 
         .calendar-heatmap { background: white; padding: 20px; border: 1px solid var(--borde); border-radius: 8px; overflow-x: auto; }
         .heatmap-month-row { display: grid; grid-template-columns: 80px repeat(31, 1fr); gap: 2px; align-items: center; margin-bottom: 4px; }
@@ -76,7 +72,6 @@
     </div>
 
     <h2 class="seccion-titulo">Análisis de Estacionalidad: Mapa de Calor</h2>
-    <p style="text-align: center; font-size: 0.85em; color: #666; margin-top: -10px;">Pulsa en los días más oscuros para ver la causa de la celebración.</p>
     <div class="calendar-heatmap" id="calendarHeatmap"></div>
     <div id="infoDia"></div>
 
@@ -130,22 +125,35 @@
             const m = detectarMes(diaRaw);
             const d = diaRaw ? parseInt(diaRaw.match(/\d+/)) : null;
 
-            // 1. EFEMÉRIDES (Se procesa para TODAS las filas, sin filtro de título para no perder Carnaval 1754)
+            // 1. EFEMÉRIDES (CON FILTRO DE PRECISIÓN)
             if (m && ocasionRaw) {
                 if (!globalData.mapFest[m]) globalData.mapFest[m] = {};
+                
                 ocasionRaw.split('+').forEach(occ => {
                     let o = occ.trim();
                     let oLow = o.toLowerCase();
-                    // Filtro de ruido: No días de la semana, ni frases de relleno, ni comillas
-                    const ruidos = ["lunes", "martes", "miercoles", "miércoles", "jueves", "viernes", "sabado", "sábado", "domingo", "días sucesivos", "dias sucesivos", "diferentes noches", "distintas noches", "se repitió", "se repitio", "diferentes óperas", "diferentes operas", "semana pasada"];
-                    if (o.length > 3 && !ruidos.some(r => oLow.includes(r)) && !o.includes("“")) {
+                    // Limpieza para comparar (ej: "Lunes." -> "lunes")
+                    let oCheck = oLow.replace(/\.$/, "");
+
+                    // Definimos días de la semana "random"
+                    const diasSemana = ["lunes", "martes", "miércoles", "miercoles", "jueves", "viernes", "sábado", "sabado", "domingo"];
+                    
+                    // Solo es "día random" si el texto es exactamente el día.
+                    // Si contiene más info (como "Domingo de Pascua"), es festivo y se guarda.
+                    const esDiaRandom = diasSemana.includes(oCheck);
+                    
+                    const esRelleno = oLow.includes("días sucesivos") || oLow.includes("dias sucesivos") || 
+                                     oLow.includes("“") || oLow.includes("se repitió") || 
+                                     oLow.includes("se repitio") || oLow.includes("distintas noches");
+
+                    if (o.length > 3 && !esDiaRandom && !esRelleno) {
                         if (!globalData.mapFest[m][o]) globalData.mapFest[m][o] = new Set();
                         globalData.mapFest[m][o].add(item.Año);
                     }
                 });
             }
 
-            // 2. MAPA DE CALOR (Sin filtro de título)
+            // 2. MAPA DE CALOR
             if (m && d) {
                 const key = `${m}-${d}`;
                 if (!globalData.dayStats[key]) globalData.dayStats[key] = { count: 0, occasions: {} };
@@ -153,14 +161,15 @@
                 if (ocasionRaw) {
                     ocasionRaw.split('+').forEach(occ => {
                         let o = occ.trim();
-                        if (o.length > 3 && !o.toLowerCase().includes("domingo") && !o.includes("“")) {
+                        // En el mapa de calor filtramos domingos sueltos para limpiar el popup
+                        if (o.length > 3 && o.toLowerCase() !== "domingo" && !o.includes("“")) {
                             globalData.dayStats[key].occasions[o] = (globalData.dayStats[key].occasions[o] || 0) + 1;
                         }
                     });
                 }
             }
 
-            // 3. ÓPERAS E INVENTARIO (Aquí SÍ filtramos títulos inciertos o con comillas)
+            // 3. INVENTARIO ÓPERAS (CON FILTRO TÍTULO)
             let t = normalizar(item.Título);
             if (item.Título && item.Título.includes("...")) t = uTit;
             else if (t !== "" && !t.includes("?") && !t.includes("“")) uTit = t;
@@ -169,7 +178,6 @@
                 if (!globalData.mapOp[t]) globalData.mapOp[t] = { años: new Set(), funciones: 0, occasions: new Set(), comp: item.Compositor || "No consta", lib: item.Libreto || "No consta" };
                 globalData.mapOp[t].años.add(item.Año);
                 globalData.mapOp[t].funciones++;
-
                 const reg = (campo, target) => {
                     if (item[campo]) {
                         let aut = item[campo].replace(/\([^\)]+\)/g, "").replace(/ y | , |,/g, " / ").replace(/\s+/g, " ").trim();
@@ -204,7 +212,7 @@
         const infoDiv = document.getElementById('infoDia');
         infoDiv.style.display = 'block';
         if (!stat || stat.count === 0) {
-            infoDiv.innerHTML = `<strong>${dia} de ${mes}:</strong> No se registran funciones operísticas en este día.`;
+            infoDiv.innerHTML = `<strong>${dia} de ${mes}:</strong> No se registran funciones.`;
             return;
         }
         let topOcc = "Función ordinaria";
@@ -212,17 +220,15 @@
         for (let o in stat.occasions) {
             if (stat.occasions[o] > max) { max = stat.occasions[o]; topOcc = o; }
         }
-        infoDiv.innerHTML = `<strong>${dia} de ${mes}:</strong> ${stat.count} funciones históricas registradas.<br><span style="color:var(--oro); font-variant: small-caps;">Causa:</span> ${topOcc}`;
+        infoDiv.innerHTML = `<strong>${dia} de ${mes}:</strong> ${stat.count} funciones registradas.<br><span style="color:var(--oro); font-variant: small-caps;">Causa:</span> ${topOcc}`;
     }
 
     function reRenderOperas(criterio) {
         const keys = Object.keys(globalData.mapOp);
         if (criterio === 'alfa') keys.sort();
         else keys.sort((a,b) => Math.min(...globalData.mapOp[a].años) - Math.min(...globalData.mapOp[b].años));
-        
         document.getElementById('btn-alfa').className = criterio === 'alfa' ? 'btn-orden active' : 'btn-orden';
         document.getElementById('btn-año').className = criterio === 'año' ? 'btn-orden active' : 'btn-orden';
-
         document.getElementById('listaOperas').innerHTML = keys.map((k, i) => `
             <div class="opera-row">
                 <div class="opera-header" onclick="toggleDetalle(${i})">
@@ -231,7 +237,7 @@
                 </div>
                 <div class="opera-detalle" id="det-${i}">
                     <strong>Compositor:</strong> ${globalData.mapOp[k].comp}<br>
-                    <strong>Libreto:</strong> ${globalData.mapOp[k].lib}<br>
+                    <strong>Libretista:</strong> ${globalData.mapOp[k].lib}<br>
                     <strong>Frecuencia:</strong> ${globalData.mapOp[k].funciones} noches en cartel.
                 </div>
             </div>`).join('');
