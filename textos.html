@@ -117,7 +117,7 @@
             <div class="card-grafica"><canvas id="chartCobertura"></canvas></div>
             <div class="recuadro-metodo">
                 <strong>Metodología de Cobertura Léxica:</strong>
-                Calcula qué porcentaje del discurso "crítico" es cubierto por los lemas más frecuentes. Ayuda a visualizar la especialización terminológica del corpus.
+                Calcula qué porcentaje del <strong>texto total (bruto)</strong> es cubierto por las formas más frecuentes. Las primeras decenas de palabras (generalmente artículos y preposiciones) suelen cubrir una inmensa parte de todo el corpus.
             </div>
         </div>
 
@@ -125,7 +125,7 @@
             <div class="card-grafica"><canvas id="chartTop10"></canvas></div>
             <div class="recuadro-metodo">
                 <strong>Metodología de Frecuencia:</strong>
-                Ranking de los 10 términos significativos más repetidos en las crónicas analizadas.
+                Ranking de los 10 términos significativos más repetidos en las crónicas analizadas (excluyendo partículas gramaticales).
             </div>
         </div>
     </div>
@@ -140,6 +140,7 @@
 
 <script>
     let rawTextos = []; 
+    let vocabularioTotal = {}; // NUEVO: Para guardar todas las palabras del texto bruto
     let vocabularioNeto = {};
     let palabrasBrutasPorAño = {};
     let palabrasNetasPorAño = {};
@@ -161,7 +162,6 @@
         mostrarDiccionario();
     });
 
-    // Añadimos el normalizador para la gráfica de cobertura
     function normalizarLema(str) {
         return str.toLowerCase()
             .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -190,12 +190,13 @@
                 setUnicasBrutas.add(pLimpia);
                 palabrasBrutasPorAño[item.Año]++;
 
+                // Agregamos TODAS las palabras (incluyendo preposiciones) al total para la gráfica de cobertura
+                let lemaNormalizadoTotal = normalizarLema(pLimpia);
+                vocabularioTotal[lemaNormalizadoTotal] = (vocabularioTotal[lemaNormalizadoTotal] || 0) + 1;
+
                 if (!EXCLUIDAS.includes(pLimpia)) {
-                    // Normalizamos al calcular el crítico
-                    let lemaNormalizado = normalizarLema(pLimpia); 
-                    
-                    setUnicasNetas.add(lemaNormalizado);
-                    vocabularioNeto[lemaNormalizado] = (vocabularioNeto[lemaNormalizado] || 0) + 1;
+                    setUnicasNetas.add(lemaNormalizadoTotal);
+                    vocabularioNeto[lemaNormalizadoTotal] = (vocabularioNeto[lemaNormalizadoTotal] || 0) + 1;
                     palabrasNetasPorAño[item.Año]++;
                     totalNetasGlobal++;
                 }
@@ -214,6 +215,7 @@
     function renderCharts() {
         const años = Object.keys(palabrasBrutasPorAño).sort();
         
+        // 1. Dinámica del volumen
         new Chart(document.getElementById('chartEvolucionComparada'), {
             type: 'line',
             data: {
@@ -226,16 +228,17 @@
             options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'DINÁMICA DEL VOLUMEN NARRATIVO ANUAL' } } }
         });
 
-        const sortedFrequencies = Object.values(vocabularioNeto).sort((a, b) => b - a);
-        let cumulativeFrequency = 0;
+        // 2. Cobertura Léxica (AHORA SOBRE EL TEXTO TOTAL)
+        const sortedFrequenciesTotal = Object.values(vocabularioTotal).sort((a, b) => b - a);
+        let cumulativeFrequencyTotal = 0;
         
-        // Arreglo del eje X y anclaje en el origen (0,0)
-        const dataY = [0];
+        const dataY = [0]; 
         const etiquetasX = [0];
 
-        sortedFrequencies.slice(0, 50).forEach((freq, index) => {
-            cumulativeFrequency += freq;
-            dataY.push((cumulativeFrequency / totalNetasGlobal) * 100);
+        sortedFrequenciesTotal.slice(0, 50).forEach((freq, index) => {
+            cumulativeFrequencyTotal += freq;
+            // Dividimos por el total bruto, no por el crítico
+            dataY.push((cumulativeFrequencyTotal / totalBrutasGlobal) * 100);
             etiquetasX.push(index + 1);
         });
 
@@ -248,7 +251,7 @@
                     data: dataY,
                     borderColor: '#0000FF',
                     pointBackgroundColor: '#0000FF',
-                    backgroundColor: 'transparent', // Quita el cuadrado de la leyenda
+                    backgroundColor: 'transparent',
                     borderWidth: 2,
                     pointRadius: 4,
                     fill: false,
@@ -260,10 +263,10 @@
                 maintainAspectRatio: false,
                 scales: {
                     x: { title: { display: true, text: 'Número de lemas agrupados más frecuentes' }, grid: { borderDash: [5, 5] } },
-                    y: { min: 0, max: 55, title: { display: true, text: 'Porcentaje del corpus (%)' }, grid: { borderDash: [5, 5] } }
+                    // He quitado el límite de max:55 para que la curva suba libremente
+                    y: { min: 0, title: { display: true, text: 'Porcentaje del texto TOTAL (%)' }, grid: { borderDash: [5, 5] } }
                 },
-                // Leyenda oculta por estética, título claro
-                plugins: { legend: { display: false }, title: { display: true, text: 'CONCENTRACIÓN LÉXICA Y DISPERSIÓN' } }
+                plugins: { legend: { display: false }, title: { display: true, text: 'CONCENTRACIÓN LÉXICA Y DISPERSIÓN (TEXTO BRUTO)' } }
             },
             plugins: [{
                 id: 'lineaRoja',
@@ -284,6 +287,7 @@
             }]
         });
 
+        // 3. Top 10 (Sigue usando vocabulario crítico para que no salgan preposiciones)
         const top10 = Object.entries(vocabularioNeto).sort((a,b) => b[1]-a[1]).slice(0, 10);
         new Chart(document.getElementById('chartTop10'), {
             type: 'bar',
@@ -295,7 +299,7 @@
                 indexAxis: 'y',
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: false }, title: { display: true, text: 'TOP 10 TÉRMINOS SIGNIFICATIVOS' } }
+                plugins: { legend: { display: false }, title: { display: true, text: 'TOP 10 TÉRMINOS SIGNIFICATIVOS (TEXTO CRÍTICO)' } }
             }
         });
     }
