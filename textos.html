@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análisis Lexicográfico - Catálogo Farinelli</title>
+    <title>Laboratorio de Textos - Catálogo Farinelli</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --azul: #1a3a5a; --oro: #b8860b; --fondo: #fdfaf3; --borde: #dcdde1; }
@@ -18,7 +18,7 @@
         .metrica-lab { font-size: 0.75em; text-transform: uppercase; color: var(--oro); font-weight: bold; letter-spacing: 1px; }
 
         .grid-graficas { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
-        .card-grafica { background: white; padding: 20px; border: 1px solid var(--borde); border-radius: 8px; height: 400px; position: relative; }
+        .card-grafica { background: white; padding: 20px; border: 1px solid var(--borde); border-radius: 8px; height: 420px; position: relative; }
 
         .buscador-container { background: white; padding: 25px; border: 1px solid var(--borde); border-radius: 8px; text-align: center; margin-bottom: 30px; }
         #inputBusqueda { width: 75%; padding: 12px; border: 2px solid var(--borde); border-radius: 25px; font-size: 1em; outline: none; text-align: center; font-family: 'Georgia', serif; }
@@ -58,7 +58,7 @@
     <div id="wordCloud" class="word-cloud"></div>
 
     <div class="buscador-container">
-        <input type="text" id="inputBusqueda" placeholder="Buscar concepto (ej: sumptuoso, iluminacion, Geronymo...)" onkeyup="filtrar()">
+        <input type="text" id="inputBusqueda" placeholder="Buscar concepto (ej: Coliseo, sumptuoso, Geronymo...)" onkeyup="filtrar()">
     </div>
 
     <div id="listaTextos" class="lista-textos"></div>
@@ -72,6 +72,7 @@
     const EXCLUIDAS = ["1","11","12","13","14","15","16","17","18","2","20","200","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","420","43","44","45","5","6","60","7","8","9","90","a","al","alguna","algunas","alguno","algunos","algún","ambos","ampleamos","ante","antes","aquel","aquellas","aquellos","aqui","arriba","atras","bajo","bastante","bien","cada","capilla","cierta","ciertas","ciertos","como","con","conseguimos","conseguir","consigo","consigue","consiguen","consigues","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleais","emplean","emplear","empleas","empleo","en","encima","entonces","entre","era","eramos","eran","eras","eres","es","esta","estaba","estado","estais","estamos","estan","este","estoy","fin","fue","fueron","fui","fuimos","gueno","ha","hace","haceis","hacemos","hacen","hacer","haces","hago","han","haviendo","huvo","incluso","intenta","intentais","intentamos","intentan","intentar","intentas","intento","ir","la","largo","las","lo","los","m","mas","mayor","mientras","mio","misma","missa","modo","muchos","muy","nos","nosotros","o","otras","otro","para","pero","podeis","podemos","poder","podria","podriais","podriamos","podrian","podrias","por","por qué","porque","primero desde","puede","pueden","puedo","que","quien","s","sabe","sabeis","sabemos","saben","saber","sabes","se","ser","si","sic","siendo","sin","sobre","sois","solamente","solo","somos","soy","su","sus","tambien","también","teneis","tenemos","tener","tengo","tiempo","tiene","tienen","toda","todo","trabaja","trabajais","trabajamos","trabajan","trabajar","trabajas","trabajo","tras","tribuna","tuvo","tuyo","ultimo","un","una","unas","uno","unos","usa","usais","usamos","usan","usar","usas","uso","va","vais","valor","vamos","van","vaya","verdad","verdadera cierto","verdadero","vosotras","vosotros","voy","y","yo"];
 
     fetch('archivo.json').then(r => r.json()).then(data => {
+        // Solo procesamos filas que tengan contenido en Transcripción
         rawTextos = data.filter(item => item.Transcripción && item.Transcripción.trim().length > 5);
         procesarTextos();
         renderCharts();
@@ -79,11 +80,18 @@
         filtrar();
     });
 
+    // --- TU LÓGICA DE NORMALIZACIÓN DE INDEX.HTML ---
     function miNormalizador(t) {
         if (!t) return "";
-        return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-            .replace(/g(?=[eiéí])/g, "j").replace(/x/g, "j").replace(/y/g, "i")
-            .replace(/h/g, "").replace(/v/g, "b").replace(/ç/g, "z").trim();
+        return t.toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Tildes
+            .replace(/g(?=[eiéí])/g, "j") // G por J ante e, i
+            .replace(/x/g, "j")           // X por J
+            .replace(/y/g, "i")           // Y por I
+            .replace(/h/g, "")           // H muda
+            .replace(/v/g, "b")           // V por B
+            .replace(/ç/g, "z")           // Cedilla
+            .trim();
     }
 
     function procesarTextos() {
@@ -91,16 +99,19 @@
         let setUnicas = new Set();
 
         rawTextos.forEach(item => {
-            let textoLimpio = item.Transcripción.replace(/<\/?[^>]+(>|$)/g, "");
+            // Limpieza de etiquetas HTML para el conteo puro
+            let textoLimpio = item.Transcripción.replace(/<\/?[^>]+(>|$)/g, " ");
             
-            // Usamos una frontera de palabra real (\b) para evitar cortes como 'colis'
-            let palabras = textoLimpio.toLowerCase().match(/\b[a-záéíóúñ]{3,}\b/gi) || [];
+            // TOKENIZACIÓN REFORZADA: 
+            // Buscamos palabras completas ignorando puntuación, para evitar cortes como "colis"
+            let palabras = textoLimpio.toLowerCase().match(/[a-záéíóúñ]{3,}/gi) || [];
             
             totalPalabras += palabras.length;
             if (!palabrasPorAño[item.Año]) palabrasPorAño[item.Año] = 0;
             palabrasPorAño[item.Año] += palabras.length;
 
             palabras.forEach(p => {
+                // Si la palabra está en tu lista de excluidas, no la contamos
                 if (!EXCLUIDAS.includes(p)) {
                     setUnicas.add(p);
                     vocabulario[p] = (vocabulario[p] || 0) + 1;
@@ -118,10 +129,12 @@
         new Chart(document.getElementById('chartLineas'), {
             type: 'line',
             data: { labels: años, datasets: [{ label: 'Palabras', data: años.map(a => palabrasPorAño[a]), borderColor: '#1a3a5a', tension: 0.4, fill: true, backgroundColor: 'rgba(26, 58, 90, 0.1)' }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'EVOLUCIÓN DEL VOLUMEN DE TEXTO' } } }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'VOLUMEN DE TEXTO ANUAL' } } }
         });
 
+        // Ordenamos el vocabulario y sacamos las 10 reales
         const top10 = Object.entries(vocabulario).sort((a,b) => b[1]-a[1]).slice(0, 10);
+        
         new Chart(document.getElementById('chartBarras'), {
             type: 'bar',
             data: { 
@@ -135,7 +148,7 @@
                 indexAxis: 'y', 
                 responsive: true, 
                 maintainAspectRatio: false, 
-                layout: { padding: { left: 80 } }, // AUMENTAMOS EL MARGEN IZQUIERDO
+                layout: { padding: { left: 100 } }, // Espacio mas que de sobra para "COLISEO"
                 plugins: { 
                     legend: { display: false }, 
                     title: { display: true, text: 'PALABRAS MÁS UTILIZADAS' } 
@@ -178,6 +191,7 @@
                         if (c === 'j') return '[j|g|x]';
                         if (c === 'i') return '[i|y]';
                         if (c === 'b') return '[b|v]';
+                        if (c === 'z') return '[z|c|ç]';
                         return c;
                     }).join('[\\u0300-\\u036f]?h?');
                     content = content.replace(new RegExp(pattern, "gi"), m => `<span class="resaltado">${m}</span>`);
