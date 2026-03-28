@@ -17,7 +17,7 @@
             margin: 0 auto 0.8em auto;
             text-align: center; 
             line-height: 1.4; 
-            max-width: 850px;          
+            max-width: 850px;           
             border-bottom: 2px double var(--oro);
             padding-bottom: 15px;
         }
@@ -106,15 +106,15 @@
             <div class="card-grafica"><canvas id="chartEvolucionComparada"></canvas></div>
             <div class="recuadro-metodo">
                 <strong>Metodología de Volumen Anual:</strong>
-                Muestra la diferencia entre la extensión física del texto (Bruto) y la densidad de información relevante (Crítico) tras filtrar las partículas gramaticales y elementos de enlace.
+                Muestra la diferencia entre la extensión física del texto (Bruto) y la densidad de información relevante (Crítico) tras filtrar las partículas gramaticales.
             </div>
         </div>
 
         <div>
             <div class="card-grafica"><canvas id="chartCobertura"></canvas></div>
             <div class="recuadro-metodo">
-                <strong>Metodología de Cobertura Léxica:</strong>
-                Calcula qué porcentaje del <strong>volumen textual completo</strong> (incluyendo partículas gramaticales) es cubierto exclusivamente por los lemas de significado pleno más frecuentes. Ilustra el peso de la información clave frente a la estructura sintáctica.
+                <strong>Metodología de Densidad Léxica:</strong>
+                Calcula qué porcentaje del <strong>contenido informativo neto</strong> (excluyendo todas las stopwords) es cubierto por los lemas más frecuentes. Ilustra la concentración temática del vocabulario clave.
             </div>
         </div>
 
@@ -210,17 +210,19 @@
             options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'DINÁMICA DEL VOLUMEN NARRATIVO ANUAL' } } }
         });
 
-        // CÁLCULO DE LA CURVA: Palabras significativas sobre el TOTAL BRUTO
+        // --- CÁLCULO DE LA CURVA: CONTENIDO CRÍTICO SOBRE TOTAL NETO ---
         const sortedFrequencies = Object.values(vocabularioNeto).sort((a, b) => b - a);
         let cumulativeFrequency = 0;
         
         const dataY = [0]; 
         const etiquetasX = [0];
 
+        // Tomamos los primeros 50 lemas más frecuentes (excluyendo ya las stopwords)
         sortedFrequencies.slice(0, 50).forEach((freq, index) => {
             cumulativeFrequency += freq;
-            // Magia matemática: acumulado significativo / total general bruto
-            dataY.push((cumulativeFrequency / totalBrutasGlobal) * 100);
+            // Cálculo: acumulado significativo / TOTAL NETO (sin stopwords)
+            let porcentajeSobreNeto = (cumulativeFrequency / totalNetasGlobal) * 100;
+            dataY.push(porcentajeSobreNeto);
             etiquetasX.push(index + 1);
         });
 
@@ -229,43 +231,26 @@
             data: {
                 labels: etiquetasX,
                 datasets: [{
-                    label: 'Cobertura de términos significativos',
+                    label: 'Cobertura del léxico crítico',
                     data: dataY,
-                    borderColor: '#0000FF',
-                    pointBackgroundColor: '#0000FF',
-                    backgroundColor: 'transparent',
+                    borderColor: '#b8860b',
+                    pointBackgroundColor: '#1a3a5a',
+                    backgroundColor: 'rgba(184, 134, 11, 0.1)',
                     borderWidth: 2,
                     pointRadius: 4,
-                    fill: false,
-                    tension: 0
+                    fill: true,
+                    tension: 0.2
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    x: { title: { display: true, text: 'Número de lemas significativos agrupados' }, grid: { borderDash: [5, 5] } },
-                    y: { min: 0, title: { display: true, text: 'Porcentaje sobre el volumen total (%)' }, grid: { borderDash: [5, 5] } }
+                    x: { title: { display: true, text: 'Número de lemas críticos (ordenados por frecuencia)' }, grid: { borderDash: [5, 5] } },
+                    y: { min: 0, max: 100, title: { display: true, text: '% sobre el volumen neto (%)' }, grid: { borderDash: [5, 5] } }
                 },
-                plugins: { legend: { display: false }, title: { display: true, text: 'CONCENTRACIÓN LÉXICA Y DISPERSIÓN' } }
-            },
-            plugins: [{
-                id: 'lineaRoja',
-                beforeDraw: (chart) => {
-                    const ctx = chart.ctx;
-                    const yScale = chart.scales.y;
-                    const xScale = chart.scales.x;
-                    const y50 = yScale.getPixelForValue(50);
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.strokeStyle = '#FF0000';
-                    ctx.setLineDash([5, 5]);
-                    ctx.moveTo(xScale.left, y50);
-                    ctx.lineTo(xScale.right, y50);
-                    ctx.stroke();
-                    ctx.restore();
-                }
-            }]
+                plugins: { legend: { display: false }, title: { display: true, text: 'CONCENTRACIÓN DE CONTENIDO (EXCLUYENDO STOPWORDS)' } }
+            }
         });
 
         const top10 = Object.entries(vocabularioNeto).sort((a,b) => b[1]-a[1]).slice(0, 10);
