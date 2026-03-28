@@ -6,7 +6,7 @@
     <title>Análisis Lexicográfico - Catálogo Farinelli</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --azul: #1a3a5a; --oro: #b8860b; --fondo: #fdfaf3; --borde: #dcdde1; }
+        :root { --azul: #1a3a5a; --oro: #b8860b; --fondo: #fdfaf3; --borde: #dcdde1; --gris-metodo: #f8f9fa; }
         body { font-family: 'Georgia', serif; background-color: #f4f1ea; color: #2c3e50; line-height: 1.8; margin: 0; padding: 20px; }
         .contenedor { max-width: 1200px; margin: 0 auto; background: var(--fondo); padding: 30px; border-top: 6px solid var(--oro); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         h1 { text-align: center; font-size: 1.6em; color: var(--azul); text-transform: uppercase; border-bottom: 2px double var(--oro); padding-bottom: 10px; margin-bottom: 30px; }
@@ -16,9 +16,13 @@
         .metrica-val { font-size: 2em; font-weight: bold; color: var(--azul); display: block; }
         .metrica-lab { font-size: 0.7em; text-transform: uppercase; color: var(--oro); font-weight: bold; letter-spacing: 1px; }
 
-        .grid-graficas { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
-        .card-grafica { background: white; padding: 20px; border: 1px solid var(--borde); border-radius: 8px; height: 450px; position: relative; }
-        .full-width { grid-column: 1 / -1; }
+        .grid-graficas { display: grid; grid-template-columns: 1fr; gap: 40px; margin-bottom: 30px; }
+        .card-grafica { background: white; padding: 25px; border: 1px solid var(--borde); border-radius: 8px; height: 450px; position: relative; }
+        
+        /* Recuadro Metodológico */
+        .recuadro-metodo { background-color: var(--gris-metodo); border-left: 4px solid var(--azul); padding: 15px 20px; margin-top: -10px; margin-bottom: 20px; font-size: 0.9em; border-radius: 0 8px 8px 0; border: 1px solid #e9ecef; border-left-width: 5px; }
+        .recuadro-metodo strong { color: var(--azul); font-variant: small-caps; }
+        .recuadro-metodo ul { margin: 5px 0 0 20px; padding: 0; }
     </style>
 </head>
 <body>
@@ -32,9 +36,40 @@
     </div>
 
     <div class="grid-graficas">
-        <div class="card-grafica full-width"><canvas id="chartEvolucionComparada"></canvas></div>
-        <div class="card-grafica full-width"><canvas id="chartCobertura"></canvas></div>
-        <div class="card-grafica full-width"><canvas id="chartTop10"></canvas></div>
+        <div>
+            <div class="card-grafica"><canvas id="chartEvolucionComparada"></canvas></div>
+            <div class="recuadro-metodo">
+                <strong>Metodología de Volumen Anual:</strong>
+                <ul>
+                    <li><strong>Volumen Bruto (Gris):</strong> Conteo de tokens tras eliminar etiquetas HTML. Excluye estrictamente las siglas <em>GM</em> y <em>MH</em>. Incluye palabras funcionales (artículos, preposiciones, conjunciones).</li>
+                    <li><strong>Volumen Neto (Azul):</strong> Conteo de tokens significativos. Se aplica el filtro de "Palabras Excluidas" (stopwords). Es el valor que debe coincidir con el análisis en Python.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div>
+            <div class="card-grafica"><canvas id="chartCobertura"></canvas></div>
+            <div class="recuadro-metodo">
+                <strong>Metodología de Cobertura Léxica:</strong>
+                <ul>
+                    <li><strong>Eje X:</strong> Representa los lemas (formas únicas) ordenados por frecuencia descendente.</li>
+                    <li><strong>Eje Y:</strong> Porcentaje acumulado de aparición en el corpus. Se calcula dividiendo la suma de frecuencias del rango actual entre el <em>Total de Palabras Netas</em> global.</li>
+                    <li><strong>Filtro:</strong> Se eliminan siglas (GM, MH) y palabras vacías antes de establecer el ranking.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div>
+            <div class="card-grafica"><canvas id="chartTop10"></canvas></div>
+            <div class="recuadro-metodo">
+                <strong>Metodología de Frecuencia de Términos:</strong>
+                <ul>
+                    <li><strong>Unificación:</strong> Todas las formas se normalizan a minúsculas.</li>
+                    <li><strong>Tokenización:</strong> Se define como "palabra" cualquier secuencia alfanumérica de al menos 2 caracteres.</li>
+                    <li><strong>Limpieza:</strong> Se eliminan signos de puntuación pegados a los tokens para evitar duplicidad de formas únicas (ej: "teatro" y "teatro." se cuentan como la misma unidad).</li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -67,7 +102,9 @@
         palabrasNetasPorAño = {};
 
         rawTextos.forEach(item => {
-            let textoSinHTML = item.Transcripción.replace(/<\/?[^>]+(>|$)/g, " ");
+            // Sustituimos tags por espacios para evitar pegar palabras
+            let textoSinHTML = item.Transcripción.replace(/<[^>]+>/g, " ");
+            // Tokenizamos: palabras de 2+ letras
             let palabras = textoSinHTML.toLowerCase().match(/[a-záéíóúñ]{2,}/gi) || [];
             
             if (!palabrasBrutasPorAño[item.Año]) palabrasBrutasPorAño[item.Año] = 0;
@@ -102,13 +139,13 @@
                 labels: años,
                 datasets: [
                     { label: 'Volumen Bruto', data: años.map(a => palabrasBrutasPorAño[a]), borderColor: '#ccc', borderDash: [5, 5], fill: false, tension: 0.3 },
-                    { label: 'Volumen Neto (Python)', data: años.map(a => palabrasNetasPorAño[a]), borderColor: '#1a3a5a', backgroundColor: 'rgba(26,58,90,0.1)', fill: true, tension: 0.3 }
+                    { label: 'Volumen Neto', data: años.map(a => palabrasNetasPorAño[a]), borderColor: '#1a3a5a', backgroundColor: 'rgba(26,58,90,0.1)', fill: true, tension: 0.3 }
                 ]
             },
             options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'DINÁMICA DEL VOLUMEN NARRATIVO ANUAL' } } }
         });
 
-        // 2. Cobertura Léxica (TU GRÁFICA)
+        // 2. Cobertura Léxica
         const sortedFrequencies = Object.values(vocabularioNeto).sort((a, b) => b - a);
         let cumulativeFrequency = 0;
         const cumulativeData = sortedFrequencies.slice(0, 50).map((freq, index) => {
@@ -138,7 +175,7 @@
                     y: { min: 0, max: 55, title: { display: true, text: 'Porcentaje del corpus (%)' }, grid: { borderDash: [5, 5] } }
                 },
                 plugins: {
-                    title: { display: true, text: 'Concentración léxica y dispersión (cobertura del corpus por lema)' }
+                    title: { display: true, text: 'CONCENTRACIÓN LÉXICA Y DISPERSIÓN' }
                 }
             },
             plugins: [{
@@ -171,7 +208,7 @@
                 indexAxis: 'y',
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: false }, title: { display: true, text: 'TÉRMINOS SIGNIFICATIVOS MÁS FRECUENTES' } }
+                plugins: { legend: { display: false }, title: { display: true, text: 'TOP 10 TÉRMINOS SIGNIFICATIVOS' } }
             }
         });
     }
