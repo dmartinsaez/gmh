@@ -8,6 +8,7 @@
     <style>
         :root { --azul: #1a3a5a; --oro: #b8860b; --fondo: #fdfaf3; --borde: #dcdde1; }
         
+        /* Diseño idéntico a textos.html (Compacto) */
         body { font-family: 'Georgia', serif; background-color: #f4f1ea; color: #2c3e50; margin: 0; padding: 20px; }
         
         .contenedor { max-width: 1100px; margin: 0 auto; background: var(--fondo); padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
@@ -32,7 +33,6 @@
         @media (max-width: 600px) { .nav-farinelli { flex-direction: column; align-items: center; gap: 5px; } }
 
         .seccion-titulo { text-align: center; font-variant: small-caps; color: var(--oro); border-bottom: 1px solid var(--oro); margin: 30px 0 15px 0; padding-bottom: 5px; font-size: 1.2em; }
-
         ::-webkit-scrollbar { width: 10px; }
         ::-webkit-scrollbar-thumb { background: var(--oro); border-radius: 5px; }
         ::-webkit-scrollbar-track { background: #eee; }
@@ -125,48 +125,42 @@
     function procesarTodo(data) {
         let uTit = "";
         data.forEach(item => {
-            const ocasionTexto = item['Ocasión'] || "";
-            const diaTexto = item['Día'] || "";
-            const m = detectarMes(diaTexto);
-            const d = diaTexto ? parseInt(diaTexto.match(/\d+/)) : null;
+            const ocasionRaw = item['Ocasión'] || "";
+            const diaRaw = item['Día'] || "";
+            const m = detectarMes(diaRaw);
+            const d = diaRaw ? parseInt(diaRaw.match(/\d+/)) : null;
 
-            // 1. ANÁLISIS DE FESTIVIDADES Y ESTACIONALIDAD (PARA TODAS LAS FILAS)
-            if (m) {
-                // Registro para Efemérides Festivas
-                if (ocasionTexto) {
-                    if (!globalData.mapFest[m]) globalData.mapFest[m] = {};
-                    ocasionTexto.split('+').forEach(occ => {
+            // 1. EFEMÉRIDES (Se procesa para TODAS las filas, sin filtro de título para no perder Carnaval 1754)
+            if (m && ocasionRaw) {
+                if (!globalData.mapFest[m]) globalData.mapFest[m] = {};
+                ocasionRaw.split('+').forEach(occ => {
+                    let o = occ.trim();
+                    let oLow = o.toLowerCase();
+                    // Filtro de ruido: No días de la semana, ni frases de relleno, ni comillas
+                    const ruidos = ["lunes", "martes", "miercoles", "miércoles", "jueves", "viernes", "sabado", "sábado", "domingo", "días sucesivos", "dias sucesivos", "diferentes noches", "distintas noches", "se repitió", "se repitio", "diferentes óperas", "diferentes operas", "semana pasada"];
+                    if (o.length > 3 && !ruidos.some(r => oLow.includes(r)) && !o.includes("“")) {
+                        if (!globalData.mapFest[m][o]) globalData.mapFest[m][o] = new Set();
+                        globalData.mapFest[m][o].add(item.Año);
+                    }
+                });
+            }
+
+            // 2. MAPA DE CALOR (Sin filtro de título)
+            if (m && d) {
+                const key = `${m}-${d}`;
+                if (!globalData.dayStats[key]) globalData.dayStats[key] = { count: 0, occasions: {} };
+                globalData.dayStats[key].count++;
+                if (ocasionRaw) {
+                    ocasionRaw.split('+').forEach(occ => {
                         let o = occ.trim();
-                        let oLow = o.toLowerCase();
-                        // Filtros de exclusión: días de la semana, días sucesivos, comillas
-                        const ruidos = ["lunes", "martes", "miércoles", "miercoles", "jueves", "viernes", "sábado", "sabado", "domingo"];
-                        const esDia = ruidos.some(rd => oLow.includes(rd));
-                        const esRelleno = oLow.includes("días sucesivos") || oLow.includes("dias sucesivos") || oLow.includes("“") || oLow.includes("se repitió");
-
-                        if (o.length > 3 && !esDia && !esRelleno) {
-                            if (!globalData.mapFest[m][o]) globalData.mapFest[m][o] = new Set();
-                            globalData.mapFest[m][o].add(item.Año);
+                        if (o.length > 3 && !o.toLowerCase().includes("domingo") && !o.includes("“")) {
+                            globalData.dayStats[key].occasions[o] = (globalData.dayStats[key].occasions[o] || 0) + 1;
                         }
                     });
                 }
-
-                // Registro para Mapa de Calor
-                if (d) {
-                    const key = `${m}-${d}`;
-                    if (!globalData.dayStats[key]) globalData.dayStats[key] = { count: 0, occasions: {} };
-                    globalData.dayStats[key].count++;
-                    if (ocasionTexto) {
-                        ocasionTexto.split('+').forEach(occ => {
-                            let o = occ.trim();
-                            if (o.length > 3 && !o.toLowerCase().includes("domingo") && !o.includes("“")) {
-                                globalData.dayStats[key].occasions[o] = (globalData.dayStats[key].occasions[o] || 0) + 1;
-                            }
-                        });
-                    }
-                }
             }
 
-            // 2. INVENTARIO DE ÓPERAS Y AUTORES (CON FILTRO DE TÍTULO)
+            // 3. ÓPERAS E INVENTARIO (Aquí SÍ filtramos títulos inciertos o con comillas)
             let t = normalizar(item.Título);
             if (item.Título && item.Título.includes("...")) t = uTit;
             else if (t !== "" && !t.includes("?") && !t.includes("“")) uTit = t;
@@ -213,19 +207,12 @@
             infoDiv.innerHTML = `<strong>${dia} de ${mes}:</strong> No se registran funciones operísticas en este día.`;
             return;
         }
-        let topOcc = "Función ordinaria o sin ocasión específica registrada";
+        let topOcc = "Función ordinaria";
         let max = 0;
         for (let o in stat.occasions) {
             if (stat.occasions[o] > max) { max = stat.occasions[o]; topOcc = o; }
         }
-        infoDiv.innerHTML = `<strong>${dia} de ${mes}:</strong> ${stat.count} funciones históricas registradas.<br><span style="color:var(--oro); font-variant: small-caps;">Causa frecuente:</span> ${topOcc}`;
-    }
-
-    function toggleDetalle(id) {
-        const el = document.getElementById('det-' + id);
-        const disp = el.style.display;
-        document.querySelectorAll('.opera-detalle').forEach(d => d.style.display = 'none');
-        el.style.display = disp === 'block' ? 'none' : 'block';
+        infoDiv.innerHTML = `<strong>${dia} de ${mes}:</strong> ${stat.count} funciones históricas registradas.<br><span style="color:var(--oro); font-variant: small-caps;">Causa:</span> ${topOcc}`;
     }
 
     function reRenderOperas(criterio) {
@@ -243,12 +230,18 @@
                     <div>${Array.from(globalData.mapOp[k].años).sort().map(a => `<span class="tag-año">${a}</span>`).join('')}</div>
                 </div>
                 <div class="opera-detalle" id="det-${i}">
-                    <strong>Compositor/es:</strong> ${globalData.mapOp[k].comp}<br>
-                    <strong>Libretista/s:</strong> ${globalData.mapOp[k].lib}<br>
-                    <strong>Frecuencia:</strong> ${globalData.mapOp[k].funciones} noches en cartel.<br>
-                    <strong>Motivos:</strong> ${Array.from(globalData.mapOp[k].occasions).join(', ')}
+                    <strong>Compositor:</strong> ${globalData.mapOp[k].comp}<br>
+                    <strong>Libreto:</strong> ${globalData.mapOp[k].lib}<br>
+                    <strong>Frecuencia:</strong> ${globalData.mapOp[k].funciones} noches en cartel.
                 </div>
             </div>`).join('');
+    }
+
+    function toggleDetalle(id) {
+        const el = document.getElementById('det-' + id);
+        const disp = el.style.display;
+        document.querySelectorAll('.opera-detalle').forEach(d => d.style.display = 'none');
+        el.style.display = disp === 'block' ? 'none' : 'block';
     }
 
     function renderAutores() {
@@ -277,7 +270,7 @@
 
     function detectarMes(s) {
         if (!s) return null;
-        const d = { "en.": "Enero", "feb.": "Febrero", "mar.": "Marzo", "ab.": "Abril", "may.": "Mayo", "jun.": "Junio", "jul.": "Julio", "ag.": "Agosto", "sep.": "Septiembre", "oct.": "Octubre", "nov.": "Noviembre", "dic.": "Diciembre" };
+        const d = { "en.": "Enero", "feb.": "Febrero", "mar.": "Marzo", "ab.": "Abril", "may.": "Mayo", "jun.": "Junio", "jul.": "Julio", "ag.": "Agosto", "sep": "Septiembre", "oct.": "Octubre", "nov.": "Noviembre", "dic.": "Diciembre" };
         for (let k in d) if (s.toLowerCase().includes(k)) return d[k];
         return null;
     }
@@ -287,7 +280,7 @@
         new Chart(document.getElementById('chartAnual').getContext('2d'), {
             type: 'line',
             data: { labels: años, datasets: [{ label: 'Funciones', data: años.map(a => globalData.raw.filter(i => i.Año === a).length), borderColor: '#1a3a5a', backgroundColor: 'rgba(26,58,90,0.1)', fill: true, tension: 0.3 }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'NÚMERO DE REPRESENTACIONES POR AÑO' }, tooltip: { callbacks: { afterLabel: (c) => HITOS[c.label] ? '✦ ' + HITOS[c.label] : '' } } } }
+            options: { responsive: true, maintainAspectRatio: false }
         });
     }
 </script>
