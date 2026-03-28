@@ -13,7 +13,7 @@
         
         h1 {
             color: var(--azul); font-size: 1.3em; margin: 0 auto 0.8em auto;
-            text-align: center; line-height: 1.4; max-width: 850px;           
+            text-align: center; line-height: 1.4; max-width: 850px;            
             border-bottom: 2px double var(--oro); padding-bottom: 15px;
         }
 
@@ -39,6 +39,7 @@
         
         .recuadro-metodo { background-color: var(--gris-metodo); border-left: 5px solid var(--azul); padding: 15px 20px; margin-top: -10px; margin-bottom: 20px; font-size: 0.9em; border: 1px solid #e9ecef; }
         .anexo-metodologico { margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--borde); font-size: 0.85em; color: #666; }
+        .anexo-titulo { font-weight: bold; font-size: 1.1em; color: var(--azul); display: block; margin-bottom: 5px; }
         .lista-excluidas { background: white; padding: 20px; border: 1px solid #eee; border-radius: 8px; max-height: 200px; overflow-y: auto; font-family: monospace; }
         .palabra-tag { display: inline-block; background: #f4f4f4; padding: 2px 6px; margin: 2px; border-radius: 4px; border: 1px solid #ddd; }
 
@@ -75,14 +76,14 @@
         <div>
             <div class="card-grafica"><canvas id="chartEvolucionAnual"></canvas></div>
             <div class="recuadro-metodo">
-                <strong>Metodología:</strong> Evolución anual del volumen crítico (Neto) tras filtrar las partículas gramaticales.
+                <strong>Metodología:</strong> Evolución anual del volumen crítico (Neto) tras filtrar las palabras vacías.
             </div>
         </div>
 
         <div>
             <div class="card-grafica"><canvas id="chartCobertura"></canvas></div>
             <div class="recuadro-metodo">
-                <strong>Metodología (Lemas):</strong> Gráfica corregida que muestra la cobertura acumulada de los lemas con significado pleno sobre el **total neta**. Incluye una línea de referencia al 50%.
+                <strong>Metodología (Lemas):</strong> Cobertura acumulada de los lemas sobre el total neto.
             </div>
         </div>
 
@@ -95,7 +96,7 @@
     </div>
 
     <div class="anexo-metodologico">
-        <span class="anexo-titulo">Anexo I: Diccionario de Exclusión (Partículas Gramaticales)</span>
+        <span class="anexo-titulo">Anexo I: Diccionario de Exclusión (palabras vacías)</span>
         <span id="totalExcluidasTxt" style="display:block; margin-bottom:10px; color:var(--oro); font-weight:bold;"></span>
         <div id="visualizarExcluidas" class="lista-excluidas"></div>
     </div>
@@ -103,13 +104,13 @@
 
 <script>
     let rawTextos = []; 
-    let vocabularioLemasNeto = {}; // Frecuencias agrupadas por lema
+    let vocabularioLemasNeto = {}; 
     let palabrasNetasPorAño = {};
     let totalBrutasGlobal = 0;
     let totalNetasGlobal = 0;
 
-// Lista optimizada: Solo incluye palabras que REALMENTE existen en tu corpus
-const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","43","44","45","5","6","60","7","8","9","a","al","alguna","algunas","alguno","algunos","algún","ambos","ante","antes","aquel","aquellas","aquellos","aqui","bajo","bastante","bien","cada","cierta","como","con","consigue","consiguen","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleo","en","encima","entonces","entre","era","eran","es","esta","estaba","estado","estan","este","fin","fue","fueron","fui","ha","hace","hacen","hacer","han","haviendo","huvo","incluso","ir","la","largo","las","lo","los","m","mas","mayor","mientras","misma","modo","muchos","muy","nos","o","otras","otro","para","pero","poder","podria","podrian","por","porque","primero","puede","pueden","que","quien","s","sabe","saben","saber","se","ser","si","sic","siendo","sin","sobre","solamente","solo","su","sus","tambien","también","tener","tiempo","tiene","tienen","toda","todo","trabajo","tras","tuvo","ultimo","un","una","unas","uno","unos","usa","uso","va","valor","verdad","y"];
+    const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","43","44","45","5","6","60","7","8","9","a","al","alguna","algunas","alguno","algunos","algún","ambos","ante","antes","aquel","aquellas","aquellos","aqui","bajo","bastante","bien","cada","cierta","como","con","consigue","consiguen","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleo","en","encima","entonces","entre","era","eran","es","esta","estaba","estado","estan","este","fin","fue","fueron","fui","ha","hace","hacen","hacer","han","haviendo","huvo","incluso","ir","la","largo","las","lo","los","m","mas","mayor","mientras","misma","modo","muchos","muy","nos","o","otras","otro","para","pero","poder","podria","podrian","por","porque","primero","puede","pueden","que","quien","s","sabe","saben","saber","se","ser","si","sic","siendo","sin","sobre","solamente","solo","su","sus","tambien","también","tener","tiempo","tiene","tienen","toda","todo","trabajo","tras","tuvo","ultimo","un","una","unas","uno","unos","usa","uso","va","valor","verdad","y"];
+
     fetch('archivo.json').then(r => r.json()).then(data => {
         let vistos = new Set();
         rawTextos = data.filter(item => {
@@ -124,41 +125,11 @@ const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20
         mostrarDiccionario();
     });
 
-    /**
-     * Función RUDIMENTARIA de lematización manual client-side para español.
-     * Mapea formas específicas (como plurarles) de vuelta a su lema base.
-     */
     function lematizarSimple(palabra) {
-        // Mapeo específico proporcionado por el usuario
         const mapeoEspecifico = {
-            "operas": "ópera",
-            "óperas": "ópera",
-            "festejos": "festejo",
-            "festexos": "festejo",
-            "reyes": "rey"
-            // Puedes añadir más mapeos aquí basados en tu corpus
+            "operas": "ópera", "óperas": "ópera", "festejos": "festejo", "festexos": "festejo", "reyes": "rey"
         };
-
-        if (mapeoEspecifico[palabra]) {
-            return mapeoEspecifico[palabra];
-        }
-
-        // Lógica básica de singularización (muy imperfecta, pero mejor que nada)
-        if (palabra.length > 4) {
-            // Quitar 'es' final (reyes->rey, cantantes->cantante)
-            if (palabra.endsWith("es")) {
-                let base = palabra.slice(0, -2);
-                // Evitar singularizar 'cantantes' -> 'cantant'
-                // Esta lógica es muy compleja sin librerías externas pesadas.
-                // Lo limitamos a mapeos específicos para mayor precisión histórica.
-            }
-            // Quitar 's' final si termina en vocal
-            // if (palabra.endsWith("s") && "aeiouáéíóú".includes(palabra.slice(-2, -1))) {
-            //     return palabra.slice(0, -1);
-            // }
-        }
-
-        return palabra; // Devolver la palabra original si no hay mapeo
+        return mapeoEspecifico[palabra] || palabra;
     }
 
     function procesarDatos() {
@@ -178,11 +149,7 @@ const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20
 
                 if (!EXCLUIDAS.includes(pLimpia)) {
                     totalNetasGlobal++;
-                    
-                    // --- APLICAR LEMATIZACIÓN ---
                     let lemaBase = lematizarSimple(pLimpia);
-                    // --- --- --- --- --- --- ---
-                    
                     setUnicasNetas.add(lemaBase);
                     vocabularioLemasNeto[lemaBase] = (vocabularioLemasNeto[lemaBase] || 0) + 1;
                     palabrasNetasPorAño[año]++;
@@ -194,11 +161,13 @@ const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20
         document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString() + " (Crítico)";
         document.getElementById('m-unicas-bruto').innerText = setUnicasBrutas.size.toLocaleString();
         document.getElementById('m-unicas-neto').innerText = setUnicasNetas.size.toLocaleString() + " (Críticas)";
-        document.getElementById('totalExcluidasTxt').innerText = "Stopwords excluidas: " + (totalBrutasGlobal - totalNetasGlobal).toLocaleString();
+        
+        // CAMBIO SOLICITADO: Conteo de palabras en diccionario y total eliminadas
+        document.getElementById('totalExcluidasTxt').innerText = 
+            `Diccionario: ${EXCLUIDAS.length} palabras vacías | Total eliminadas del corpus: ${(totalBrutasGlobal - totalNetasGlobal).toLocaleString()}`;
     }
 
     function renderCharts() {
-        // 1. Evolución Anual Neto
         const años = Object.keys(palabrasNetasPorAño).sort();
         new Chart(document.getElementById('chartEvolucionAnual'), {
             type: 'line',
@@ -213,18 +182,14 @@ const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20
                     tension: 0.3
                 }]
             },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'EVOLUCIÓN ANUAL DEL VOLUMEN CRÍTICO' } } }
+            options: { responsive: true, maintainAspectRatio: false }
         });
 
-        // 2. Concentración Léxica y Dispersión (CON LÓGICA DE LEMAS Y CORTE ESTÉTICO)
         const sortedFrequencies = Object.values(vocabularioLemasNeto).sort((a, b) => b - a);
         let cumulative = 0;
-        const dataY = [0]; 
-        const etiquetasX = [0];
-        
+        const dataY = [0]; const etiquetasX = [0];
         sortedFrequencies.slice(0, 50).forEach((freq, index) => {
             cumulative += freq;
-            // Cálculo sobre el Volumen Neto
             dataY.push((cumulative / totalNetasGlobal) * 100);
             etiquetasX.push(index + 1);
         });
@@ -234,64 +199,27 @@ const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20
             data: {
                 labels: etiquetasX,
                 datasets: [{
-                    label: 'Cobertura acumulada del léxico neto',
+                    label: 'Cobertura acumulada',
                     data: dataY,
                     borderColor: '#0000FF',
-                    pointBackgroundColor: '#0000FF',
-                    pointRadius: 4,
-                    fill: false,
-                    tension: 0.1
+                    fill: false
                 }]
             },
-            options: {
-                responsive: true,
+            options: { 
+                responsive: true, 
                 maintainAspectRatio: false,
-                scales: { 
-                    x: { 
-                        min: 0, 
-                        max: 50, // RECORTADO ESTRICTAMENTE EN 50
-                        title: { display: true, text: 'Número de lemas agrupados más frecuentes' }
-                    },
-                    y: { 
-                        beginAtZero: true,
-                        // No forzamos max: 100 para que la curva suba con suavidad
-                        title: { display: true, text: 'Porcentaje de la neta (%)' }
-                    }
-                },
-                plugins: { legend: { display: false }, title: { display: true, text: 'CONCENTRACIÓN LÉXICA Y DISPERSIÓN' } }
-            },
-            plugins: [{
-                id: 'linea50',
-                beforeDraw: (chart) => {
-                    const ctx = chart.ctx;
-                    const yScale = chart.scales.y;
-                    const xScale = chart.scales.x;
-                    const y50Pixel = yScale.getPixelForValue(50);
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.strokeStyle = '#FF0000'; // Rojo
-                    ctx.lineWidth = 1;
-                    ctx.setLineDash([5, 5]);
-                    ctx.moveTo(xScale.left, y50Pixel);
-                    ctx.lineTo(xScale.right, y50Pixel);
-                    ctx.stroke();
-                    ctx.restore();
-                }
-            }]
+                scales: { x: { max: 50 }, y: { beginAtZero: true } }
+            }
         });
 
-        // 3. Top 10 (AHORA MUESTRA LEMAS)
         const top10 = Object.entries(vocabularioLemasNeto).sort((a,b) => b[1]-a[1]).slice(0, 10);
         new Chart(document.getElementById('chartTop10'), {
             type: 'bar',
             data: {
                 labels: top10.map(t => t[0].toUpperCase()),
-                datasets: [{ label: 'Frecuencia (Lema)', data: top10.map(t => t[1]), backgroundColor: '#1a3a5a' }]
+                datasets: [{ label: 'Frecuencia', data: top10.map(t => t[1]), backgroundColor: '#1a3a5a' }]
             },
-            options: { 
-                indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { display: false }, title: { display: true, text: 'TOP 10 TÉRMINOS NETOS (AGRUPADOS)' } }
-            }
+            options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
         });
     }
 
