@@ -3,64 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laboratorio de Textos - Catálogo Farinelli</title>
+    <title>Análisis Lexicográfico - Catálogo Farinelli</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --azul: #1a3a5a; --oro: #b8860b; --fondo: #fdfaf3; --borde: #dcdde1; }
         body { font-family: 'Georgia', serif; background-color: #f4f1ea; color: #2c3e50; line-height: 1.8; margin: 0; padding: 20px; }
         .contenedor { max-width: 1100px; margin: 0 auto; background: var(--fondo); padding: 30px; border-top: 6px solid var(--oro); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        
         h1 { text-align: center; font-size: 1.6em; color: var(--azul); text-transform: uppercase; border-bottom: 2px double var(--oro); padding-bottom: 10px; }
-
         .metricas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; text-align: center; }
         .metrica-card { background: white; padding: 20px; border: 1px solid var(--borde); border-radius: 8px; }
         .metrica-val { font-size: 2.2em; font-weight: bold; color: var(--azul); display: block; }
-        .metrica-lab { font-size: 0.75em; text-transform: uppercase; color: var(--oro); font-weight: bold; letter-spacing: 1px; }
-
+        .metrica-lab { font-size: 0.75em; text-transform: uppercase; color: var(--oro); font-weight: bold; }
         .grid-graficas { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
         .card-grafica { background: white; padding: 20px; border: 1px solid var(--borde); border-radius: 8px; height: 420px; position: relative; }
-
         .buscador-container { background: white; padding: 25px; border: 1px solid var(--borde); border-radius: 8px; text-align: center; margin-bottom: 30px; }
         #inputBusqueda { width: 75%; padding: 12px; border: 2px solid var(--borde); border-radius: 25px; font-size: 1em; outline: none; text-align: center; font-family: 'Georgia', serif; }
-
-        .word-cloud { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; padding: 20px; margin-bottom: 20px; }
-        .word-item { cursor: pointer; transition: 0.2s; padding: 3px 8px; border-radius: 5px; color: #555; }
-        .word-item:hover { color: var(--oro) !important; background: rgba(184,134,11,0.05); transform: scale(1.1); }
-
         .lista-textos { max-height: 600px; overflow-y: scroll; background: white; border: 1px solid var(--borde); border-radius: 8px; padding: 10px; }
         .texto-card { padding: 25px; border-bottom: 1px solid #f0f0f0; }
-        .texto-meta { font-size: 0.85em; color: var(--oro); font-weight: bold; margin-bottom: 10px; display: block; font-variant: small-caps; }
-        .resaltado { background: #ffe066; font-weight: bold; color: #000; padding: 0 2px; border-radius: 2px; }
-
+        .resaltado { background: #ffe066; font-weight: bold; color: #000; padding: 0 2px; }
         ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-thumb { background: var(--oro); border-radius: 5px; border: 3px solid white; }
-        ::-webkit-scrollbar-track { background: #f0f0f0; }
-
-        @media (max-width: 900px) { .grid-graficas, .metricas-grid { grid-template-columns: 1fr; } }
+        ::-webkit-scrollbar-thumb { background: var(--oro); border-radius: 5px; }
     </style>
 </head>
 <body>
 
 <div class="contenedor">
     <h1>Análisis Lexicográfico de las Crónicas</h1>
-
     <div class="metricas-grid">
-        <div class="metrica-card"><span class="metrica-val" id="m-unicas">0</span><span class="metrica-lab">Palabras Únicas</span></div>
+        <div class="metrica-card"><span class="metrica-val" id="m-unicas">0</span><span class="metrica-lab">Vocabulario Único</span></div>
         <div class="metrica-card"><span class="metrica-val" id="m-total">0</span><span class="metrica-lab">Total Palabras</span></div>
-        <div class="metrica-card"><span class="metrica-val" id="m-docs">0</span><span class="metrica-lab">Crónicas (Textos)</span></div>
+        <div class="metrica-card"><span class="metrica-val" id="m-docs">0</span><span class="metrica-lab">Crónicas (136 Reales)</span></div>
     </div>
-
     <div class="grid-graficas">
         <div class="card-grafica"><canvas id="chartLineas"></canvas></div>
         <div class="card-grafica"><canvas id="chartBarras"></canvas></div>
     </div>
-
-    <div id="wordCloud" class="word-cloud"></div>
-
+    <div id="wordCloud" style="display:flex; flex-wrap:wrap; justify-content:center; gap:12px; padding:20px;"></div>
     <div class="buscador-container">
-        <input type="text" id="inputBusqueda" placeholder="Buscar concepto (ej: Coliseo, sumptuoso, Geronymo...)" onkeyup="filtrar()">
+        <input type="text" id="inputBusqueda" placeholder="Buscar concepto..." onkeyup="filtrar()">
     </div>
-
     <div id="listaTextos" class="lista-textos"></div>
 </div>
 
@@ -72,26 +53,27 @@
     const EXCLUIDAS = ["1","11","12","13","14","15","16","17","18","2","20","200","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","420","43","44","45","5","6","60","7","8","9","90","a","al","alguna","algunas","alguno","algunos","algún","ambos","ampleamos","ante","antes","aquel","aquellas","aquellos","aqui","arriba","atras","bajo","bastante","bien","cada","capilla","cierta","ciertas","ciertos","como","con","conseguimos","conseguir","consigo","consigue","consiguen","consigues","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleais","emplean","emplear","empleas","empleo","en","encima","entonces","entre","era","eramos","eran","eras","eres","es","esta","estaba","estado","estais","estamos","estan","este","estoy","fin","fue","fueron","fui","fuimos","gueno","ha","hace","haceis","hacemos","hacen","hacer","haces","hago","han","haviendo","huvo","incluso","intenta","intentais","intentamos","intentan","intentar","intentas","intento","ir","la","largo","las","lo","los","m","mas","mayor","mientras","mio","misma","missa","modo","muchos","muy","nos","nosotros","o","otras","otro","para","pero","podeis","podemos","poder","podria","podriais","podriamos","podrian","podrias","por","por qué","porque","primero desde","puede","pueden","puedo","que","quien","s","sabe","sabeis","sabemos","saben","saber","sabes","se","ser","si","sic","siendo","sin","sobre","sois","solamente","solo","somos","soy","su","sus","tambien","también","teneis","tenemos","tener","tengo","tiempo","tiene","tienen","toda","todo","trabaja","trabajais","trabajamos","trabajan","trabajar","trabajas","trabajo","tras","tribuna","tuvo","tuyo","ultimo","un","una","unas","uno","unos","usa","usais","usamos","usan","usar","usas","uso","va","vais","valor","vamos","van","vaya","verdad","verdadera cierto","verdadero","vosotras","vosotros","voy","y","yo"];
 
     fetch('archivo.json').then(r => r.json()).then(data => {
-        // Solo procesamos filas que tengan contenido en Transcripción
-        rawTextos = data.filter(item => item.Transcripción && item.Transcripción.trim().length > 5);
+        // SOLUCIÓN: Solo contamos una vez cada transcripción única
+        let textosVistos = new Set();
+        rawTextos = data.filter(item => {
+            if (item.Transcripción && item.Transcripción.trim().length > 5 && !textosVistos.has(item.Transcripción)) {
+                textosVistos.add(item.Transcripción);
+                return true;
+            }
+            return false;
+        });
+        
         procesarTextos();
         renderCharts();
         renderCloud();
         filtrar();
     });
 
-    // --- TU LÓGICA DE NORMALIZACIÓN DE INDEX.HTML ---
     function miNormalizador(t) {
         if (!t) return "";
-        return t.toLowerCase()
-            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Tildes
-            .replace(/g(?=[eiéí])/g, "j") // G por J ante e, i
-            .replace(/x/g, "j")           // X por J
-            .replace(/y/g, "i")           // Y por I
-            .replace(/h/g, "")           // H muda
-            .replace(/v/g, "b")           // V por B
-            .replace(/ç/g, "z")           // Cedilla
-            .trim();
+        return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .replace(/g(?=[eiéí])/g, "j").replace(/x/g, "j").replace(/y/g, "i")
+            .replace(/h/g, "").replace(/v/g, "b").replace(/ç/g, "z").trim();
     }
 
     function procesarTextos() {
@@ -99,19 +81,15 @@
         let setUnicas = new Set();
 
         rawTextos.forEach(item => {
-            // Limpieza de etiquetas HTML para el conteo puro
-            let textoLimpio = item.Transcripción.replace(/<\/?[^>]+(>|$)/g, " ");
-            
-            // TOKENIZACIÓN REFORZADA: 
-            // Buscamos palabras completas ignorando puntuación, para evitar cortes como "colis"
-            let palabras = textoLimpio.toLowerCase().match(/[a-záéíóúñ]{3,}/gi) || [];
+            let textoLimpio = item.Transcripción.replace(/<[^>]+>/g, " ").replace(/[.,;:]/g, " ");
+            // Filtro de 5 letras para evitar "colis" (pasa a ser "coliseo")
+            let palabras = textoLimpio.toLowerCase().match(/[a-záéíóúñ]{5,}/gi) || [];
             
             totalPalabras += palabras.length;
             if (!palabrasPorAño[item.Año]) palabrasPorAño[item.Año] = 0;
             palabrasPorAño[item.Año] += palabras.length;
 
             palabras.forEach(p => {
-                // Si la palabra está en tu lista de excluidas, no la contamos
                 if (!EXCLUIDAS.includes(p)) {
                     setUnicas.add(p);
                     vocabulario[p] = (vocabulario[p] || 0) + 1;
@@ -132,36 +110,11 @@
             options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'VOLUMEN DE TEXTO ANUAL' } } }
         });
 
-        // Ordenamos el vocabulario y sacamos las 10 reales
         const top10 = Object.entries(vocabulario).sort((a,b) => b[1]-a[1]).slice(0, 10);
-        
         new Chart(document.getElementById('chartBarras'), {
             type: 'bar',
-            data: { 
-                labels: top10.map(t => t[0].toUpperCase()), 
-                datasets: [{ 
-                    data: top10.map(t => t[1]), 
-                    backgroundColor: ['#b8860b', '#c1941e', '#caa331', '#d4af44', '#ddbb57', '#e7c86a', '#f0d47d', '#f9e190', '#ffeda3', '#fff9b6'] 
-                }] 
-            },
-            options: { 
-                indexAxis: 'y', 
-                responsive: true, 
-                maintainAspectRatio: false, 
-                layout: { padding: { left: 100 } }, // Espacio mas que de sobra para "COLISEO"
-                plugins: { 
-                    legend: { display: false }, 
-                    title: { display: true, text: 'PALABRAS MÁS UTILIZADAS' } 
-                },
-                scales: {
-                    y: {
-                        ticks: {
-                            autoSkip: false,
-                            font: { family: 'Georgia', size: 12 }
-                        }
-                    }
-                }
-            }
+            data: { labels: top10.map(t => t[0].toUpperCase()), datasets: [{ data: top10.map(t => t[1]), backgroundColor: '#b8860b' }] },
+            options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, layout: { padding: { left: 100 } }, plugins: { legend: { display: false }, title: { display: true, text: 'TOP 10 PALABRAS' } }, scales: { y: { ticks: { font: { size: 12 } } } } }
         });
     }
 
@@ -170,7 +123,7 @@
         Object.entries(vocabulario).sort((a,b) => b[1]-a[1]).slice(0, 30).forEach(([w, f]) => {
             let s = document.createElement('span');
             s.className = 'word-item';
-            s.innerText = w;
+            s.innerText = w; s.style.cursor = "pointer";
             s.style.fontSize = `${Math.min(12 + f * 1.5, 30)}px`;
             s.onclick = () => { document.getElementById('inputBusqueda').value = w; filtrar(); };
             cloud.appendChild(s);
@@ -191,16 +144,11 @@
                         if (c === 'j') return '[j|g|x]';
                         if (c === 'i') return '[i|y]';
                         if (c === 'b') return '[b|v]';
-                        if (c === 'z') return '[z|c|ç]';
                         return c;
                     }).join('[\\u0300-\\u036f]?h?');
                     content = content.replace(new RegExp(pattern, "gi"), m => `<span class="resaltado">${m}</span>`);
                 }
-                container.innerHTML += `
-                <div class="texto-card">
-                    <span class="texto-meta">${item.Año} | ${item.Día}</span>
-                    <div class="texto-contenido">${content}</div>
-                </div>`;
+                container.innerHTML += `<div class="texto-card"><span class="texto-meta">${item.Año} | ${item.Día}</span><div class="texto-contenido">${content}</div></div>`;
             }
         });
     }
