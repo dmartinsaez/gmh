@@ -51,7 +51,7 @@
         <div>
             <div class="card-grafica"><canvas id="chartCobertura"></canvas></div>
             <div class="recuadro-metodo">
-                <strong>Análisis de concentración:</strong> Esta gráfica mide cuánto ocupan los términos más frecuentes sobre el <strong>total del léxico con significado</strong>.
+                <strong>Análisis de concentración:</strong> Esta gráfica mide cuánto ocupan los términos más frecuentes sobre el <strong>total del léxico neto</strong> (excluyendo partículas gramaticales).
             </div>
         </div>
         <div>
@@ -74,7 +74,16 @@
     const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20","200","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","420","43","44","45","5","6","60","7","8","9","90","a","al","alguna","algunas","alguno","algunos","algún","ambos","ampleamos","ante","antes","aquel","aquellas","aquellos","aqui","arriba","atras","bajo","bastante","bien","cada","capilla","cierta","ciertas","ciertos","como","con","conseguimos","conseguir","consigo","consigue","consiguen","consigues","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleais","emplean","emplear","empleas","empleo","en","encima","entonces","entre","era","eramos","eran","eras","eres","es","esta","estaba","estado","estais","estamos","estan","este","estoy","fin","fue","fueron","fui","fuimos","gueno","ha","hace","haceis","hacemos","hacen","hacer","haces","hago","han","haviendo","huvo","incluso","intenta","intentais","intentamos","intentan","intentar","intentas","intento","ir","la","largo","las","lo","los","m","mas","mayor","mientras","mio","misma","missa","modo","muchos","muy","nos","nosotros","o","otras","otro","para","pero","podeis","podemos","poder","podria","podriais","podriamos","podrian","podrias","por","por qué","porque","primero","desde","puede","pueden","puedo","que","quien","s","sabe","sabeis","sabemos","saben","saber","sabes","se","ser","si","sic","siendo","sin","sobre","sois","solamente","solo","somos","soy","su","sus","tambien","también","teneis","tenemos","tener","tengo","tiempo","tiene","tienen","toda","todo","trabaja","trabajais","trabajamos","trabajan","trabajar","trabajas","trabajo","tras","tribuna","tuvo","tuyo","ultimo","un","una","unas","uno","unos","usa","usais","usamos","usan","usar","usas","uso","va","vais","valor","vamos","van","vaya","verdad","verdadera","verdadero","cierto","vosotras","vosotros","voy","y","yo"];
 
     fetch('archivo.json').then(r => r.json()).then(data => {
-        rawTextos = data.filter(item => item.Transcripción && item.Transcripción.trim().length > 0);
+        // DEDUPLICACIÓN: Evita contar dos veces el mismo texto exacto
+        let vistos = new Set();
+        rawTextos = data.filter(item => {
+            if (!item.Transcripción || item.Transcripción.trim().length === 0) return false;
+            let textoLimpio = item.Transcripción.trim();
+            if (vistos.has(textoLimpio)) return false;
+            vistos.add(textoLimpio);
+            return true;
+        });
+        
         procesarDatos();
         renderCharts();
         mostrarDiccionario();
@@ -82,6 +91,7 @@
 
     function procesarDatos() {
         rawTextos.forEach(item => {
+            // Limpieza de HTML y extracción de palabras (mínimo 2 letras)
             let palabras = item.Transcripción.replace(/<[^>]+>/g, " ").toLowerCase().match(/[a-záéíóúñ]{2,}/gi) || [];
             palabras.forEach(p => {
                 let pLimpia = p.trim();
@@ -105,11 +115,11 @@
 
         sortedFrequencies.slice(0, 50).forEach((freq, index) => {
             cumulativeFrequency += freq;
-            // LA CLAVE: Dividimos por totalNetasGlobal para que las stopwords no "roben" porcentaje
             dataY.push((cumulativeFrequency / totalNetasGlobal) * 100);
             etiquetasX.push(index + 1);
         });
 
+        // Gráfico de Cobertura Neta
         new Chart(document.getElementById('chartCobertura'), {
             type: 'line',
             data: {
@@ -130,9 +140,7 @@
                     x: { title: { display: true, text: 'Número de lemas (sin stopwords)' } },
                     y: { min: 0, title: { display: true, text: 'Porcentaje del contenido neto (%)' } }
                 },
-                plugins: {
-                    title: { display: true, text: 'CONCENTRACIÓN LÉXICA (LÉXICO PLENO)' }
-                }
+                plugins: { title: { display: true, text: 'CONCENTRACIÓN LÉXICA (LÉXICO NETO)' } }
             },
             plugins: [{
                 id: 'linea50',
@@ -151,14 +159,27 @@
             }]
         });
 
+        // Gráfico de Top 10
         const top10 = Object.entries(vocabularioNeto).sort((a,b) => b[1]-a[1]).slice(0, 10);
         new Chart(document.getElementById('chartTop10'), {
             type: 'bar',
             data: {
                 labels: top10.map(t => t[0].toUpperCase()),
-                datasets: [{ data: top10.map(t => t[1]), backgroundColor: '#1a3a5a' }]
+                datasets: [{ 
+                    label: 'Frecuencia',
+                    data: top10.map(t => t[1]), 
+                    backgroundColor: '#1a3a5a' 
+                }]
             },
-            options: { indexAxis: 'y', plugins: { title: { display: true, text: 'TOP 10 TÉRMINOS NETOS' } } }
+            options: { 
+                indexAxis: 'y', 
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { 
+                    title: { display: true, text: 'TOP 10 TÉRMINOS NETOS' },
+                    legend: { display: false }
+                } 
+            }
         });
     }
 
