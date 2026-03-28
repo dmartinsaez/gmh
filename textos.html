@@ -78,7 +78,9 @@
 <body>
 
 <div class="contenedor">
-    <h1>Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)</h1>
+    <h1>
+        Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)
+    </h1>
 
     <nav class="nav-farinelli">
         <a href="index.html">Documentario</a>
@@ -104,7 +106,7 @@
             <div class="card-grafica"><canvas id="chartEvolucionComparada"></canvas></div>
             <div class="recuadro-metodo">
                 <strong>Metodología de Volumen Anual:</strong>
-                Muestra la diferencia entre la extensión física del texto (Bruto) y la densidad de información relevante (Crítico) tras filtrar las partículas gramaticales.
+                Muestra la diferencia entre la extensión física del texto (Bruto) y la densidad de información relevante (Crítico) tras filtrar las partículas gramaticales y elementos de enlace.
             </div>
         </div>
 
@@ -112,7 +114,7 @@
             <div class="card-grafica"><canvas id="chartCobertura"></canvas></div>
             <div class="recuadro-metodo">
                 <strong>Metodología de Cobertura Léxica:</strong>
-                Calcula qué porcentaje del <strong>texto total bruto</strong> (incluyendo stopwords) es cubierto exclusivamente por los lemas significativos más frecuentes. Esto ilustra el peso real de la terminología clave frente a la estructura gramatical.
+                Calcula qué porcentaje del <strong>volumen textual completo</strong> (incluyendo partículas gramaticales) es cubierto exclusivamente por los lemas de significado pleno más frecuentes. Ilustra el peso de la información clave frente a la estructura sintáctica.
             </div>
         </div>
 
@@ -120,15 +122,15 @@
             <div class="card-grafica"><canvas id="chartTop10"></canvas></div>
             <div class="recuadro-metodo">
                 <strong>Metodología de Frecuencia:</strong>
-                Ranking de los 10 términos significativos más repetidos en las crónicas analizadas.
+                Ranking de los 10 términos de léxico pleno más repetidos en las crónicas analizadas.
             </div>
         </div>
     </div>
 
     <div class="anexo-metodologico">
-        <span class="anexo-titulo">Anexo I: Diccionario de Exclusión (Stopwords)</span>
-        <span class="anexo-contador" id="totalExcluidasTxt">Total de palabras excluidas: 0</span>
-        <p>Formas gramaticales y siglas de control editorial omitidas para el cálculo del volumen crítico:</p>
+        <span class="anexo-titulo">Anexo I: Diccionario de Exclusión (Partículas Gramaticales)</span>
+        <span class="anexo-contador" id="totalExcluidasTxt">Total de elementos de enlace excluidos: 0</span>
+        <p>Formas gramaticales y siglas de control editorial omitidas para el análisis del vocabulario crítico:</p>
         <div id="visualizarExcluidas" class="lista-excluidas"></div>
     </div>
 </div>
@@ -156,15 +158,6 @@
         mostrarDiccionario();
     });
 
-    function normalizarLema(str) {
-        return str.toLowerCase()
-            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-            .replace(/ph/g,'f').replace(/th/g,'t').replace(/ch/g,'c')
-            .replace(/[gx]/g,'j').replace(/[vb]/g,'b')
-            .replace(/[iy]/g,'i').replace(/[cq]/g,'c').replace(/[cz]/g,'c')
-            .replace(/mpt/g,'nt').replace(/escena/g, 'scena');
-    }
-
     function procesarDatos() {
         let setUnicasBrutas = new Set();
         let setUnicasNetas = new Set();
@@ -185,10 +178,8 @@
                 palabrasBrutasPorAño[item.Año]++;
 
                 if (!EXCLUIDAS.includes(pLimpia)) {
-                    let lemaNormalizado = normalizarLema(pLimpia); 
-                    
-                    setUnicasNetas.add(lemaNormalizado);
-                    vocabularioNeto[lemaNormalizado] = (vocabularioNeto[lemaNormalizado] || 0) + 1;
+                    setUnicasNetas.add(pLimpia);
+                    vocabularioNeto[pLimpia] = (vocabularioNeto[pLimpia] || 0) + 1;
                     palabrasNetasPorAño[item.Año]++;
                     totalNetasGlobal++;
                 }
@@ -201,7 +192,7 @@
         document.getElementById('m-unicas-neto').innerText = setUnicasNetas.size.toLocaleString() + " (Críticas)";
         
         let totalExcluidas = totalBrutasGlobal - totalNetasGlobal;
-        document.getElementById('totalExcluidasTxt').innerText = "Total de palabras excluidas: " + totalExcluidas.toLocaleString();
+        document.getElementById('totalExcluidasTxt').innerText = "Total de elementos de enlace excluidos: " + totalExcluidas.toLocaleString();
     }
 
     function renderCharts() {
@@ -219,7 +210,7 @@
             options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'DINÁMICA DEL VOLUMEN NARRATIVO ANUAL' } } }
         });
 
-        // Calculamos las frecuencias de las palabras SIGNIFICATIVAS
+        // CÁLCULO DE LA CURVA: Palabras significativas sobre el TOTAL BRUTO
         const sortedFrequencies = Object.values(vocabularioNeto).sort((a, b) => b - a);
         let cumulativeFrequency = 0;
         
@@ -228,7 +219,7 @@
 
         sortedFrequencies.slice(0, 50).forEach((freq, index) => {
             cumulativeFrequency += freq;
-            // Dividimos entre el texto TOTAL BRUTO
+            // Magia matemática: acumulado significativo / total general bruto
             dataY.push((cumulativeFrequency / totalBrutasGlobal) * 100);
             etiquetasX.push(index + 1);
         });
@@ -238,7 +229,7 @@
             data: {
                 labels: etiquetasX,
                 datasets: [{
-                    label: 'Cobertura acumulada',
+                    label: 'Cobertura de términos significativos',
                     data: dataY,
                     borderColor: '#0000FF',
                     pointBackgroundColor: '#0000FF',
@@ -253,9 +244,8 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    x: { title: { display: true, text: 'Número de lemas agrupados más frecuentes' }, grid: { borderDash: [5, 5] } },
-                    // He fijado el max: 55 para que siempre se dibuje la línea roja del 50% aunque la curva se quede abajo
-                    y: { min: 0, max: 55, title: { display: true, text: 'Porcentaje del texto TOTAL (%)' }, grid: { borderDash: [5, 5] } }
+                    x: { title: { display: true, text: 'Número de lemas significativos agrupados' }, grid: { borderDash: [5, 5] } },
+                    y: { min: 0, title: { display: true, text: 'Porcentaje sobre el volumen total (%)' }, grid: { borderDash: [5, 5] } }
                 },
                 plugins: { legend: { display: false }, title: { display: true, text: 'CONCENTRACIÓN LÉXICA Y DISPERSIÓN' } }
             },
