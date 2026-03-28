@@ -8,7 +8,6 @@
     <style>
         :root { --azul: #1a3a5a; --oro: #b8860b; --fondo: #fdfaf3; --borde: #dcdde1; }
         
-        /* Diseño unificado con textos.html e index.html corregido */
         body { font-family: 'Georgia', serif; background-color: #f4f1ea; color: #2c3e50; margin: 0; padding: 20px; }
         
         .contenedor { max-width: 1100px; margin: 0 auto; background: var(--fondo); padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
@@ -17,7 +16,7 @@
             color: var(--azul); font-size: 1.3em; 
             text-align: center; line-height: 1.4; max-width: 850px;            
             border-bottom: 2px double var(--oro); padding-bottom: 15px;
-            margin: 0 auto 0.8em auto; /* Ajustado a 0.8em */
+            margin: 0 auto 0.8em auto;
         }
 
         .nav-farinelli {
@@ -123,21 +122,51 @@
         return txt.replace(/<\/?[^>]+(>|$)/g, "").replace(/\.\.\./g, "").trim();
     }
 
-    // Función para filtrar días de la semana y frases de relleno
-    function esOcasioValida(txt) {
-        if (!txt || txt.includes("“") || txt.includes("\"")) return false;
-        const t = txt.toLowerCase();
-        const ruidos = ["lunes", "martes", "miércoles", "miercoles", "jueves", "viernes", "sábado", "sabado", "domingo", "días sucesivos", "dias sucesivos", "diferentes noches", "distintas noches", "se repitió", "se repitio", "diferentes óperas", "diferentes operas", "semana pasada"];
-        return !ruidos.some(r => t.includes(r));
-    }
-
     function procesarTodo(data) {
         let uTit = "";
         data.forEach(item => {
-            const ocasionRaw = item['Ocasión'] || "";
-            const diaRaw = item['Día'] || "";
-            
-            // 1. Lógica de Óperas (Se mantiene el filtro de títulos inciertos para el inventario)
+            const ocasionTexto = item['Ocasión'] || "";
+            const diaTexto = item['Día'] || "";
+            const m = detectarMes(diaTexto);
+            const d = diaTexto ? parseInt(diaTexto.match(/\d+/)) : null;
+
+            // 1. ANÁLISIS DE FESTIVIDADES Y ESTACIONALIDAD (PARA TODAS LAS FILAS)
+            if (m) {
+                // Registro para Efemérides Festivas
+                if (ocasionTexto) {
+                    if (!globalData.mapFest[m]) globalData.mapFest[m] = {};
+                    ocasionTexto.split('+').forEach(occ => {
+                        let o = occ.trim();
+                        let oLow = o.toLowerCase();
+                        // Filtros de exclusión: días de la semana, días sucesivos, comillas
+                        const ruidos = ["lunes", "martes", "miércoles", "miercoles", "jueves", "viernes", "sábado", "sabado", "domingo"];
+                        const esDia = ruidos.some(rd => oLow.includes(rd));
+                        const esRelleno = oLow.includes("días sucesivos") || oLow.includes("dias sucesivos") || oLow.includes("“") || oLow.includes("se repitió");
+
+                        if (o.length > 3 && !esDia && !esRelleno) {
+                            if (!globalData.mapFest[m][o]) globalData.mapFest[m][o] = new Set();
+                            globalData.mapFest[m][o].add(item.Año);
+                        }
+                    });
+                }
+
+                // Registro para Mapa de Calor
+                if (d) {
+                    const key = `${m}-${d}`;
+                    if (!globalData.dayStats[key]) globalData.dayStats[key] = { count: 0, occasions: {} };
+                    globalData.dayStats[key].count++;
+                    if (ocasionTexto) {
+                        ocasionTexto.split('+').forEach(occ => {
+                            let o = occ.trim();
+                            if (o.length > 3 && !o.toLowerCase().includes("domingo") && !o.includes("“")) {
+                                globalData.dayStats[key].occasions[o] = (globalData.dayStats[key].occasions[o] || 0) + 1;
+                            }
+                        });
+                    }
+                }
+            }
+
+            // 2. INVENTARIO DE ÓPERAS Y AUTORES (CON FILTRO DE TÍTULO)
             let t = normalizar(item.Título);
             if (item.Título && item.Título.includes("...")) t = uTit;
             else if (t !== "" && !t.includes("?") && !t.includes("“")) uTit = t;
@@ -146,10 +175,6 @@
                 if (!globalData.mapOp[t]) globalData.mapOp[t] = { años: new Set(), funciones: 0, occasions: new Set(), comp: item.Compositor || "No consta", lib: item.Libreto || "No consta" };
                 globalData.mapOp[t].años.add(item.Año);
                 globalData.mapOp[t].funciones++;
-                if (ocasionRaw) ocasionRaw.split('+').forEach(occ => {
-                    let o = occ.trim();
-                    if (esOcasioValida(o)) globalData.mapOp[t].occasions.add(o);
-                });
 
                 const reg = (campo, target) => {
                     if (item[campo]) {
@@ -160,37 +185,6 @@
                 };
                 reg('Compositor', globalData.mapComp);
                 reg('Libreto', globalData.mapLib);
-            }
-
-            // 2. Lógica de Estacionalidad y Efemérides (FUERA del filtro de título para no perder datos)
-            const m = detectarMes(diaRaw);
-            const d = diaRaw ? parseInt(diaRaw.match(/\d+/)) : null;
-
-            if (m) {
-                // Para el Mapa de Calor
-                if (d) {
-                    const key = `${m}-${d}`;
-                    if (!globalData.dayStats[key]) globalData.dayStats[key] = { count: 0, occasions: {} };
-                    globalData.dayStats[key].count++;
-                    if (ocasionRaw) {
-                        ocasionRaw.split('+').forEach(occ => {
-                            let o = occ.trim();
-                            if (esOcasioValida(o)) globalData.dayStats[key].occasions[o] = (globalData.dayStats[key].occasions[o] || 0) + 1;
-                        });
-                    }
-                }
-
-                // Para las Efemérides Completas
-                if (ocasionRaw) {
-                    if (!globalData.mapFest[m]) globalData.mapFest[m] = {};
-                    ocasionRaw.split('+').forEach(occ => {
-                        let o = occ.trim();
-                        if (o.length > 3 && esOcasioValida(o)) {
-                            if (!globalData.mapFest[m][o]) globalData.mapFest[m][o] = new Set();
-                            globalData.mapFest[m][o].add(item.Año);
-                        }
-                    });
-                }
             }
         });
     }
