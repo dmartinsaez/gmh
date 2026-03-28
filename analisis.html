@@ -6,140 +6,42 @@
     <title>Análisis Estadístico - Ópera Italiana (1747-1758)</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root {
-            --azul-real: #1f3d5a;
-            --dorado: #b8860b;
-            --gris-suave: #f8f9fa;
-            --borde: #dcdde1;
-        }
-
-        body { 
-            font-family: 'Georgia', serif; 
-            background-color: #f4f1ea; 
-            color: #2c3e50; 
-            line-height: 1.7; 
-            margin: 0; 
-            padding: 40px 20px; 
-        }
-
-        .contenedor { 
-            max-width: 1100px; 
-            margin: 0 auto; 
-            background: white; 
-            padding: 50px; 
-            border-radius: 4px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            border-top: 6px solid var(--azul-real);
-        }
-
-        h1 { 
-            text-align: center; 
-            font-size: 2em; 
-            color: var(--azul-real); 
-            margin-bottom: 40px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .seccion-titulo {
-            text-align: center;
-            font-variant: small-caps;
-            color: var(--dorado);
-            border-bottom: 1px solid var(--dorado);
-            margin: 50px 0 30px 0;
-            padding-bottom: 10px;
-            font-size: 1.5em;
-        }
-
-        .grid-graficos { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 30px; 
-            margin-bottom: 50px; 
-        }
-
-        .card-grafico { 
-            background: var(--gris-suave); 
-            padding: 25px; 
-            border: 1px solid var(--borde);
-            border-radius: 8px;
-        }
-
+        :root { --azul-real: #1f3d5a; --dorado: #b8860b; --papel: #fdfaf3; --borde: #dcdde1; }
+        body { font-family: 'Georgia', serif; background-color: #f4f1ea; color: #2c3e50; line-height: 1.7; margin: 0; padding: 40px 20px; }
+        .contenedor { max-width: 1100px; margin: 0 auto; background: var(--papel); padding: 50px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 6px solid var(--azul-real); }
+        h1 { text-align: center; font-size: 1.9em; color: var(--azul-real); margin-bottom: 40px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px double var(--dorado); padding-bottom: 15px; }
+        .seccion-titulo { text-align: center; font-variant: small-caps; color: var(--dorado); border-bottom: 1px solid var(--dorado); margin: 50px 0 30px 0; padding-bottom: 10px; font-size: 1.5em; }
+        .grid-graficos { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 50px; }
+        .card-grafico { background: white; padding: 25px; border: 1px solid var(--borde); border-radius: 8px; }
         .full-width { grid-column: 1 / -1; }
-
-        .lista-container {
-            background: var(--gris-suave);
-            border: 1px solid var(--borde);
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-        }
-
+        .lista-container { background: white; border: 1px solid var(--borde); padding: 20px; border-radius: 8px; margin-bottom: 30px; }
         ul { list-style: none; padding: 0; margin: 0; }
-        li { 
-            padding: 8px 0; 
-            border-bottom: 1px solid #e0e0e0; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: flex-start;
-        }
-        li:last-child { border-bottom: none; }
-
-        .tag-año { 
-            background: var(--azul-real); 
-            color: white; 
-            padding: 2px 8px; 
-            border-radius: 3px; 
-            font-size: 0.8em; 
-            margin-left: 5px;
-            font-family: sans-serif;
-        }
-
-        .autores-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-
-        .mes-bloque {
-            margin-bottom: 25px;
-        }
-
-        .mes-nombre {
-            font-weight: bold;
-            color: var(--azul-real);
-            display: block;
-            border-bottom: 2px solid var(--azul-real);
-            margin-bottom: 10px;
-        }
-
-        .evento-item {
-            margin-bottom: 10px;
-            font-size: 0.95em;
-        }
-
-        @media (max-width: 850px) {
-            .grid-graficos, .autores-grid { grid-template-columns: 1fr; }
-        }
+        li { padding: 10px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: flex-start; }
+        .tag-año { background: var(--azul-real); color: white; padding: 2px 8px; border-radius: 3px; font-size: 0.75em; margin-left: 5px; font-family: sans-serif; font-weight: bold; }
+        .autores-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .mes-bloque { margin-bottom: 25px; background: #fff; padding: 15px; border: 1px solid #eee; border-radius: 5px; break-inside: avoid; }
+        .mes-nombre { font-weight: bold; color: var(--azul-real); display: block; border-bottom: 2px solid var(--azul-real); margin-bottom: 12px; text-align: center; text-transform: uppercase; font-size: 0.9em; }
+        .evento-item { font-size: 0.85em; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px dashed #ddd; line-height: 1.4; }
+        @media (max-width: 850px) { .grid-graficos, .autores-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <div class="contenedor">
-    <h1>Documentario Farinelli: Análisis de Datos</h1>
+    <h1>Análisis del Catálogo y Actividad Operística</h1>
 
     <div class="grid-graficos">
         <div class="card-grafico full-width">
-            <h2 class="seccion-titulo" style="margin-top:0">Actividad Operística Anual</h2>
+            <h2 class="seccion-titulo" style="margin-top:0">Frecuencia Anual</h2>
             <canvas id="chartAnual"></canvas>
         </div>
         <div class="card-grafico full-width">
-            <h2 class="seccion-titulo">Distribución Estacional (Meses)</h2>
+            <h2 class="seccion-titulo">Distribución Estacional</h2>
             <canvas id="chartMensual"></canvas>
         </div>
     </div>
 
-    <h2 class="seccion-titulo">Catálogo de Óperas Representadas</h2>
+    <h2 class="seccion-titulo">Catálogo de Óperas Únicas</h2>
     <div id="listaOperas" class="lista-container"></div>
 
     <div class="autores-grid">
@@ -153,8 +55,8 @@
         </div>
     </div>
 
-    <h2 class="seccion-titulo">Calendario de Ocasiones Festivas</h2>
-    <div id="calendarioFestivo" class="lista-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;"></div>
+    <h2 class="seccion-titulo">Calendario de Ocasiones Festivas (Únicas)</h2>
+    <div id="calendarioFestivo" class="lista-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;"></div>
 </div>
 
 <script>
@@ -166,28 +68,73 @@
         renderLists(datos);
     });
 
+    // --- NORMALIZACIÓN SEMÁNTICA DE FESTIVIDADES ---
+    function normalizarFestividad(str) {
+        if (!str) return [];
+        
+        // Días de la semana y expresiones a ignorar (Lista Negra)
+        const excluir = ["lunes", "martes", "miércoles", "miercoles", "jueves", "viernes", "sábado", "sabado", "domingo", "se repitió", "se repitio"];
+        
+        let partes = str.split(/\+|\by\b|,|;/);
+        
+        return partes.map(p => {
+            let s = p.trim().toLowerCase();
+            
+            // FILTRO: Si es un día de la semana, nota entrecomillada o está en la lista negra, lo descartamos
+            if (excluir.some(palabra => s.includes(palabra)) || s.includes("“") || s.includes("”") || s === "") {
+                return null;
+            }
+
+            // Limpieza de artículos y prefijos
+            s = s.replace(/^(la |el |fiesta |festividad |celebración |celebracion |día |dia |del |de |en |los |las |de la |de los |nuestra |nuestro )+/gi, "");
+            s = s.replace(/\.$/, ""); 
+
+            // Consolidación de eventos idénticos
+            if (s.includes("bárbara") || s.includes("barbara")) return "Santo y Cumpleaños de la Reina Bárbara";
+            if (s.includes("dos sicilias")) return "Cumpleaños del Rey de las Dos Sicilias";
+            if (s.includes("adoración reyes") || s.includes("adoracion reyes")) return "Adoración de los Reyes";
+            if (s.includes("dulcísimo nombre") || s.includes("dulcisimo nombre")) return "Dulcísimo Nombre de Jesús";
+            if (s.includes("purificación") || s.includes("purificacion")) return "Purificación de Nuestra Señora";
+            if (s.includes("expectación") || s.includes("expectacion")) return "Expectación de Nuestra Señora";
+            if (s.includes("pascua")) return "Pascua de Resurrección";
+            if (s.includes("carnaval") || s.includes("carnestolendas")) return "Carnaval";
+            if (s.includes("fernando vi") || s.includes("años del rey")) return "Cumpleaños de Fernando VI";
+            if (s.includes("san juan evangelista") || s.includes("juan v de portugal")) return "Día de San Juan (Rey de Portugal)";
+            if (s.includes("isabel de borbón") || s.includes("isabel maria") || s.includes("isabel de borbon")) return "Cumpleaños de la Infanta Isabel";
+
+            return s.charAt(0).toUpperCase() + s.slice(1).trim();
+        }).filter(p => p !== null && p.length > 2);
+    }
+
+    function normalizarTitulo(titulo) {
+        if (!titulo) return [];
+        let limpio = titulo.replace(/<\/?[^>]+(>|$)/g, "").replace(/\.\.\./g, "").trim();
+        if (limpio.includes("“") || limpio.includes("?") || limpio === "") return [];
+        let partes = limpio.split(/ o |\/| y /);
+        return partes.map(p => {
+            let s = p.trim().replace(/^(La |El |L'|Las |Los )/i, "");
+            if (s.toLowerCase().includes("niteti")) s = "Nitteti";
+            if (s.toLowerCase().includes("artaxer")) s = "Artaserse";
+            return s.charAt(0).toUpperCase() + s.slice(1);
+        }).filter(p => p.length > 2);
+    }
+
     function procesarFarinelli(data) {
-        let ultimoTitulo = "";
+        let ultimoTitulo = [];
         const mapOp = {}, mapComp = {}, mapLib = {}, mapFest = {};
 
         data.forEach(item => {
-            // 1. Limpieza de Título y lógica de "..."
-            let t = item.Título ? item.Título.replace(/<\/?[^>]+(>|$)/g, "").trim() : "";
-            if (t.endsWith("...")) {
-                t = ultimoTitulo;
-            } else if (t !== "" && !t.includes("“") && !t.includes("?")) {
-                ultimoTitulo = t;
+            // Títulos
+            let tFila = normalizarTitulo(item.Título);
+            if (item.Título && item.Título.includes("...")) {
+                tFila = ultimoTitulo;
+            } else if (tFila.length > 0) {
+                ultimoTitulo = tFila;
             }
 
-            // Ignorar notas de cantidad o dudas para estadísticas de autoría
-            const esValido = t !== "" && !t.includes("“") && !t.includes("?");
-
-            if (esValido) {
-                // Registro de Óperas y Años
+            tFila.forEach(t => {
                 if (!mapOp[t]) mapOp[t] = new Set();
                 mapOp[t].add(item.Año);
-
-                // Registro de Autores (SIN ARRASTRE: solo si el campo tiene texto)
                 const extraer = (campo, target) => {
                     if (item[campo] && item[campo].trim() !== "") {
                         item[campo].split(/,|y|\//).forEach(n => {
@@ -201,23 +148,19 @@
                 };
                 extraer('Compositor', mapComp);
                 extraer('Libreto', mapLib);
-            }
+            });
 
-            // 2. Lógica Festiva (Normalización de nombres)
-            if (item.Ocasión && item.Ocasión.trim() !== "") {
-                const mes = detectarMes(item.Día);
-                if (mes) {
-                    // Normalizar: "Cumpleaños Rey Dos Sicilias y días sucesivos" -> "Cumpleaños Rey Dos Sicilias"
-                    let occ = item.Ocasión.split(" y ")[0].split(".")[0].trim();
-                    occ = occ.charAt(0).toUpperCase() + occ.slice(1);
-                    
+            // Ocasiones Festivas Únicas
+            const mes = detectarMes(item.Día);
+            if (mes && item.Ocasión) {
+                const ocasiones = normalizarFestividad(item.Ocasión);
+                ocasiones.forEach(occ => {
                     if (!mapFest[mes]) mapFest[mes] = {};
                     if (!mapFest[mes][occ]) mapFest[mes][occ] = new Set();
                     mapFest[mes][occ].add(item.Año);
-                }
+                });
             }
         });
-
         return { data, mapOp, mapComp, mapLib, mapFest };
     }
 
@@ -230,32 +173,24 @@
     }
 
     function renderLists({ mapOp, mapComp, mapLib, mapFest }) {
-        // Render Óperas
-        const opDiv = document.getElementById('listaOperas');
-        let htmlOp = "<ul>";
-        Object.keys(mapOp).sort().forEach(o => {
-            htmlOp += `<li><span>${o}</span> <div>${Array.from(mapOp[o]).sort().map(a => `<span class="tag-año">${a}</span>`).join('')}</div></li>`;
-        });
-        opDiv.innerHTML = htmlOp + "</ul>";
-
-        // Render Autores
-        const renderAut = (map, id) => {
+        const renderGeneric = (map, id, isOp = false) => {
             let h = "<ul>";
-            Object.keys(map).sort().forEach(a => {
-                h += `<li><div><strong>${a}</strong><br><small style="color:#666">${Array.from(map[a]).join(', ')}</small></div></li>`;
+            Object.keys(map).sort().forEach(k => {
+                h += `<li><span><strong>${k}</strong>${!isOp ? '<br><small style="color:#666">Obras: '+Array.from(map[k]).join(', ')+'</small>' : ''}</span> 
+                      <div>${isOp ? Array.from(map[k]).sort().map(a => `<span class="tag-año">${a}</span>`).join('') : ''}</div></li>`;
             });
             document.getElementById(id).innerHTML = h + "</ul>";
         };
-        renderAut(mapComp, 'listaCompositores');
-        renderAut(mapLib, 'listaLibretistas');
+        renderGeneric(mapOp, 'listaOperas', true);
+        renderGeneric(mapComp, 'listaCompositores');
+        renderGeneric(mapLib, 'listaLibretistas');
 
-        // Render Festivo
         let hFest = "";
         MESES.forEach(m => {
             if (mapFest[m]) {
                 hFest += `<div class="mes-bloque"><span class="mes-nombre">${m}</span>`;
                 Object.keys(mapFest[m]).sort().forEach(ev => {
-                    hFest += `<div class="evento-item">${ev} <br> ${Array.from(mapFest[m][ev]).sort().map(a => `<span class="tag-año" style="background:#d4af37">${a}</span>`).join('')}</div>`;
+                    hFest += `<div class="evento-item"><strong>${ev}</strong><br>${Array.from(mapFest[m][ev]).sort().map(a => `<span class="tag-año" style="background:#d4af37; color:#000">${a}</span>`).join('')}</div>`;
                 });
                 hFest += `</div>`;
             }
@@ -264,28 +199,20 @@
     }
 
     function renderCharts({ data }) {
-        // Gráfico Anual
         const años = [...new Set(data.map(i => i.Año))].sort();
         const counts = años.map(a => data.filter(i => i.Año === a).length);
-        
         new Chart(document.getElementById('chartAnual'), {
             type: 'line',
             data: { labels: años, datasets: [{ label: 'Funciones', data: counts, borderColor: '#1f3d5a', backgroundColor: 'rgba(31,61,90,0.1)', fill: true, tension: 0.3 }] },
-            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+            options: { plugins: { legend: { display: false } } }
         });
-
-        // Gráfico Mensual
-        const mesCounts = MESES.map(m => {
-            return data.filter(i => detectarMes(i.Día) === m).length;
-        });
-
+        const mesCounts = MESES.map(m => data.filter(i => detectarMes(i.Día) === m).length);
         new Chart(document.getElementById('chartMensual'), {
             type: 'radar',
-            data: { labels: MESES, datasets: [{ label: 'Actividad', data: mesCounts, backgroundColor: 'rgba(184,134,11,0.2)', borderColor: '#b8860b', pointBackgroundColor: '#b8860b' }] },
+            data: { labels: MESES, datasets: [{ label: 'Actividad', data: mesCounts, backgroundColor: 'rgba(184,134,11,0.2)', borderColor: '#b8860b' }] },
             options: { plugins: { legend: { display: false } } }
         });
     }
 </script>
-
 </body>
 </html>
