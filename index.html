@@ -4,8 +4,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta charset="UTF-8">
   <title>Documentario de prensa y calendario Farinelli (1747–1758)</title>
+
   <style>
-    /* VARIABLES DE DISEÑO INSTITUCIONAL */
+    /* VARIABLES DE COLOR INSTITUCIONAL */
     :root { 
       --azul: #1a3a5a; 
       --oro: #b8860b; 
@@ -21,7 +22,7 @@
       margin: 0;
     }
 
-    /* CONTENEDOR CON EL BORDE SUPERIOR DE ANALISIS.HTML */
+    /* CONTENEDOR CON IDENTIDAD VISUAL */
     .contenedor {
       max-width: 1200px;
       margin: 0 auto;
@@ -31,7 +32,6 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     }
 
-    /* TÍTULO CON DOBLE BORDE DORADO */
     h1 {
       color: var(--azul); 
       font-size: 1.35em;
@@ -43,7 +43,7 @@
       padding-bottom: 15px;
     }
 
-    /* ENCABEZADO DE NAVEGACIÓN */
+    /* MENÚ DE NAVEGACIÓN */
     .nav-sitio {
       display: flex;
       justify-content: center;
@@ -60,7 +60,6 @@
       font-weight: bold;
       padding: 6px 12px;
       transition: 0.3s;
-      border: 1px solid transparent;
     }
     .nav-sitio a:hover { color: var(--oro); }
     .nav-sitio a.active {
@@ -69,7 +68,7 @@
       border-radius: 4px;
     }
 
-    /* INTRODUCCIÓN Y DECORACIÓN */
+    /* ESTILO DE LA INTRODUCCIÓN */
     .intro-con-decoracion {
       display: flex; gap: 20px; background-color: #fff; border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 15px 80px; align-items: stretch; 
@@ -96,10 +95,10 @@
     th { background-color: #e9ecef; color: var(--azul); text-align: left; }
     tr:nth-child(even) td { background-color: #fafafa; }
 
-    /* BOTONES DE TRANSCRIPCIÓN */
+    /* BOTONES */
     .btn-trans { padding: 4px 12px; font-size: 0.85em; cursor: pointer; background-color: var(--azul); color: white; border: none; border-radius: 4px; display: block; margin: 0 auto; }
     .btn-trans:hover { background-color: #0f2a44; }
-    .btn-ver-referencia { background-color: #6c757d; color: white; margin: 0 auto; display: block; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; }
+    .btn-ver-referencia { background-color: #6c757d; color: white; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; display: block; margin: 0 auto; }
     .transcripcion { display: none; background-color: #fffdf7; padding: 15px; border-left: 4px solid var(--oro); margin-top: 8px; line-height: 1.5; }
     mark { background-color: #ffe58a; padding: 0 2px; }
 
@@ -110,7 +109,10 @@
     .input-con-icono .icono-buscar { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 20px; stroke: #555; fill: none; }
     .buscador-recuadro button { padding: 12px 20px; background-color: var(--azul); color: white; border: none; border-radius: 6px; cursor: pointer; margin-left: 10px; }
 
-    .nota-autor { padding-top: 12px; border-top: 1px solid #ddd; font-size: 0.9rem; color: #555; text-align: center; margin-top: 20px; }
+    @media (max-width: 600px) {
+      .intro-con-decoracion { padding: 15px; }
+      .intro-con-decoracion img { width: 100%; height: 200px; }
+    }
   </style>
 </head>
 
@@ -128,9 +130,8 @@
       <img src="https://raw.githubusercontent.com/dmartinsaez/gmh/main/farinelli.jpg" alt="Farinelli">
       <div class="texto-intro">
         <p>Este documentario incluye las transcripciones de todas las noticias sobre las óperas realizadas en el Coliseo del Buen Retiro de Madrid...</p>
-        <p>Hemos reconstruido el calendario de representaciones indicando el año y día de la representación, el título, los libretistas y compositores...</p>
+        <p>Hemos reconstruido el calendario de representaciones indicando el año y día, el título, los libretistas y compositores...</p>
       </div>
-      <div class="nota-autor">Creado por Daniel Martín Sáez (USAL) - Proyecto LexiMus-USAL (PID2022-139589NB-C33).</div>
     </div>
 
     <div class="intro-recuadro">
@@ -143,7 +144,7 @@
       </div>
       <h3 class="acordeon">Criterios de normalización</h3>
       <div class="panel">
-        <p>El buscador no distingue mayúsculas, acentos ni grafías del XVIII (b/v, ph/f, th/t, mpt/nt).</p>
+        <p>El buscador no distingue mayúsculas, acentos ni grafías del XVIII.</p>
       </div>
       <h3 class="acordeon">Cómo citar este recurso</h3>
       <div class="panel">
@@ -174,7 +175,7 @@
 <script>
 let todasVisibles = false;
 
-/* TU LÓGICA DE TRANSCRIPCIÓN ORIGINAL */
+/* TU LÓGICA ORIGINAL DE FUNCIONAMIENTO */
 function toggleTrans(boton, divId) {
   const div = document.getElementById(divId);
   const visible = getComputedStyle(div).display !== 'none';
@@ -196,18 +197,14 @@ function toggleTodas(event) {
   document.querySelector('.btn-text').textContent = todasVisibles ? 'Ocultar todas las noticias' : 'Mostrar todas las noticias';
 }
 
-/* TU LÓGICA DE NORMALIZACIÓN ORIGINAL */
 function normalizar(str) {
-  return str.toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .replace(/ph/g,'f').replace(/th/g,'t').replace(/ch/g,'c')
     .replace(/[gx]/g,'j').replace(/[vb]/g,'b')
     .replace(/[iy]/g,'i').replace(/[cq]/g,'c').replace(/[cz]/g,'c')
-    .replace(/\s|-/g,'').replace(/(.)\1+/g,'$1')
-    .replace(/mpt/g,'nt').replace(/escena/g, 'scena');
+    .replace(/\s|-/g,'').replace(/(.)\1+/g,'$1').replace(/mpt/g,'nt').replace(/escena/g, 'scena');
 }
 
-/* TU LÓGICA DE BÚSQUEDA ORIGINAL */
 function marcarBusqueda(div, palabraNorm) {
   function normTexto(str) { return normalizar(str); }
   let contador = 0;
@@ -254,7 +251,7 @@ function buscar() {
   info.textContent = total === 1 ? '1 resultado encontrado' : `${total} resultados encontrados`;
 }
 
-/* TU LÓGICA DE CONSTRUCCIÓN DE TABLA ORIGINAL (BUCLE WHILE) */
+/* CARGA DE TABLA RECONSTRUIDA SEGÚN TU LÓGICA ORIGINAL */
 fetch('archivo.json').then(r => r.json()).then(data => {
   let html = '';
   let i = 0;
@@ -263,3 +260,49 @@ fetch('archivo.json').then(r => r.json()).then(data => {
     const añoActual = data[i].Año || '';
     let filasMismoAño = 0;
     for (let j = i; j < data.length && (data[j].Año || '') === añoActual; j++) filasMismoAño++;
+    for (let k = 0; k < filasMismoAño; k++) {
+      const f = data[i + k];
+      html += `<tr><td>${f.Año}</td><td>${f['Nº']||''}</td><td>${f['Día']||''}</td><td>${f['Título']||''}</td><td>${f['Libreto']||''}</td><td>${f['Compositor']||''}</td><td>${f['Ocasión']||''}</td><td>${f['Fuentes']||''}</td></tr>`;
+      if (f.Transcripción && f.Transcripción.trim()) {
+        const transHTML = f.Transcripción.split(/(?<=\.\s)(?=\[\d+\])/g).map(t => `<p>${t.trim()}</p>`).join('');
+        const transDivId = `trans-${i + k}`;
+        if (seenTrans[transHTML] !== undefined) {
+          const origen = seenTrans[transHTML];
+          html += `<tr><td colspan="8"><button class="btn-ver-referencia" data-target="trans-${origen}">Véase la noticia nº ${origen + 1}</button></td></tr>`;
+        } else {
+          seenTrans[transHTML] = i + k;
+          html += `<tr><td colspan="8"><button class="btn-trans" data-text-original="Ver noticia" onclick="toggleTrans(this,'${transDivId}')">Ver noticia</button><div id="${transDivId}" class="transcripcion" data-original='${transHTML.replace(/'/g,"&#39;")}'>${transHTML}</div></td></tr>`;
+        }
+      }
+    }
+    i += filasMismoAño;
+  }
+  document.getElementById('tabla-funciones').innerHTML = `<table><thead><tr><th>Año</th><th>Nº</th><th>Día</th><th>Título</th><th>Libreto</th><th>Compositor</th><th>Ocasión</th><th>Fuentes</th></tr></thead><tbody>${html}</tbody></table>`;
+  
+  /* RE-VINCULACIÓN DE REFERENCIAS CRUZADAS */
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('btn-ver-referencia')) {
+      const target = document.getElementById(e.target.getAttribute('data-target'));
+      if (target) {
+        target.style.display = 'block';
+        target.scrollIntoView({behavior: "smooth", block: "center"});
+      }
+    }
+  });
+});
+
+/* ACORDEONES */
+document.querySelectorAll('.acordeon').forEach(btn => {
+  btn.onclick = () => {
+    const panel = btn.nextElementSibling;
+    panel.classList.toggle('abierto'); btn.classList.toggle('abierto');
+  };
+});
+
+/* CITAS */
+const citaTxt = `Martín Sáez, D. (${new Date().getFullYear()}). Documentario Farinelli. USAL.`;
+document.getElementById('cita-apa').textContent = citaTxt;
+document.getElementById('cita-chicago').textContent = citaTxt;
+</script>
+</body>
+</html>
