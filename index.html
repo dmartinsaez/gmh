@@ -4,15 +4,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta charset="UTF-8">
   <title>Documentario de prensa y calendario Farinelli (1747–1758)</title>
-
   <style>
-    /* VARIABLES DE COLOR PARA SINTONÍA VISUAL */
+    /* VARIABLES DE DISEÑO INSTITUCIONAL */
     :root { 
       --azul: #1a3a5a; 
       --oro: #b8860b; 
       --fondo-papel: #fdfaf3; 
-      --fondo-body: #f4f1ea; 
-      --borde: #dcdde1; 
+      --fondo-body: #f4f1ea;
     }
 
     body {
@@ -20,9 +18,10 @@
       padding: 30px;
       background-color: var(--fondo-body);
       color: #2b2b2b;
+      margin: 0;
     }
 
-    /* CONTENEDOR PRINCIPAL CON EL BORDE INSTITUCIONAL */
+    /* CONTENEDOR CON EL BORDE SUPERIOR DE ANALISIS.HTML */
     .contenedor {
       max-width: 1200px;
       margin: 0 auto;
@@ -35,17 +34,17 @@
     /* TÍTULO CON DOBLE BORDE DORADO */
     h1 {
       color: var(--azul); 
-      font-size: 1.4em;
-      margin: 0 auto 0.5em auto;
+      font-size: 1.35em;
+      margin: 0 auto 0.6em auto;
       text-align: center;
       line-height: 1.4;
-      max-width: 900px;
+      max-width: 850px;
       border-bottom: 2px double var(--oro);
       padding-bottom: 15px;
     }
 
-    /* NUEVO MENÚ DE NAVEGACIÓN */
-    .nav-farinelli {
+    /* ENCABEZADO DE NAVEGACIÓN */
+    .nav-sitio {
       display: flex;
       justify-content: center;
       gap: 20px;
@@ -55,146 +54,63 @@
       text-transform: uppercase;
       letter-spacing: 1px;
     }
-    .nav-farinelli a {
+    .nav-sitio a {
       text-decoration: none;
       color: var(--azul);
       font-weight: bold;
-      padding: 5px 10px;
-      border: 1px solid transparent;
+      padding: 6px 12px;
       transition: 0.3s;
+      border: 1px solid transparent;
     }
-    .nav-farinelli a:hover {
-      color: var(--oro);
-      border-bottom: 1px solid var(--oro);
-    }
-    .nav-farinelli .active {
-      border: 1px solid var(--azul);
-      background: var(--azul);
-      color: white !important;
+    .nav-sitio a:hover { color: var(--oro); }
+    .nav-sitio a.active {
+      background-color: var(--azul);
+      color: white;
+      border-radius: 4px;
     }
 
-    /* INTRODUCCIÓN CON EL TOQUE DORADO */
+    /* INTRODUCCIÓN Y DECORACIÓN */
     .intro-con-decoracion {
-      display: flex;
-      gap: 20px;
-      background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      padding: 15px 80px;
-      align-items: stretch;
-      flex-wrap: wrap;
-      margin-bottom: 30px;
-      border-top: 4px solid var(--oro);
+      display: flex; gap: 20px; background-color: #fff; border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 15px 80px; align-items: stretch; 
+      flex-wrap: wrap; margin-bottom: 30px; border-top: 4px solid var(--oro);
     }
-
+    .intro-con-decoracion img { flex-shrink: 0; width: 300px; height: auto; object-fit: cover; border-radius: 10px; }
     .texto-intro { flex: 1; display: flex; flex-direction: column; text-align: justify; }
     .texto-intro p { margin-bottom: 1em; line-height: 1.5; }
 
-    .intro-con-decoracion img {
-      flex-shrink: 0;
-      width: 300px;
-      height: auto;
-      object-fit: cover;
-      border-radius: 10px;
+    /* ACORDEONES */
+    .intro-recuadro { background-color: #ffffff; padding: 15px 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 30px; }
+    .acordeon { 
+      max-width: 850px; width: 100%; margin: 6px auto 0; padding: 10px; 
+      font-size: 1em; cursor: pointer; background-color: #e9ecef; border-radius: 5px; 
+      border-bottom: 1px solid #ddd; text-align: center; font-weight: bold;
     }
-
-    /* ACORDEONES EN SINTONÍA */
-    .intro-recuadro {
-      background-color: #ffffff;
-      padding: 15px 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      margin-bottom: 30px;
-    }
-
-    .intro-recuadro .acordeon {
-      max-width: 850px;
-      width: 100%;
-      margin: 6px auto 0;
-      padding: 8px 12px;
-      font-size: 1em;
-      cursor: pointer;
-      background-color: #e9ecef;
-      border-radius: 5px;
-      border: none;
-      border-bottom: 1px solid #ddd;
-      position: relative;
-      text-align: center;
-      transition: 0.3s;
-    }
-    
-    .acordeon:hover { background-color: #d0e2f0; color: var(--azul); }
     .acordeon.abierto { background-color: var(--azul) !important; color: white !important; }
+    .panel { display: block; max-height: 0; overflow: hidden; padding: 0 20px; background-color: #ffffff; transition: 0.3s ease; text-align: justify; max-width: 850px; margin: 0 auto; }
+    .panel.abierto { max-height: 2000px; padding: 15px 20px; margin-bottom: 15px; }
 
-    .intro-recuadro .panel {
-      display: block;
-      max-height: 0;
-      overflow: hidden;
-      padding: 0 20px;
-      background-color: #ffffff;
-      margin: 0 auto;
-      transition: max-height 0.3s ease;
-      text-align: justify;
-      max-width: 850px;
-    }
-    .intro-recuadro .panel.abierto { max-height: 2000px; padding: 15px 20px; margin-bottom: 15px; }
+    /* TABLA */
+    table { border-collapse: collapse; width: 100%; margin-top: 5px; background: white; font-family: Arial, sans-serif; font-size: 0.95em; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    th, td { border: 1px solid #ddd; padding: 8px 10px; vertical-align: top; }
+    th { background-color: #e9ecef; color: var(--azul); text-align: left; }
+    tr:nth-child(even) td { background-color: #fafafa; }
 
-    /* TABLA Y BOTONES */
-    table { border-collapse: collapse; width: 100%; background: white; font-family: Arial, sans-serif; font-size: 0.95em; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-    th { background-color: #e9ecef; color: var(--azul); border: 1px solid #ddd; padding: 10px; text-align: left; }
-    td { border: 1px solid #ddd; padding: 8px 10px; vertical-align: top; }
-    
-    .btn-trans {
-      background-color: var(--azul);
-      color: white;
-      padding: 4px 12px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      display: block;
-      margin: 0 auto;
-    }
+    /* BOTONES DE TRANSCRIPCIÓN */
+    .btn-trans { padding: 4px 12px; font-size: 0.85em; cursor: pointer; background-color: var(--azul); color: white; border: none; border-radius: 4px; display: block; margin: 0 auto; }
     .btn-trans:hover { background-color: #0f2a44; }
-    .btn-ver-referencia { background-color: #6c757d; color: white; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; display: block; margin: 0 auto; }
-
-    .transcripcion {
-      display: none;
-      background-color: #fffdf7;
-      padding: 15px;
-      border-left: 4px solid var(--oro);
-      margin-top: 8px;
-    }
+    .btn-ver-referencia { background-color: #6c757d; color: white; margin: 0 auto; display: block; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; }
+    .transcripcion { display: none; background-color: #fffdf7; padding: 15px; border-left: 4px solid var(--oro); margin-top: 8px; line-height: 1.5; }
+    mark { background-color: #ffe58a; padding: 0 2px; }
 
     /* BUSCADOR */
-    .buscador-recuadro {
-      background-color: #ffffff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      margin: 30px auto;
-      text-align: center;
-    }
-    .input-con-icono input {
-      padding: 12px 12px 12px 40px;
-      width: 100%;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    .buscador-recuadro button {
-      padding: 12px 25px;
-      background-color: var(--azul);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-left: 10px;
-    }
+    .buscador-recuadro { background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin: 30px auto; text-align: center; }
+    .input-con-icono { position: relative; display: inline-block; width: 70%; max-width: 600px; }
+    .input-con-icono input { width: 100%; padding: 12px 40px; font-size: 1.1em; border: 1px solid #ccc; border-radius: 6px; }
+    .input-con-icono .icono-buscar { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 20px; stroke: #555; fill: none; }
+    .buscador-recuadro button { padding: 12px 20px; background-color: var(--azul); color: white; border: none; border-radius: 6px; cursor: pointer; margin-left: 10px; }
 
-    @media (max-width: 600px) {
-      .intro-con-decoracion { padding: 15px; }
-      .intro-con-decoracion img { width: 100%; height: 200px; }
-      .nav-farinelli { flex-direction: column; align-items: center; gap: 5px; }
-    }
+    .nota-autor { padding-top: 12px; border-top: 1px solid #ddd; font-size: 0.9rem; color: #555; text-align: center; margin-top: 20px; }
   </style>
 </head>
 
@@ -202,7 +118,7 @@
   <div class="contenedor">
     <h1>Documentario de prensa y calendario de las representaciones de ópera italiana (1747–1758)</h1>
 
-    <nav class="nav-farinelli">
+    <nav class="nav-sitio">
       <a href="index.html" class="active">Documentario</a>
       <a href="analisis.html">Análisis del calendario</a>
       <a href="textos.html">Análisis léxico</a>
@@ -211,26 +127,25 @@
     <div class="intro-con-decoracion">
       <img src="https://raw.githubusercontent.com/dmartinsaez/gmh/main/farinelli.jpg" alt="Farinelli">
       <div class="texto-intro">
-        <p>Este documentario incluye las transcripciones de todas las noticias sobre las óperas realizadas en el Coliseo del Buen Retiro de Madrid durante este periodo...</p>
-        <p>Hemos reconstruido el calendario de representaciones indicando el año y día, el título de las óperas, los libretistas y compositores...</p>
+        <p>Este documentario incluye las transcripciones de todas las noticias sobre las óperas realizadas en el Coliseo del Buen Retiro de Madrid...</p>
+        <p>Hemos reconstruido el calendario de representaciones indicando el año y día de la representación, el título, los libretistas y compositores...</p>
       </div>
-      <div class="nota-autor">
-        Recurso creado por Daniel Martín Sáez (Universidad de Salamanca) - Proyecto LexiMus-USAL.
-      </div>
+      <div class="nota-autor">Creado por Daniel Martín Sáez (USAL) - Proyecto LexiMus-USAL (PID2022-139589NB-C33).</div>
     </div>
 
     <div class="intro-recuadro">
       <h3 class="acordeon">Herramientas interactivas</h3>
       <div class="panel">
-        <p>Para facilitar la consulta del documentario, hemos incluido herramientas interactivas como el Buscador y la visualización de noticias críticas.</p>
+        <ul>
+          <li><strong>Buscador:</strong> localiza términos en contexto.</li>
+          <li><strong>Mostrar todas las noticias:</strong> despliega u oculta el documentario completo.</li>
+        </ul>
       </div>
-      
       <h3 class="acordeon">Criterios de normalización</h3>
       <div class="panel">
-        <p>El buscador identifica grafías del XVIII (b/v, j/g, ph/f) y permite búsquedas por fragmentos léxicos.</p>
+        <p>El buscador no distingue mayúsculas, acentos ni grafías del XVIII (b/v, ph/f, th/t, mpt/nt).</p>
       </div>
-
-      <h2 class="acordeon">Cómo citar este recurso</h2>
+      <h3 class="acordeon">Cómo citar este recurso</h3>
       <div class="panel">
         <p><strong>APA:</strong> <span id="cita-apa"></span></p>
         <p><strong>Chicago:</strong> <span id="cita-chicago"></span></p>
@@ -238,18 +153,16 @@
     </div>
 
     <div class="buscador-recuadro">
-      <strong>BUSCADOR LEXICOGRÁFICO</strong><br><br>
-      <div class="input-con-icono" style="position:relative; display:inline-block; width:70%; max-width:600px;">
-        <input type="text" id="buscar" placeholder="Escriba la palabra o sintagma...">
-        <svg class="icono-buscar" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); width:20px; height:20px; fill:none; stroke:#555;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="7" stroke-width="2"/><line x1="16" y1="16" x2="22" y2="22" stroke-width="2"/>
-        </svg>
+      <strong>BUSCADOR</strong><br><br>
+      <div class="input-con-icono">
+        <input type="text" id="buscar" placeholder="Buscar palabra o sintagma...">
+        <svg class="icono-buscar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="16" y1="16" x2="22" y2="22"/></svg>
       </div>
       <button onclick="buscar()">Buscar</button>
       <p id="resultado-busqueda" style="font-weight:bold; color:var(--azul); margin-top:15px;"></p>
     </div>
 
-    <div class="btn-todas-container" style="text-align:center; margin:20px 0;">
+    <div style="text-align:center; margin:20px 0;">
       <button id="btn-toggle" onclick="toggleTodas(event)" style="background-color:#4da6ff; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer;">
         <span class="btn-text">Mostrar todas las noticias</span>
       </button>
@@ -259,9 +172,9 @@
   </div>
 
 <script>
-/* MANTENGO TODA TU LÓGICA DE JAVASCRIPT INTACTA */
 let todasVisibles = false;
 
+/* TU LÓGICA DE TRANSCRIPCIÓN ORIGINAL */
 function toggleTrans(boton, divId) {
   const div = document.getElementById(divId);
   const visible = getComputedStyle(div).display !== 'none';
@@ -283,67 +196,70 @@ function toggleTodas(event) {
   document.querySelector('.btn-text').textContent = todasVisibles ? 'Ocultar todas las noticias' : 'Mostrar todas las noticias';
 }
 
+/* TU LÓGICA DE NORMALIZACIÓN ORIGINAL */
 function normalizar(str) {
   return str.toLowerCase()
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .replace(/ph/g,'f').replace(/th/g,'t').replace(/ch/g,'c')
     .replace(/[gx]/g,'j').replace(/[vb]/g,'b')
     .replace(/[iy]/g,'i').replace(/[cq]/g,'c').replace(/[cz]/g,'c')
-    .replace(/\s|-/g,'').replace(/(.)\1+/g,'$1').replace(/mpt/g,'nt').replace(/escena/g, 'scena');
+    .replace(/\s|-/g,'').replace(/(.)\1+/g,'$1')
+    .replace(/mpt/g,'nt').replace(/escena/g, 'scena');
 }
 
-/* CARGA DE DATOS Y TABLA */
-fetch('archivo.json').then(r => r.json()).then(data => construirTabla(data));
-
-function construirTabla(data) {
-  let html = '';
-  const seenTrans = {};
-  data.forEach((f, idx) => {
-    html += `<tr>
-      <td>${f.Año}</td><td>${f['Nº']||''}</td><td>${f['Día']||''}</td><td>${f['Título']||''}</td>
-      <td>${f['Libreto']||''}</td><td>${f['Compositor']||''}</td><td>${f['Ocasión']||''}</td><td>${f['Fuentes']||''}</td>
-    </tr>`;
-    if (f.Transcripción && f.Transcripción.trim()) {
-      const transHTML = f.Transcripción.split(/(?<=\.\s)(?=\[\d+\])/g).map(t => `<p>${t.trim()}</p>`).join('');
-      const divId = `trans-${idx}`;
-      if (seenTrans[transHTML] !== undefined) {
-        html += `<tr><td colspan="8"><button class="btn-ver-referencia" onclick="abrirRef('trans-${seenTrans[transHTML]}')">Véase la noticia nº ${seenTrans[transHTML]+1}</button></td></tr>`;
-      } else {
-        seenTrans[transHTML] = idx;
-        html += `<tr><td colspan="8">
-          <button class="btn-trans" data-text-original="Ver noticia" onclick="toggleTrans(this,'${divId}')">Ver noticia</button>
-          <div id="${divId}" class="transcripcion" style="display:none" data-original='${transHTML.replace(/'/g,"&#39;")}'>${transHTML}</div>
-        </td></tr>`;
+/* TU LÓGICA DE BÚSQUEDA ORIGINAL */
+function marcarBusqueda(div, palabraNorm) {
+  function normTexto(str) { return normalizar(str); }
+  let contador = 0;
+  function recorrerNodo(nodo) {
+    if (nodo.nodeType === Node.TEXT_NODE) {
+      const textoNorm = normTexto(nodo.textContent);
+      let indices = [], start = 0;
+      while (start <= textoNorm.length - palabraNorm.length) {
+        if (textoNorm.slice(start, start + palabraNorm.length) === palabraNorm) {
+          indices.push(start); start += palabraNorm.length;
+        } else start++;
       }
-    }
-  });
-  document.getElementById('tabla-funciones').innerHTML = `<table><thead><tr><th>Año</th><th>Nº</th><th>Día</th><th>Título</th><th>Libreto</th><th>Compositor</th><th>Ocasión</th><th>Fuentes</th></tr></thead><tbody>${html}</tbody></table>`;
+      if (!indices.length) return;
+      contador += indices.length;
+      let nuevoHTML = '', origIdx = 0;
+      indices.forEach(idxNorm => {
+        let startOrig = origIdx;
+        while (startOrig < nodo.textContent.length && normTexto(nodo.textContent.slice(0, startOrig)).length < idxNorm) startOrig++;
+        let endOrig = startOrig;
+        while (endOrig < nodo.textContent.length && normTexto(nodo.textContent.slice(startOrig, endOrig)).length < palabraNorm.length) endOrig++;
+        nuevoHTML += nodo.textContent.slice(origIdx,startOrig) + '<mark>' + nodo.textContent.slice(startOrig,endOrig) + '</mark>';
+        origIdx = endOrig;
+      });
+      nuevoHTML += nodo.textContent.slice(origIdx);
+      const span = document.createElement('span'); span.innerHTML = nuevoHTML; nodo.replaceWith(span);
+    } else if (nodo.nodeType === Node.ELEMENT_NODE) { nodo.childNodes.forEach(recorrerNodo); }
+  }
+  div.childNodes.forEach(recorrerNodo);
+  return contador;
 }
 
-function abrirRef(id) {
-  const div = document.getElementById(id);
-  div.style.display = 'block';
-  div.scrollIntoView({behavior: "smooth", block: "center"});
+function buscar() {
+  const palabra = document.getElementById('buscar').value.trim();
+  const info = document.getElementById('resultado-busqueda');
+  if (!palabra) { info.textContent = ''; document.querySelectorAll('.transcripcion').forEach(div => div.style.display='none'); return; }
+  const palabraNorm = normalizar(palabra);
+  let total = 0;
+  document.querySelectorAll('.transcripcion').forEach(div => {
+    div.innerHTML = div.getAttribute('data-original');
+    div.style.display='none';
+    total += marcarBusqueda(div, palabraNorm);
+    if (div.querySelector('mark')) div.style.display='block';
+  });
+  info.textContent = total === 1 ? '1 resultado encontrado' : `${total} resultados encontrados`;
 }
 
-/* ACORDEONES */
-document.querySelectorAll('.acordeon').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const panel = btn.nextElementSibling;
-    panel.classList.toggle('abierto');
-    btn.classList.toggle('abierto');
-  });
-});
-
-/* CITAS */
-const autor = "Martín Sáez, Daniel";
-const titulo = "Documentario de prensa Farinelli";
-const year = new Date().getFullYear();
-const url = window.location.href;
-document.getElementById('cita-apa').textContent = `${autor}. (${year}). ${titulo}. USAL. ${url}`;
-document.getElementById('cita-chicago').textContent = `${autor}. “${titulo}.” USAL, ${year}. ${url}.`;
-
-function buscar() { /* Lógica de búsqueda que ya tenías */ }
-</script>
-</body>
-</html>
+/* TU LÓGICA DE CONSTRUCCIÓN DE TABLA ORIGINAL (BUCLE WHILE) */
+fetch('archivo.json').then(r => r.json()).then(data => {
+  let html = '';
+  let i = 0;
+  const seenTrans = {};
+  while (i < data.length) {
+    const añoActual = data[i].Año || '';
+    let filasMismoAño = 0;
+    for (let j = i; j < data.length && (data[j].Año || '') === añoActual; j++) filasMismoAño++;
