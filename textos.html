@@ -76,7 +76,7 @@
         <div>
             <div class="card-grafica"><canvas id="chartEvolucionAnual"></canvas></div>
             <div class="recuadro-metodo">
-                <strong>Metodología:</strong> Evolución anual del volumen crítico (Neto) tras filtrar las palabras vacías.
+                <strong>Metodología:</strong> Composición del volumen anual y densidad léxica (relación entre contenido crítico y palabras vacías).
             </div>
         </div>
 
@@ -106,6 +106,8 @@
     let rawTextos = []; 
     let vocabularioLemasNeto = {}; 
     let palabrasNetasPorAño = {};
+    let palabrasExcluidasPorAño = {}; 
+    let densidadPorAño = {};
     let totalBrutasGlobal = 0;
     let totalNetasGlobal = 0;
 
@@ -138,7 +140,10 @@
 
         rawTextos.forEach(item => {
             let año = item.Año || "S/D";
-            if (!palabrasNetasPorAño[año]) palabrasNetasPorAño[año] = 0;
+            if (!palabrasNetasPorAño[año]) {
+                palabrasNetasPorAño[año] = 0;
+                palabrasExcluidasPorAño[año] = 0;
+            }
 
             let palabras = item.Transcripción.replace(/<[^>]+>/g, " ").toLowerCase().match(/[a-záéíóúñ]{2,}/gi) || [];
             
@@ -147,7 +152,9 @@
                 totalBrutasGlobal++;
                 setUnicasBrutas.add(pLimpia);
 
-                if (!EXCLUIDAS.includes(pLimpia)) {
+                if (EXCLUIDAS.includes(pLimpia)) {
+                    palabrasExcluidasPorAño[año]++;
+                } else {
                     totalNetasGlobal++;
                     let lemaBase = lematizarSimple(pLimpia);
                     setUnicasNetas.add(lemaBase);
@@ -155,6 +162,9 @@
                     palabrasNetasPorAño[año]++;
                 }
             });
+
+            let totalAño = palabrasNetasPorAño[año] + palabrasExcluidasPorAño[año];
+            densidadPorAño[año] = totalAño > 0 ? (palabrasNetasPorAño[año] / totalAño) * 100 : 0;
         });
 
         document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
@@ -162,27 +172,58 @@
         document.getElementById('m-unicas-bruto').innerText = setUnicasBrutas.size.toLocaleString();
         document.getElementById('m-unicas-neto').innerText = setUnicasNetas.size.toLocaleString() + " (Críticas)";
         
-        // CAMBIO SOLICITADO: Conteo de palabras en diccionario y total eliminadas
         document.getElementById('totalExcluidasTxt').innerText = 
             `Diccionario: ${EXCLUIDAS.length} palabras vacías | Total eliminadas del corpus: ${(totalBrutasGlobal - totalNetasGlobal).toLocaleString()}`;
     }
 
     function renderCharts() {
         const años = Object.keys(palabrasNetasPorAño).sort();
+        
+        // GRÁFICO 1: COMPLEJO (COMPOSICIÓN Y DENSIDAD)
         new Chart(document.getElementById('chartEvolucionAnual'), {
             type: 'line',
             data: {
                 labels: años,
-                datasets: [{
-                    label: 'Palabras Netas',
-                    data: años.map(a => palabrasNetasPorAño[a]),
-                    borderColor: '#1a3a5a',
-                    backgroundColor: 'rgba(26,58,90,0.1)',
-                    fill: true,
-                    tension: 0.3
-                }]
+                datasets: [
+                    {
+                        label: '% Densidad Léxica',
+                        data: años.map(a => densidadPorAño[a]),
+                        type: 'line',
+                        borderColor: '#e74c3c',
+                        borderWidth: 2,
+                        yAxisID: 'y1',
+                        fill: false,
+                        zIndex: 10
+                    },
+                    {
+                        label: 'Palabras Netas',
+                        data: años.map(a => palabrasNetasPorAño[a]),
+                        backgroundColor: 'rgba(26, 58, 90, 0.7)',
+                        fill: true,
+                        stacked: true,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Palabras Vacías',
+                        data: años.map(a => palabrasExcluidasPorAño[a]),
+                        backgroundColor: 'rgba(184, 134, 11, 0.3)',
+                        fill: true,
+                        stacked: true,
+                        yAxisID: 'y'
+                    }
+                ]
             },
-            options: { responsive: true, maintainAspectRatio: false }
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false,
+                scales: { 
+                    y: { stacked: true, title: { display: true, text: 'Cantidad de palabras' } },
+                    y1: { position: 'right', min: 0, max: 100, title: { display: true, text: '% Contenido Crítico' }, grid: { drawOnChartArea: false } }
+                },
+                plugins: {
+                    title: { display: true, text: 'ANÁLISIS DE COMPOSICIÓN Y DENSIDAD LÉXICA' }
+                }
+            }
         });
 
         const sortedFrequencies = Object.values(vocabularioLemasNeto).sort((a, b) => b - a);
