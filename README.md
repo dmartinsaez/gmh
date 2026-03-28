@@ -28,7 +28,7 @@ El sitio web ofrece:
 - Las **transcripciones completas de las noticias de prensa**, respetando la grafía original del siglo XVIII, con aclaraciones editoriales cuando ha sido necesario.
 
 - Una página de **Análisis del calendario**, a partir de los datos anteriores, con varias gráficas que sirven para visualizar el contenido del calendario de un modo más eficiente.
-- 
+  
 - Una página de **Análisis léxico**, que incluye la información básica del corpus textual en cuanto al número de palabras significativas, la densidad léxica por año, las palabras más frecuentes, las palabras excluidas y otros datos de interés.
 
 En total, el corpus recoge más de **300 noches de ópera** documentadas, a partir de más de **140 noticias distintas**, que informan de al menos **165 fechas de representación**.
