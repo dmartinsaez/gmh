@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análisis Lexicográfico - Catálogo Farinelli</title>
+    <title>Laboratorio Lexicográfico - Catálogo Farinelli</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --azul: #1a3a5a; --oro: #b8860b; --fondo: #fdfaf3; --borde: #dcdde1; --gris-metodo: #f8f9fa; }
@@ -17,12 +17,18 @@
         .metrica-lab { font-size: 0.7em; text-transform: uppercase; color: var(--oro); font-weight: bold; letter-spacing: 1px; }
 
         .grid-graficas { display: grid; grid-template-columns: 1fr; gap: 40px; margin-bottom: 30px; }
-        .card-grafica { background: white; padding: 25px; border: 1px solid var(--borde); border-radius: 8px; height: 450px; position: relative; }
+        .card-grafica { background: white; padding: 25px; border: 1px solid var(--borde); border-radius: 8px; height: 480px; position: relative; }
         
-        /* Recuadro Metodológico */
-        .recuadro-metodo { background-color: var(--gris-metodo); border-left: 4px solid var(--azul); padding: 15px 20px; margin-top: -10px; margin-bottom: 20px; font-size: 0.9em; border-radius: 0 8px 8px 0; border: 1px solid #e9ecef; border-left-width: 5px; }
+        .recuadro-metodo { background-color: var(--gris-metodo); border-left: 5px solid var(--azul); padding: 15px 20px; margin-top: -10px; margin-bottom: 20px; font-size: 0.9em; border: 1px solid #e9ecef; border-radius: 0 8px 8px 0; }
         .recuadro-metodo strong { color: var(--azul); font-variant: small-caps; }
         .recuadro-metodo ul { margin: 5px 0 0 20px; padding: 0; }
+
+        .anexo-metodologico { margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--borde); font-size: 0.85em; color: #666; }
+        .anexo-titulo { color: var(--azul); text-transform: uppercase; font-weight: bold; margin-bottom: 15px; display: block; letter-spacing: 1px; }
+        .lista-excluidas { background: white; padding: 20px; border: 1px solid #eee; border-radius: 8px; line-height: 1.6; text-align: justify; max-height: 200px; overflow-y: auto; font-family: monospace; }
+        .palabra-tag { display: inline-block; background: #f4f4f4; padding: 2px 6px; margin: 2px; border-radius: 4px; border: 1px solid #ddd; color: #444; }
+
+        @media (max-width: 900px) { .grid-graficas, .metricas-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -41,8 +47,8 @@
             <div class="recuadro-metodo">
                 <strong>Metodología de Volumen Anual:</strong>
                 <ul>
-                    <li><strong>Volumen Bruto (Gris):</strong> Conteo de tokens tras eliminar etiquetas HTML. Excluye estrictamente las siglas <em>GM</em> y <em>MH</em>. Incluye palabras funcionales (artículos, preposiciones, conjunciones).</li>
-                    <li><strong>Volumen Neto (Azul):</strong> Conteo de tokens significativos. Se aplica el filtro de "Palabras Excluidas" (stopwords). Es el valor que debe coincidir con el análisis en Python.</li>
+                    <li><strong>Volumen Bruto (Gris):</strong> Extensión total del texto tras eliminar etiquetas HTML. Excluye estrictamente las siglas <em>GM</em> y <em>MH</em>.</li>
+                    <li><strong>Volumen Crítico (Azul):</strong> Densidad informativa obtenida tras filtrar el ruido gramatical (artículos, preposiciones, conjunciones) mediante el diccionario de exclusión.</li>
                 </ul>
             </div>
         </div>
@@ -52,9 +58,8 @@
             <div class="recuadro-metodo">
                 <strong>Metodología de Cobertura Léxica:</strong>
                 <ul>
-                    <li><strong>Eje X:</strong> Representa los lemas (formas únicas) ordenados por frecuencia descendente.</li>
-                    <li><strong>Eje Y:</strong> Porcentaje acumulado de aparición en el corpus. Se calcula dividiendo la suma de frecuencias del rango actual entre el <em>Total de Palabras Netas</em> global.</li>
-                    <li><strong>Filtro:</strong> Se eliminan siglas (GM, MH) y palabras vacías antes de establecer el ranking.</li>
+                    <li>Analiza la concentración del vocabulario: muestra cómo los lemas más frecuentes cubren el discurso total.</li>
+                    <li>El cálculo se realiza exclusivamente sobre el <strong>Volumen Crítico</strong>. El eje Y representa el porcentaje acumulado sobre el total de palabras netas.</li>
                 </ul>
             </div>
         </div>
@@ -64,12 +69,17 @@
             <div class="recuadro-metodo">
                 <strong>Metodología de Frecuencia de Términos:</strong>
                 <ul>
-                    <li><strong>Unificación:</strong> Todas las formas se normalizan a minúsculas.</li>
-                    <li><strong>Tokenización:</strong> Se define como "palabra" cualquier secuencia alfanumérica de al menos 2 caracteres.</li>
-                    <li><strong>Limpieza:</strong> Se eliminan signos de puntuación pegados a los tokens para evitar duplicidad de formas únicas (ej: "teatro" y "teatro." se cuentan como la misma unidad).</li>
+                    <li>Normalización de todas las formas a minúsculas y eliminación de signos de puntuación adyacentes.</li>
+                    <li>Tokenización estricta de unidades alfanuméricas de al menos 2 caracteres.</li>
                 </ul>
             </div>
         </div>
+    </div>
+
+    <div class="anexo-metodologico">
+        <span class="anexo-titulo">Anexo I: Diccionario de Exclusión (Stopwords)</span>
+        <p>Formas gramaticales y siglas de control editorial omitidas para el cálculo del volumen crítico:</p>
+        <div id="visualizarExcluidas" class="lista-excluidas"></div>
     </div>
 </div>
 
@@ -92,19 +102,14 @@
         });
         procesarDatos();
         renderCharts();
+        mostrarDiccionario();
     });
 
     function procesarDatos() {
-        let setUnicasNetas = new Set();
         totalNetasGlobal = 0;
-        vocabularioNeto = {};
-        palabrasBrutasPorAño = {};
-        palabrasNetasPorAño = {};
-
+        let setUnicasNetas = new Set();
         rawTextos.forEach(item => {
-            // Sustituimos tags por espacios para evitar pegar palabras
             let textoSinHTML = item.Transcripción.replace(/<[^>]+>/g, " ");
-            // Tokenizamos: palabras de 2+ letras
             let palabras = textoSinHTML.toLowerCase().match(/[a-záéíóúñ]{2,}/gi) || [];
             
             if (!palabrasBrutasPorAño[item.Año]) palabrasBrutasPorAño[item.Año] = 0;
@@ -113,9 +118,7 @@
             palabras.forEach(p => {
                 let pLimpia = p.trim();
                 if (pLimpia === "gm" || pLimpia === "mh") return;
-                
                 palabrasBrutasPorAño[item.Año]++;
-
                 if (!EXCLUIDAS.includes(pLimpia)) {
                     setUnicasNetas.add(pLimpia);
                     vocabularioNeto[pLimpia] = (vocabularioNeto[pLimpia] || 0) + 1;
@@ -124,14 +127,13 @@
                 }
             });
         });
-
         document.getElementById('m-unicas').innerText = setUnicasNetas.size.toLocaleString();
         document.getElementById('m-total').innerText = totalNetasGlobal.toLocaleString();
     }
 
     function renderCharts() {
         const años = Object.keys(palabrasBrutasPorAño).sort();
-
+        
         // 1. Evolución
         new Chart(document.getElementById('chartEvolucionComparada'), {
             type: 'line',
@@ -139,7 +141,7 @@
                 labels: años,
                 datasets: [
                     { label: 'Volumen Bruto', data: años.map(a => palabrasBrutasPorAño[a]), borderColor: '#ccc', borderDash: [5, 5], fill: false, tension: 0.3 },
-                    { label: 'Volumen Neto', data: años.map(a => palabrasNetasPorAño[a]), borderColor: '#1a3a5a', backgroundColor: 'rgba(26,58,90,0.1)', fill: true, tension: 0.3 }
+                    { label: 'Volumen Crítico', data: años.map(a => palabrasNetasPorAño[a]), borderColor: '#1a3a5a', backgroundColor: 'rgba(26,58,90,0.1)', fill: true, tension: 0.3 }
                 ]
             },
             options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'DINÁMICA DEL VOLUMEN NARRATIVO ANUAL' } } }
@@ -174,9 +176,7 @@
                     x: { type: 'linear', min: 0, max: 50, title: { display: true, text: 'Número de lemas agrupados más frecuentes' }, grid: { borderDash: [5, 5] } },
                     y: { min: 0, max: 55, title: { display: true, text: 'Porcentaje del corpus (%)' }, grid: { borderDash: [5, 5] } }
                 },
-                plugins: {
-                    title: { display: true, text: 'CONCENTRACIÓN LÉXICA Y DISPERSIÓN' }
-                }
+                plugins: { title: { display: true, text: 'CONCENTRACIÓN LÉXICA Y DISPERSIÓN' } }
             },
             plugins: [{
                 beforeDraw: (chart) => {
@@ -210,6 +210,17 @@
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false }, title: { display: true, text: 'TOP 10 TÉRMINOS SIGNIFICATIVOS' } }
             }
+        });
+    }
+
+    function mostrarDiccionario() {
+        const box = document.getElementById('visualizarExcluidas');
+        const ordenadas = [...EXCLUIDAS].sort((a, b) => a.localeCompare(b));
+        ordenadas.forEach(p => {
+            const s = document.createElement('span');
+            s.className = 'palabra-tag';
+            s.innerText = p;
+            box.appendChild(s);
         });
     }
 </script>
