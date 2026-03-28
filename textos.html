@@ -38,7 +38,7 @@
     <div class="metricas-grid">
         <div class="metrica-card"><span class="metrica-val" id="m-unicas">0</span><span class="metrica-lab">Palabras Únicas</span></div>
         <div class="metrica-card"><span class="metrica-val" id="m-total">0</span><span class="metrica-lab">Total Palabras</span></div>
-        <div class="metrica-card"><span class="metrica-val" id="m-docs">0</span><span class="metrica-lab">Crónicas (142 Reales)</span></div>
+        <div class="metrica-card"><span class="metrica-val" id="m-docs">0</span><span class="metrica-lab">Crónicas Analizadas</span></div>
     </div>
 
     <div class="grid-graficas">
@@ -63,8 +63,15 @@
     const EXCLUIDAS = ["1","11","12","13","14","15","16","17","18","2","20","200","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","420","43","44","45","5","6","60","7","8","9","90","a","al","alguna","algunas","alguno","algunos","algún","ambos","ampleamos","ante","antes","aquel","aquellas","aquellos","aqui","arriba","atras","bajo","bastante","bien","cada","capilla","cierta","ciertas","ciertos","como","con","conseguimos","conseguir","consigo","consigue","consiguen","consigues","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleais","emplean","emplear","empleas","empleo","en","encima","entonces","entre","era","eramos","eran","eras","eres","es","esta","estaba","estado","estais","estamos","estan","este","estoy","fin","fue","fueron","fui","fuimos","gueno","ha","hace","haceis","hacemos","hacen","hacer","haces","hago","han","haviendo","huvo","incluso","intenta","intentais","intentamos","intentan","intentar","intentas","intento","ir","la","largo","las","lo","los","m","mas","mayor","mientras","mio","misma","missa","modo","muchos","muy","nos","nosotros","o","otras","otro","para","pero","podeis","podemos","poder","podria","podriais","podriamos","podrian","podrias","por","por qué","porque","primero desde","puede","pueden","puedo","que","quien","s","sabe","sabeis","sabemos","saben","saber","sabes","se","ser","si","sic","siendo","sin","sobre","sois","solamente","solo","somos","soy","su","sus","tambien","también","teneis","tenemos","tener","tengo","tiempo","tiene","tienen","toda","todo","trabaja","trabajais","trabajamos","trabajan","trabajar","trabajas","trabajo","tras","tribuna","tuvo","tuyo","ultimo","un","una","unas","uno","unos","usa","usais","usamos","usan","usar","usas","uso","va","vais","valor","vamos","van","vaya","verdad","verdadera cierto","verdadero","vosotras","vosotros","voy","y","yo"];
 
     fetch('archivo.json').then(r => r.json()).then(data => {
-        // FILTRO: Cualquier fila que tenga texto en Transcripción (así llegamos a tus 142)
-        rawTextos = data.filter(item => item.Transcripción && item.Transcripción.trim().length > 0);
+        // UNIFICACIÓN: Evitamos duplicados si el texto es idéntico (filas repetidas o puntos suspensivos)
+        let vistos = new Set();
+        rawTextos = data.filter(item => {
+            if (!item.Transcripción || item.Transcripción.trim().length === 0) return false;
+            if (vistos.has(item.Transcripción)) return false;
+            vistos.add(item.Transcripción);
+            return true;
+        });
+
         procesarTextos();
         renderCharts();
         renderCloud();
@@ -81,22 +88,23 @@
     function procesarTextos() {
         let totalPalabras = 0;
         let setUnicas = new Set();
+        vocabulario = {}; 
+        palabrasPorAño = {};
 
         rawTextos.forEach(item => {
-            // Recuperamos el motor de limpieza que funcionaba
-            let textoLimpio = item.Transcripción.replace(/<\/?[^>]+(>|$)/g, " ");
+            // Limpieza: quitamos HTML y ponemos espacios para que no se peguen palabras
+            let textoSinHTML = item.Transcripción.replace(/<\/?[^>]+(>|$)/g, " ");
             
-            // Usamos el tokenizador del penúltimo código (el que contaba bien)
-            let palabras = textoLimpio.toLowerCase().match(/[a-záéíóúñ]{2,}/gi) || [];
+            // Tokenización: Solo palabras (letras), omitiendo números y puntuación pegada
+            // Usamos \b para asegurar que son palabras completas
+            let palabras = textoSinHTML.toLowerCase().match(/[a-záéíóúñ]{2,}/gi) || [];
             
             totalPalabras += palabras.length;
             if (!palabrasPorAño[item.Año]) palabrasPorAño[item.Año] = 0;
             palabrasPorAño[item.Año] += palabras.length;
 
             palabras.forEach(p => {
-                // Limpieza extra de puntuación pegada
-                let pLimpia = p.replace(/[.,;:]/g, "");
-                // IMPORTANTE: Para que no salga "colis", filtramos que no sea exactamente esa cadena
+                let pLimpia = p.trim();
                 if (!EXCLUIDAS.includes(pLimpia) && pLimpia !== "colis") {
                     setUnicas.add(pLimpia);
                     vocabulario[pLimpia] = (vocabulario[pLimpia] || 0) + 1;
@@ -106,7 +114,7 @@
 
         document.getElementById('m-unicas').innerText = setUnicas.size.toLocaleString();
         document.getElementById('m-total').innerText = totalPalabras.toLocaleString();
-        document.getElementById('m-docs').innerText = rawTextos.length; // Aquí deben salir los 142
+        document.getElementById('m-docs').innerText = rawTextos.length; 
     }
 
     function renderCharts() {
@@ -137,6 +145,7 @@
 
     function renderCloud() {
         const cloud = document.getElementById('wordCloud');
+        cloud.innerHTML = "";
         Object.entries(vocabulario).sort((a,b) => b[1]-a[1]).slice(0, 30).forEach(([w, f]) => {
             let s = document.createElement('span');
             s.className = 'word-item';
