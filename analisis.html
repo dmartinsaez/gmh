@@ -300,7 +300,7 @@
         new Chart(document.getElementById('chartAnual').getContext('2d'), {
             type: 'line',
             data: { labels: años, datasets: [{ label: 'Funciones', data: años.map(a => globalData.raw.filter(i => i.Año === a).length), borderColor: '#1a3a5a', backgroundColor: 'rgba(26,58,90,0.1)', fill: true, tension: 0.3 }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'INTENSIDAD ANUAL' }, tooltip: { callbacks: { afterLabel: (c) => HITOS[c.label] ? '✦ ' + HITOS[c.label] : '' } } } }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'NÚMERO DE REPRESENTACIONES POR AÑO' }, tooltip: { callbacks: { afterLabel: (c) => HITOS[c.label] ? '✦ ' + HITOS[c.label] : '' } } } }
         });
     }
 </script>
