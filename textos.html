@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laboratorio Lexicográfico - Catálogo Farinelli</title>
+    <title>Análisis Lexicográfico - Catálogo Farinelli</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --azul: #1a3a5a; --oro: #b8860b; --fondo: #fdfaf3; --borde: #dcdde1; }
@@ -19,13 +19,12 @@
         .grid-graficas { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
         .card-grafica { background: white; padding: 20px; border: 1px solid var(--borde); border-radius: 8px; height: 450px; position: relative; }
         .full-width { grid-column: 1 / -1; }
-        .info-analisis { font-size: 0.9em; color: #666; font-style: italic; margin-top: 10px; text-align: center; }
     </style>
 </head>
 <body>
 
 <div class="contenedor">
-    <h1>Análisis Cuantitativo y Cobertura Léxica</h1>
+    <h1>Análisis Lexicográfico de las Crónicas</h1>
 
     <div class="metricas-grid">
         <div class="metrica-card"><span class="metrica-val" id="m-unicas">0</span><span class="metrica-lab">Formas Únicas (Netas)</span></div>
@@ -34,11 +33,7 @@
 
     <div class="grid-graficas">
         <div class="card-grafica full-width"><canvas id="chartEvolucionComparada"></canvas></div>
-        
-        <div class="card-grafica full-width"><canvas id="chartCobertura"></canvas>
-            <div class="info-analisis">Calculado sobre el vocabulario neto (sin palabras funcionales, gm o mh).</div>
-        </div>
-        
+        <div class="card-grafica full-width"><canvas id="chartCobertura"></canvas></div>
         <div class="card-grafica full-width"><canvas id="chartTop10"></canvas></div>
     </div>
 </div>
@@ -48,7 +43,7 @@
     let vocabularioNeto = {};
     let palabrasBrutasPorAño = {};
     let palabrasNetasPorAño = {};
-    let totalNetasGlobal = 0; // Necesario para la cobertura
+    let totalNetasGlobal = 0;
 
     const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20","200","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","420","43","44","45","5","6","60","7","8","9","90","a","al","alguna","algunas","alguno","algunos","algún","ambos","ampleamos","ante","antes","aquel","aquellas","aquellos","aqui","arriba","atras","bajo","bastante","bien","cada","capilla","cierta","ciertas","ciertos","como","con","conseguimos","conseguir","consigo","consigue","consiguen","consigues","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleais","emplean","emplear","empleas","empleo","en","encima","entonces","entre","era","eramos","eran","eras","eres","es","esta","estaba","estado","estais","estamos","estan","este","estoy","fin","fue","fueron","fui","fuimos","gueno","ha","hace","haceis","hacemos","hacen","hacen","hacer","haces","hago","han","haviendo","huvo","incluso","intenta","intentais","intentamos","intentan","intentar","intentas","intento","ir","la","largo","las","lo","los","m","mas","mayor","mientras","mio","misma","missa","modo","muchos","muy","nos","nosotros","o","otras","otro","para","pero","podeis","podemos","poder","podria","podriais","podriamos","podrian","podrias","por","por qué","porque","primero desde","puede","pueden","puedo","que","quien","s","sabe","sabeis","sabemos","saben","saber","sabes","se","ser","si","sic","siendo","sin","sobre","sois","solamente","solo","somos","soy","su","sus","tambien","también","teneis","tenemos","tener","tengo","tiempo","tiene","tienen","toda","todo","trabaja","trabajais","trabajamos","trabajamos","trabajan","trabajar","trabajas","trabajo","tras","tribuna","tuvo","tuyo","ultimo","un","una","unas","uno","unos","usa","usais","usamos","usan","usar","usas","uso","va","vais","valor","vamos","van","vaya","verdad","verdadera cierto","verdadero","vosotras","vosotros","voy","y","yo"];
 
@@ -66,7 +61,10 @@
 
     function procesarDatos() {
         let setUnicasNetas = new Set();
-        totalNetasGlobal = 0; // Reiniciamos
+        totalNetasGlobal = 0;
+        vocabularioNeto = {};
+        palabrasBrutasPorAño = {};
+        palabrasNetasPorAño = {};
 
         rawTextos.forEach(item => {
             let textoSinHTML = item.Transcripción.replace(/<\/?[^>]+(>|$)/g, " ");
@@ -77,13 +75,10 @@
 
             palabras.forEach(p => {
                 let pLimpia = p.trim();
-                
-                // Exclusión total de GM/MH en historial bruto
                 if (pLimpia === "gm" || pLimpia === "mh") return;
                 
                 palabrasBrutasPorAño[item.Año]++;
 
-                // Datos Netos (sin stop-words de tu lista)
                 if (!EXCLUIDAS.includes(pLimpia)) {
                     setUnicasNetas.add(pLimpia);
                     vocabularioNeto[pLimpia] = (vocabularioNeto[pLimpia] || 0) + 1;
@@ -100,96 +95,62 @@
     function renderCharts() {
         const años = Object.keys(palabrasBrutasPorAño).sort();
 
-        // 1. Evolución Comparada
+        // 1. Evolución
         new Chart(document.getElementById('chartEvolucionComparada'), {
             type: 'line',
             data: {
                 labels: años,
                 datasets: [
-                    { label: 'Volumen Bruto (con funcionales, sin GM/MH)', data: años.map(a => palabrasBrutasPorAño[a]), borderColor: '#ccc', borderDash: [5, 5], pointRadius: 0, fill: false, tension: 0.3 },
-                    { label: 'Volumen Neto (Investigación)', data: años.map(a => palabrasNetasPorAño[a]), borderColor: '#1a3a5a', backgroundColor: 'rgba(26,58,90,0.1)', fill: true, tension: 0.3 }
+                    { label: 'Volumen Bruto', data: años.map(a => palabrasBrutasPorAño[a]), borderColor: '#ccc', borderDash: [5, 5], fill: false, tension: 0.3 },
+                    { label: 'Volumen Neto (Python)', data: años.map(a => palabrasNetasPorAño[a]), borderColor: '#1a3a5a', backgroundColor: 'rgba(26,58,90,0.1)', fill: true, tension: 0.3 }
                 ]
             },
             options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'DINÁMICA DEL VOLUMEN NARRATIVO ANUAL' } } }
         });
 
-        // 2. LÓGICA DE COBERTURA LÉXICA (Replicando tu gráfica)
+        // 2. Cobertura Léxica (TU GRÁFICA)
         const sortedFrequencies = Object.values(vocabularioNeto).sort((a, b) => b - a);
-        const top50Frequencies = sortedFrequencies.slice(0, 50);
-        
         let cumulativeFrequency = 0;
-        const cumulativeData = top50Frequencies.map((freq, index) => {
+        const cumulativeData = sortedFrequencies.slice(0, 50).map((freq, index) => {
             cumulativeFrequency += freq;
-            // Calculamos porcentaje sobre el total NETO global
             return { x: index + 1, y: (cumulativeFrequency / totalNetasGlobal) * 100 };
         });
 
         new Chart(document.getElementById('chartCobertura'), {
             type: 'line',
             data: {
-                datasets: [
-                    {
-                        label: 'Cobertura acumulada del corpus',
-                        data: cumulativeData,
-                        borderColor: '#0000FF', // AZUL como en tu gráfica
-                        backgroundColor: '#0000FF',
-                        borderWidth: 2,
-                        pointRadius: 4, // Puntos marcados
-                        fill: false,
-                        tension: 0 // Líneas rectas entre puntos
-                    }
-                ]
+                datasets: [{
+                    label: 'Cobertura acumulada',
+                    data: cumulativeData,
+                    borderColor: '#0000FF',
+                    backgroundColor: '#0000FF',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    fill: false,
+                    tension: 0
+                }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    x: {
-                        type: 'linear',
-                        min: 0, max: 50, // Top 50 Lemas
-                        ticks: { stepSize: 10, font: { family: 'Arial' } },
-                        title: { display: true, text: 'Número de lemas agrupados más frecuentes (Rango)', font: { weight: 'bold' } },
-                        grid: { borderDash: [5, 5] } // Rejilla discontinua
-                    },
-                    y: {
-                        min: 0, max: 55, // Porcentaje 0-100 (ajustado a max 55 para rejilla)
-                        ticks: { stepSize: 10, font: { family: 'Arial' } },
-                        title: { display: true, text: 'Porcentaje del corpus cubierto (%)', font: { weight: 'bold' } },
-                        grid: { borderDash: [5, 5] }
-                    }
+                    x: { type: 'linear', min: 0, max: 50, title: { display: true, text: 'Número de lemas agrupados más frecuentes' }, grid: { borderDash: [5, 5] } },
+                    y: { min: 0, max: 55, title: { display: true, text: 'Porcentaje del corpus (%)' }, grid: { borderDash: [5, 5] } }
                 },
                 plugins: {
-                    title: { display: true, text: 'Concentración léxica y dispersión (cobertura del corpus por lema)', font: { size: 14, weight: 'bold' } },
-                    legend: { display: false },
-                    // Lógica para la línea roja del 50%
-                    annotation: {
-                        annotations: {
-                            line1: {
-                                type: 'line', yMin: 50, yMax: 50,
-                                borderColor: 'rgb(255, 99, 132)',
-                                borderWidth: 2, borderDash: [6, 6],
-                                label: { display: true, content: '50% Cobertura', position: 'end', backgroundColor: 'rgba(255,255,255,0.8)', color: '#000' }
-                            }
-                        }
-                    }
+                    title: { display: true, text: 'Concentración léxica y dispersión (cobertura del corpus por lema)' }
                 }
             },
-            // Plugin para añadir línea de rejilla discontinua y anotación manual ( Chart.js v3+)
             plugins: [{
-                id: 'zipf_grid_and_line',
                 beforeDraw: (chart) => {
                     const ctx = chart.ctx;
                     const yScale = chart.scales.y;
                     const xScale = chart.scales.x;
-                    if (!yScale || !xScale) return;
-
-                    // Dibujamos la línea roja del 50% manual si no se carga el plugin de anotación
                     const y50 = yScale.getPixelForValue(50);
                     ctx.save();
                     ctx.beginPath();
-                    ctx.lineWidth = 1.5;
-                    ctx.strokeStyle = '#FF0000'; // ROJO
-                    ctx.setLineDash([5, 5]); // Discontinua
+                    ctx.strokeStyle = '#FF0000';
+                    ctx.setLineDash([5, 5]);
                     ctx.moveTo(xScale.left, y50);
                     ctx.lineTo(xScale.right, y50);
                     ctx.stroke();
@@ -198,7 +159,7 @@
             }]
         });
 
-        // 3. Top 10 (Neto) - Cambiado a full width para que luzca más
+        // 3. Top 10
         const top10 = Object.entries(vocabularioNeto).sort((a,b) => b[1]-a[1]).slice(0, 10);
         new Chart(document.getElementById('chartTop10'), {
             type: 'bar',
