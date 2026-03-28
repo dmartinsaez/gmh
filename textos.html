@@ -73,7 +73,9 @@
 <body>
 
 <div class="contenedor">
-    <h1>Análisis Lexicográfico - Documentario de prensa 'Farinelli'</h1>
+    <h1>
+        Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)
+    </h1>
 
     <nav class="nav-farinelli">
         <a href="index.html">Documentario</a>
@@ -98,21 +100,21 @@
         <div>
             <div class="card-grafica"><canvas id="chartEvolucionAnual"></canvas></div>
             <div class="recuadro-metodo">
-                <strong>Metodología de Volumen Anual:</strong> Muestra la densidad de información relevante (Crítico) por año tras filtrar las partículas gramaticales.
+                <strong>Metodología de Volumen Anual:</strong> Muestra el volumen de léxico con contenido (Neto) por cada año de la serie histórica.
             </div>
         </div>
 
         <div>
             <div class="card-grafica"><canvas id="chartCobertura"></canvas></div>
             <div class="recuadro-metodo">
-                <strong>Concentración Léxica Neta:</strong> Porcentaje que suman los términos más frecuentes sobre el <strong>total del léxico neto</strong> (sin stopwords).
+                <strong>Concentración Léxica y Dispersión:</strong> Cobertura acumulada de los 50 lemas más frecuentes calculada exclusivamente sobre el <strong>volumen crítico</strong> (sin stopwords).
             </div>
         </div>
 
         <div>
             <div class="card-grafica"><canvas id="chartTop10"></canvas></div>
             <div class="recuadro-metodo">
-                <strong>Ranking de Frecuencia:</strong> Los 10 términos de léxico pleno más repetidos.
+                <strong>Ranking de Frecuencia:</strong> Los 10 términos de léxico pleno más repetidos en el documentario.
             </div>
         </div>
     </div>
@@ -179,7 +181,7 @@
     }
 
     function renderCharts() {
-        // 1. Evolución Anual (Neto)
+        // 1. Evolución Anual Neto
         const años = Object.keys(palabrasNetasPorAño).sort();
         new Chart(document.getElementById('chartEvolucionAnual'), {
             type: 'line',
@@ -197,10 +199,13 @@
             options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'EVOLUCIÓN ANUAL DEL LÉXICO CRÍTICO' } } }
         });
 
-        // 2. Concentración Léxica Neta
+        // 2. Concentración Léxica (RECORTE EN 50)
         const sortedFrequencies = Object.values(vocabularioNeto).sort((a, b) => b - a);
         let cumulative = 0;
-        const dataY = [0]; const etiquetasX = [0];
+        const dataY = [0]; 
+        const etiquetasX = [0];
+        
+        // Tomamos exactamente los 50 más frecuentes
         sortedFrequencies.slice(0, 50).forEach((freq, index) => {
             cumulative += freq;
             dataY.push((cumulative / totalNetasGlobal) * 100);
@@ -221,9 +226,21 @@
                 }]
             },
             options: {
-                responsive: true, maintainAspectRatio: false,
-                scales: { y: { min: 0, max: 100 } },
-                plugins: { title: { display: true, text: 'CONCENTRACIÓN LÉXICA (CONTENIDO NETO)' } }
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { 
+                    x: { 
+                        min: 0, 
+                        max: 50, // RECORTADO ESTRICTAMENTE EN 50
+                        title: { display: true, text: 'Número de lemas agrupados más frecuentes' }
+                    },
+                    y: { 
+                        min: 0, 
+                        max: 100, 
+                        title: { display: true, text: 'Porcentaje del contenido neto (%)' }
+                    }
+                },
+                plugins: { title: { display: true, text: 'CONCENTRACIÓN LÉXICA Y DISPERSIÓN' } }
             },
             plugins: [{
                 id: 'linea50',
@@ -237,7 +254,7 @@
             }]
         });
 
-        // 3. Top 10 corregido
+        // 3. Top 10
         const top10 = Object.entries(vocabularioNeto).sort((a,b) => b[1]-a[1]).slice(0, 10);
         new Chart(document.getElementById('chartTop10'), {
             type: 'bar',
