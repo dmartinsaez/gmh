@@ -174,7 +174,7 @@
 
                     if (!globalData.mapOp[finalKey]) {
                         globalData.mapOp[finalKey] = { 
-                            años: new Set(), seguras: 0, totales: 0, occasions: new Set(), 
+                            años: new Set(), seguras: 0, totales: 0, occasions: {},
                             comp: (maestra ? maestra.comp : "—"), lib: (maestra ? maestra.lib : "—") 
                         };
                     }
@@ -186,8 +186,7 @@
                     op.años.add(item.Año);
                     
                     if (item['Ocasión']) item['Ocasión'].split('+').forEach(f => {
-                        let txt = f.trim(); if (esFestejoReal(txt)) op.occasions.add(txt);
-                    });
+                let txt = f.trim(); if (esFestejoReal(txt)) { if(!op.occasions[txt]) op.occasions[txt] = new Set(); op.occasions[txt].add(item.Año); }                    });
                 });
             }
         });
@@ -208,7 +207,7 @@
                 <span class="txt-noches">${noches}</span>
                 <div class="opera-detalle" id="det-${i}">
                     <strong>Compositor:</strong> ${op.comp}<br><strong>Libretista:</strong> ${op.lib}<br>
-                    <strong>Ocasiones registradas:</strong> ${Array.from(op.occasions).join(', ') || "Funciones ordinarias"}
+                    <strong>Ocasiones registradas:</strong> ${Object.entries(op.occasions).map(([nom, añs]) => nom + " (" + Array.from(añs).sort().join(", ") + ")").join(", ") || "Funciones ordinarias"}
                 </div></div>`;
         }).join('');
     }
