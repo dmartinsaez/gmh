@@ -15,17 +15,18 @@
         .nav-farinelli .active { border: 1px solid var(--azul); background: var(--azul); color: white !important; border-radius: 4px; }
         .seccion-titulo { text-align: center; font-variant: small-caps; color: var(--oro); border-bottom: 1px solid var(--oro); margin: 30px 0 15px 0; padding-bottom: 5px; font-size: 1.2em; }
         
-        .calendar-heatmap { background: white; padding: 20px; border: 1px solid var(--borde); border-radius: 8px; overflow-x: auto; }
+        /* HEATMAP */
+        .calendar-heatmap { background: white; padding: 20px; border: 1px solid var(--borde); border-radius: 8px; overflow-x: auto; margin-bottom: 10px; }
         .heatmap-month-row { display: grid; grid-template-columns: 80px repeat(31, 1fr); gap: 2px; align-items: center; margin-bottom: 4px; }
         .heatmap-month-name { font-size: 0.7em; font-weight: bold; color: var(--azul); text-transform: uppercase; }
         .day-cell { height: 18px; background: #f0f0f0; border-radius: 1px; cursor: pointer; transition: 0.2s; }
         #infoDia { display: none; background: var(--azul); color: white; padding: 15px; border-radius: 8px; margin: 10px auto 30px; max-width: 850px; text-align: center; border-left: 5px solid var(--oro); }
 
-        /* TABLA INVENTARIO CORREGIDA */
+        /* TABLA INVENTARIO */
         .tabla-operas { max-width: 1000px; margin: 0 auto; background: white; border: 1px solid var(--borde); border-radius: 8px; overflow: hidden; }
         .fila-header { 
             display: grid; 
-            grid-template-columns: 100px 1.5fr 1fr 140px; 
+            grid-template-columns: 90px 1.5fr 1fr 140px; 
             background: #f1f2f6; 
             padding: 12px 15px; 
             font-weight: bold; 
@@ -37,7 +38,7 @@
         .scroll-area { max-height: 550px; overflow-y: auto; }
         .opera-row { 
             display: grid; 
-            grid-template-columns: 100px 1.5fr 1fr 140px; 
+            grid-template-columns: 90px 1.5fr 1fr 140px; 
             padding: 12px 15px; 
             border-bottom: 1px solid #eee; 
             align-items: center;
@@ -50,11 +51,10 @@
         .txt-noches { font-size: 0.85em; font-family: sans-serif; text-align: right; }
         .opera-detalle { display: none; padding: 15px; background: #f9f6ef; border-bottom: 2px solid var(--oro); font-size: 0.9em; line-height: 1.6; grid-column: 1 / span 4; }
 
-        .btn-orden { background: white; border: 1px solid var(--oro); color: var(--oro); padding: 5px 12px; cursor: pointer; font-variant: small-caps; margin: 0 5px; }
+        .btn-orden { background: white; border: 1px solid var(--oro); color: var(--oro); padding: 5px 12px; cursor: pointer; font-variant: small-caps; margin: 0 10px; }
         .btn-orden.active { background: var(--azul); color: white; border-color: var(--azul); }
         .grid-graficas { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0; }
         .lista-compacta { background: white; border: 1px solid var(--borde); border-radius: 8px; max-height: 300px; overflow-y: auto; }
-        #calendarioFestivo { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
     </style>
 </head>
 <body>
@@ -77,7 +77,7 @@
     <div id="infoDia"></div>
 
     <h2 class="seccion-titulo" style="margin-top:50px">Inventario de Óperas</h2>
-    <div style="text-align: center; margin-bottom: 15px;">
+    <div style="text-align: center; margin-bottom: 20px;">
         <button class="btn-orden active" id="btn-año" onclick="reRenderOperas('año')">Por Estreno</button>
         <button class="btn-orden" id="btn-alfa" onclick="reRenderOperas('alfa')">Alfabético</button>
     </div>
@@ -102,14 +102,32 @@
             <div id="listaLibretistas"></div>
         </div>
     </div>
-
     <h2 class="seccion-titulo">Efemérides Festivas Completas</h2>
-    <div id="calendarioFestivo"></div>
+    <div id="calendarioFestivo" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;"></div>
 </div>
 
 <script>
     let globalData = { mapOp: {}, mapComp: {}, mapLib: {}, mapFest: {}, raw: [], dayStats: {} };
     const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+    // Listado canónico basado en tu JSON para agrupar abreviaturas
+    const CANON = {
+        "clemenza": "La clemenza di Tito",
+        "angelica": "Angelica e Medoro",
+        "polifemo": "Polifemo y Galatea",
+        "vello": "Vello d’oro conquistato",
+        "artaserse": "Artaserse",
+        "demofoonte": "Demofoonte",
+        "armida": "Armida placata",
+        "demetrio": "Demetrio",
+        "didone": "Didone abbandonata",
+        "siroe": "Siroe",
+        "semiramide": "Semiramide riconosciuta",
+        "eroe": "L’eroe cinese",
+        "nitteti": "Nitteti",
+        "pastore": "Re pastore",
+        "adriano": "Adriano in Siria"
+    };
 
     fetch('archivo.json').then(r => r.json()).then(data => {
         globalData.raw = data;
@@ -128,7 +146,7 @@
 
     function procesarTodo(data) {
         let uTit = ""; 
-        let meta = {}; 
+        let metaCache = {};
 
         data.forEach(item => {
             const oc = item['Ocasión'] || "";
@@ -136,7 +154,7 @@
             const m = detectarMes(dia);
             const dN = dia ? parseInt(dia.match(/\d+/)) : null;
 
-            // 1. MAPA Y FESTIVIDADES (INTACTO)
+            // 1. MAPA Y FESTIVIDADES (SECUENCIA GLOBAL, SIN FILTROS)
             if (m) {
                 if (dN) {
                     const key = `${m}-${dN}`;
@@ -144,7 +162,7 @@
                     globalData.dayStats[key].count++;
                     if (oc) oc.split('+').forEach(p => {
                         let o = p.trim();
-                        if (o.length > 3 && o.toLowerCase() !== "domingo" && !o.includes("“")) {
+                        if (o.length > 3 && !o.toLowerCase().includes("domingo") && !o.includes("“")) {
                             globalData.dayStats[key].occasions[o] = (globalData.dayStats[key].occasions[o] || 0) + 1;
                         }
                     });
@@ -153,7 +171,9 @@
                     if (!globalData.mapFest[m]) globalData.mapFest[m] = {};
                     oc.split('+').forEach(p => {
                         let o = p.trim();
-                        if (o.length > 3 && !["lunes","martes","miércoles","miercoles","jueves","viernes","sábado","sabado","domingo"].includes(o.toLowerCase().replace(/\.$/,""))) {
+                        let oL = o.toLowerCase().replace(/\.$/,"");
+                        const dSem = ["lunes","martes","miércoles","miercoles","jueves","viernes","sábado","sabado","domingo"];
+                        if (o.length > 3 && !dSem.includes(oL) && !oL.includes("días sucesivos") && !o.includes("“")) {
                             if (!globalData.mapFest[m][o]) globalData.mapFest[m][o] = new Set();
                             globalData.mapFest[m][o].add(item.Año);
                         }
@@ -161,60 +181,56 @@
                 }
             }
 
-            // 2. INVENTARIO DE ÓPERAS (LÓGICA ANTI-DESASTRE)
+            // 2. INVENTARIO DE ÓPERAS (AGRUPACIÓN INTELIGENTE)
             if (item.Título) {
                 let rawT = item.Título.trim();
-                // Excluir ruido (listas, noticias genéricas, muy cortos)
-                if (rawT.includes(",") || rawT.length < 3 || /^\d/.test(rawT) || rawT.toLowerCase().includes("óperas")) return;
+                
+                // Ignorar filas de noticias ("3 óperas", listas con comas, etc)
+                if ((rawT.includes(",") && !rawT.toLowerCase().includes(" o ")) || /^\d/.test(rawT) || rawT.toLowerCase().includes("óperas") || rawT.startsWith("“")) return;
 
-                let tProcesado = rawT.includes("...") ? uTit : rawT;
-                if (!rawT.includes("...") && !rawT.includes("“")) uTit = rawT;
+                let tActual = rawT.includes("...") ? uTit : rawT;
+                if (!rawT.includes("...") && !rawT.startsWith("“")) uTit = rawT;
 
-                tProcesado.split(/\s+o\s+/i).forEach(unTit => {
-                    let isDoubt = unTit.includes("?");
-                    let tL = normalizar(unTit);
-                    if (!tL) return;
+                // Separar por " o " para casos como "Adriano o Nitteti"
+                tActual.split(/\s+o\s+/i).forEach(parte => {
+                    let esDuda = parte.includes("?") || rawT.includes("?");
+                    let tL = normalizar(parte);
+                    if (!tL || tL.length < 3) return;
 
-                    // BUSCADOR INTELIGENTE DE TÍTULOS (para agrupar "Vello" con "Vello d'oro...")
-                    let finalKey = tL;
-                    let existingKeys = Object.keys(globalData.mapOp);
-                    
-                    // Excepción: Semiramide y Semiramide riconosciuta no se agrupan
-                    if (!tL.toLowerCase().includes("semiramide")) {
-                        let match = existingKeys.find(k => 
-                            (k.toLowerCase().startsWith(tL.toLowerCase()) || tL.toLowerCase().startsWith(k.toLowerCase())) 
-                            && Math.abs(k.length - tL.length) < 20
-                        );
-                        if (match) finalKey = match;
+                    // Mapeo canónico (Semiramide -> Semiramide riconosciuta)
+                    let finalT = tL;
+                    let base = tL.split(' ')[0].toLowerCase().replace(/[^\w]/g, "");
+                    if (CANON[base]) finalT = CANON[base];
+
+                    if (!globalData.mapOp[finalT]) {
+                        globalData.mapOp[finalT] = { años: new Set(), seguras: 0, totales: 0, occasions: new Set(), comp: "", lib: "" };
                     }
 
-                    if (!globalData.mapOp[finalKey]) {
-                        globalData.mapOp[finalKey] = { años: new Set(), seguras: 0, totales: 0, occasions: new Set(), comp: "", lib: "" };
-                    }
-
-                    let op = globalData.mapOp[finalKey];
+                    let op = globalData.mapOp[finalT];
                     op.totales++;
-                    if (!isDoubt) op.seguras++;
+                    if (!esDuda) op.seguras++;
                     op.años.add(item.Año);
                     
-                    // Heredar autores
-                    if (item.Compositor && item.Compositor.length > 3 && !item.Compositor.includes("...")) op.comp = item.Compositor;
-                    if (item.Libreto && item.Libreto.length > 3 && !item.Libreto.includes("...")) op.lib = item.Libreto;
+                    // Guardar y heredar autores
+                    if (item.Compositor && item.Compositor.length > 3 && !item.Compositor.includes("...")) metaCache[finalT + "_c"] = item.Compositor;
+                    if (item.Libreto && item.Libreto.length > 3 && !item.Libreto.includes("...")) metaCache[finalT + "_l"] = item.Libreto;
+                    
+                    op.comp = metaCache[finalT + "_c"] || "No consta";
+                    op.lib = metaCache[finalT + "_l"] || "No consta";
 
-                    if (oc) oc.split('+').forEach(p => {
-                        let f = p.trim();
-                        if (f.length > 3 && !f.includes("“")) op.occasions.add(f);
+                    if (oc) oc.split('+').forEach(f => {
+                        let txt = f.trim();
+                        if (txt.length > 3 && !txt.includes("“")) op.occasions.add(txt);
                     });
 
-                    // Listas de autores
-                    const reg = (v, target) => {
+                    // Autores para listas inferiores
+                    const regAut = (v, target) => {
                         if (v && v !== "No consta") {
                             let aut = v.replace(/\([^\)]+\)/g, "").replace(/ y | , |,/g, " / ").replace(/\s+/g, " ").trim();
-                            if (aut) { if (!target[aut]) target[aut] = new Set(); target[aut].add(finalKey); }
+                            if (aut) { if (!target[aut]) target[aut] = new Set(); target[aut].add(finalT); }
                         }
                     };
-                    reg(op.comp, globalData.mapComp);
-                    reg(op.lib, globalData.mapLib);
+                    regAut(op.comp, globalData.mapComp); regAut(op.lib, globalData.mapLib);
                 });
             }
         });
@@ -239,8 +255,8 @@
                 <span class="txt-repos">${repos || "—"}</span>
                 <span class="txt-noches">${noches}</span>
                 <div class="opera-detalle" id="det-${i}">
-                    <strong>Compositor:</strong> ${op.comp || "No consta"}<br>
-                    <strong>Libretista:</strong> ${op.lib || "No consta"}<br>
+                    <strong>Compositor:</strong> ${op.comp}<br>
+                    <strong>Libretista:</strong> ${op.lib}<br>
                     <strong>Ocasiones detectadas:</strong> ${Array.from(op.occasions).join(', ') || "Funciones ordinarias"}
                 </div>
             </div>`;
@@ -272,10 +288,10 @@
     function verDetalleDia(m, d) {
         const stat = globalData.dayStats[`${m}-${d}`];
         const infoDiv = document.getElementById('infoDia'); infoDiv.style.display = 'block';
-        if (!stat || stat.count === 0) { infoDiv.innerHTML = `<strong>${d} de ${m}:</strong> Sin registros.`; return; }
+        if (!stat || stat.count === 0) { infoDiv.innerHTML = `<strong>${d} de ${m}:</strong> No hay registros.`; return; }
         let topOcc = "Función ordinaria"; let max = 0;
         for (let o in stat.occasions) { if (stat.occasions[o] > max) { max = stat.occasions[o]; topOcc = o; } }
-        infoDiv.innerHTML = `<strong>${d} de ${m}:</strong> ${stat.count} registros.<br><span style="color:var(--oro); font-variant: small-caps;">Causa:</span> ${topOcc}`;
+        infoDiv.innerHTML = `<strong>${d} de ${m}:</strong> ${stat.count} registros históricos.<br><span style="color:var(--oro); font-variant: small-caps;">Causa frecuente:</span> ${topOcc}`;
     }
 
     function renderAutores() {
@@ -291,7 +307,7 @@
         let h = "";
         MESES.forEach(m => {
             if (globalData.mapFest[m] && Object.keys(globalData.mapFest[m]).length > 0) {
-                h += `<div class="mes-bloque"><span style="font-weight:bold; color:var(--azul); border-bottom:2px solid var(--azul); display:block; text-align:center; margin-bottom:10px; text-transform:uppercase; font-size:0.85em;">${m}</span>`;
+                h += `<div class="mes-bloque" style="background:white; padding:15px; border:1px solid var(--borde); border-radius:8px; width:250px;"><span style="font-weight:bold; color:var(--azul); border-bottom:2px solid var(--azul); display:block; text-align:center; margin-bottom:10px; text-transform:uppercase; font-size:0.85em;">${m}</span>`;
                 Object.keys(globalData.mapFest[m]).sort().forEach(ev => {
                     h += `<div style="font-size:0.8em; margin-bottom:8px;"><strong>${ev}</strong><br>${Array.from(globalData.mapFest[m][ev]).sort().map(a => `<span style="background:#d4af37;color:black;padding:1px 4px;border-radius:3px;font-size:0.9em;margin-right:2px;">${a}</span>`).join('')}</div>`;
                 });
