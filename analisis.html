@@ -6,19 +6,33 @@
     <title>Estadísticas y análisis - Documentario de prensa 'Farinelli'</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --azul: #1a3a5a; --oro: #b8860b; --fondo: #fdfaf3; --borde: #dcdde1; }
-        body { font-family: 'Georgia', serif; background-color: #f4f1ea; color: #2c3e50; margin: 0; padding: 20px; }
-        .contenedor { max-width: 1100px; margin: 0 auto; background: var(--fondo); padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        :root { --azul: #1a3a5a; --oro: #b8860b; --fondo: #fdfaf3; --borde: #dcdde1; --gris-metodo: #f8f9fa; }
+        body { font-family: 'Georgia', serif; background-color: #f4f1ea; color: #2c3e50; line-height: 1.8; margin: 0; padding: 20px; }
         
-        /* CABECERA IDÉNTICA A TEXTOS.HTML */
-        h1 { color: var(--azul); font-size: 1.3em; text-align: center; line-height: 1.4; max-width: 900px; border-bottom: 2px double var(--oro); padding-bottom: 15px; margin: 0 auto 0.8em auto; }
-        .nav-farinelli { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
-        .nav-farinelli a { text-decoration: none; color: var(--azul); font-weight: bold; padding: 5px 10px; border: 1px solid transparent; }
-        .nav-farinelli .active { border: 1px solid var(--azul); background: var(--azul); color: white !important; border-radius: 4px; }
+        .contenedor { max-width: 1200px; margin: 0 auto; background: var(--fondo); padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         
+        /* CABECERA CALCADA DE TEXTOS.HTML */
+        h1 {
+            color: var(--azul); font-size: 1.3em; margin: 0 auto 0.8em auto;
+            text-align: center; line-height: 1.4; max-width: 850px;            
+            border-bottom: 2px double var(--oro); padding-bottom: 15px;
+        }
+
+        .nav-farinelli {
+            display: flex; justify-content: center; gap: 20px; margin-bottom: 30px;
+            font-family: sans-serif; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .nav-farinelli a {
+            text-decoration: none; color: var(--azul); font-weight: bold; padding: 5px 10px; transition: 0.3s;
+        }
+        .nav-farinelli .active {
+            border: 1px solid var(--azul); background: var(--azul); color: white !important; border-radius: 4px;
+        }
+
         .seccion-titulo { text-align: center; font-variant: small-caps; color: var(--oro); border-bottom: 1px solid var(--oro); margin: 30px 0 15px 0; padding-bottom: 5px; font-size: 1.2em; }
         
-        .chart-container { height: 320px; background:white; border:1px solid var(--borde); border-radius:8px; padding:20px; margin-bottom:30px; }
+        /* GRÁFICAS Y TABLAS */
+        .chart-container { height: 350px; background:white; border:1px solid var(--borde); border-radius:8px; padding:20px; margin-bottom:30px; }
         .calendar-heatmap { background: white; padding: 20px; border: 1px solid var(--borde); border-radius: 8px; overflow-x: auto; }
         .heatmap-month-row { display: grid; grid-template-columns: 80px repeat(31, 1fr); gap: 2px; align-items: center; margin-bottom: 4px; }
         .heatmap-month-name { font-size: 0.7em; font-weight: bold; color: var(--azul); text-transform: uppercase; }
@@ -42,18 +56,20 @@
         .años-wrapper { display: flex; flex-wrap: wrap; gap: 4px; }
         .tag-año { background: #d4af37; color: black; padding: 1px 6px; border-radius: 3px; font-size: 0.75em; font-family: sans-serif; font-weight: bold; }
 
-        .btn-orden { background: white; border: 1px solid var(--oro); color: var(--oro); padding: 5px 12px; cursor: pointer; font-variant: small-caps; margin: 0 5px; }
+        .btn-orden { background: white; border: 1px solid var(--oro); color: var(--oro); padding: 5px 12px; cursor: pointer; font-variant: small-caps; margin: 0 5px; border: 1px solid var(--oro); }
         .btn-orden.active { background: var(--azul); color: white; border-color: var(--azul); }
     </style>
 </head>
 <body>
 
 <div class="contenedor">
-    <h1>Documentario de prensa de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli (1747–1758)</h1>
+    <h1>
+        Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)
+    </h1>
 
     <nav class="nav-farinelli">
         <a href="index.html">Documentario</a>
-        <a href="analisis.html" class="active">Estadísticas y análisis</a>
+        <a href="analisis.html" class="active">Análisis del calendario</a>
         <a href="textos.html">Análisis léxico</a>
     </nav>
 
@@ -99,6 +115,7 @@
         return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/l'|l’|la |el |l /g, "").replace(/[^\w]/g, "").trim();
     }
 
+    // LAS ÓPERAS CON COMPOSITOR SON LAS "MADRES"
     function prepararMaestras(data) {
         data.forEach(item => {
             if (item.Título && item.Compositor && item.Compositor.trim().length > 3) {
@@ -193,7 +210,7 @@
                 <span class="txt-noches">${noches}</span>
                 <div class="opera-detalle" id="det-${i}">
                     <strong>Compositor:</strong> ${op.comp}<br><strong>Libretista:</strong> ${op.lib}<br>
-                    <strong>Ocasiones detectadas:</strong> ${Array.from(op.occasions).join(', ') || "Funciones ordinarias"}
+                    <strong>Ocasiones registradas:</strong> ${Array.from(op.occasions).join(', ') || "Funciones ordinarias"}
                 </div></div>`;
         }).join('');
     }
