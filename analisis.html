@@ -3,44 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análisis Estadístico - Documentario Farinelli</title>
+    <title>Estadísticas y análisis - Documentario de prensa 'Farinelli'</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --azul: #1a3a5a; --oro: #b8860b; --fondo: #fdfaf3; --borde: #dcdde1; }
         body { font-family: 'Georgia', serif; background-color: #f4f1ea; color: #2c3e50; margin: 0; padding: 20px; }
         .contenedor { max-width: 1100px; margin: 0 auto; background: var(--fondo); padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        h1 { color: var(--azul); font-size: 1.3em; text-align: center; line-height: 1.4; border-bottom: 2px double var(--oro); padding-bottom: 15px; margin-bottom: 30px; }
-        .nav-farinelli { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
-        .nav-farinelli a { text-decoration: none; color: var(--azul); font-weight: bold; padding: 5px 10px; }
+        
+        h1 { color: var(--azul); font-size: 1.3em; text-align: center; line-height: 1.4; max-width: 900px; border-bottom: 2px double var(--oro); padding-bottom: 15px; margin: 0 auto 0.8em auto; }
+        
+        .nav-farinelli { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; font-family: sans-serif; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-farinelli a { text-decoration: none; color: var(--azul); font-weight: bold; padding: 5px 10px; border: 1px solid transparent; transition: 0.3s; }
         .nav-farinelli .active { border: 1px solid var(--azul); background: var(--azul); color: white !important; border-radius: 4px; }
+        
         .seccion-titulo { text-align: center; font-variant: small-caps; color: var(--oro); border-bottom: 1px solid var(--oro); margin: 30px 0 15px 0; padding-bottom: 5px; font-size: 1.2em; }
         
-        /* GRÁFICA Y HEATMAP */
-        .chart-container { height: 300px; background:white; border:1px solid var(--borde); border-radius:8px; padding:20px; margin-bottom:30px; }
+        .chart-container { height: 320px; background:white; border:1px solid var(--borde); border-radius:8px; padding:20px; margin-bottom:30px; }
         .calendar-heatmap { background: white; padding: 20px; border: 1px solid var(--borde); border-radius: 8px; overflow-x: auto; }
         .heatmap-month-row { display: grid; grid-template-columns: 80px repeat(31, 1fr); gap: 2px; align-items: center; margin-bottom: 4px; }
         .heatmap-month-name { font-size: 0.7em; font-weight: bold; color: var(--azul); text-transform: uppercase; }
         .day-cell { height: 18px; background: #f0f0f0; border-radius: 1px; cursor: pointer; }
         #infoDia { display: none; background: var(--azul); color: white; padding: 15px; border-radius: 8px; margin: 10px auto 30px; text-align: center; border-left: 5px solid var(--oro); }
 
-        /* INVENTARIO */
+        /* TABLA INVENTARIO */
         .tabla-operas { max-width: 1000px; margin: 0 auto; background: white; border: 1px solid var(--borde); border-radius: 8px; overflow: hidden; }
-        .fila-header { display: grid; grid-template-columns: 90px 1.5fr 1.2fr 130px; background: #f1f2f6; padding: 12px 15px; font-weight: bold; font-size: 0.85em; text-transform: uppercase; color: var(--azul); border-bottom: 2px solid var(--oro); }
-        .scroll-area { max-height: 600px; overflow-y: auto; }
-        .opera-row { display: grid; grid-template-columns: 90px 1.5fr 1.2fr 130px; padding: 12px 15px; border-bottom: 1px solid #eee; align-items: center; cursor: pointer; }
+        .fila-header-tabla { 
+            display: grid; 
+            grid-template-columns: 100px 1.5fr 1fr 140px; 
+            background: #f1f2f6; 
+            padding: 12px 15px; 
+            font-weight: bold; 
+            font-size: 0.85em; 
+            text-transform: uppercase; 
+            color: var(--azul);
+            border-bottom: 2px solid var(--oro);
+        }
+        .scroll-area { max-height: 550px; overflow-y: auto; }
+        .opera-row { 
+            display: grid; 
+            grid-template-columns: 100px 1.5fr 1fr 140px; 
+            padding: 12px 15px; 
+            border-bottom: 1px solid #eee; 
+            align-items: center;
+            cursor: pointer;
+        }
         .opera-row:hover { background: #fdfaf3; }
         .txt-estreno { font-weight: bold; color: var(--azul); font-family: sans-serif; }
-        .titulo-opera { font-style: italic; font-weight: bold; color: var(--azul); }
-        .txt-repos { color: #666; font-size: 0.85em; font-family: sans-serif; }
-        .txt-noches { text-align: right; font-family: sans-serif; font-size: 0.85em; color: #333; }
+        .titulo-opera { font-style: italic; font-weight: bold; color: var(--azul); font-size: 1.05em; }
+        .txt-repos { font-size: 0.85em; color: #666; font-family: sans-serif; }
+        .txt-noches { font-size: 0.85em; font-family: sans-serif; text-align: right; color: #333; }
         .opera-detalle { display: none; padding: 20px; background: #f9f6ef; border-bottom: 2px solid var(--oro); font-size: 0.9em; line-height: 1.6; grid-column: 1 / span 4; }
 
-        /* EFEMÉRIDES - CORRECCIÓN DE DESBORDE */
+        /* EFEMÉRIDES CORREGIDAS */
         #calendarioFestivo { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px; }
         .mes-bloque { background: white; padding: 15px; border: 1px solid var(--borde); border-radius: 8px; width: 280px; box-sizing: border-box; }
-        .evento-item { margin-bottom: 15px; }
         .evento-titulo { font-size: 0.85em; font-weight: bold; display: block; margin-bottom: 5px; line-height: 1.3; }
-        .años-wrapper { display: flex; flex-wrap: wrap; gap: 4px; }
+        .años-wrapper { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 12px; }
         .tag-año { background: #d4af37; color: black; padding: 1px 6px; border-radius: 3px; font-size: 0.8em; font-family: sans-serif; font-weight: bold; }
 
         .btn-orden { background: white; border: 1px solid var(--oro); color: var(--oro); padding: 5px 12px; cursor: pointer; font-variant: small-caps; margin: 0 5px; }
@@ -50,11 +68,12 @@
 <body>
 
 <div class="contenedor">
-    <h1>Análisis del Calendario Lírico en la Corte de Fernando VI (1747–1758)</h1>
+    <h1>Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)</h1>
 
     <nav class="nav-farinelli">
         <a href="index.html">Documentario</a>
-        <a href="analisis.html" class="active">Estadísticas</a>
+        <a href="analisis.html" class="active">Análisis del calendario</a>
+        <a href="textos.html">Análisis léxico</a>
     </nav>
 
     <h2 class="seccion-titulo">Evolución de la Actividad Lírica (Funciones Anuales)</h2>
@@ -62,18 +81,18 @@
         <canvas id="chartAnual"></canvas>
     </div>
 
-    <h2 class="seccion-titulo">Mapa de Intensidad Diaria</h2>
+    <h2 class="seccion-titulo">Mapa de Intensidad de Representaciones Diarias</h2>
     <div class="calendar-heatmap" id="calendarHeatmap"></div>
     <div id="infoDia"></div>
 
     <h2 class="seccion-titulo">Inventario Crítico de Óperas</h2>
     <div style="text-align: center; margin-bottom: 20px;">
-        <button class="btn-orden active" id="btn-año" onclick="reRenderOperas('año')">Por Estreno</button>
+        <button class="btn-orden active" id="btn-año" onclick="reRenderOperas('año')">Por Año de Estreno</button>
         <button class="btn-orden" id="btn-alfa" onclick="reRenderOperas('alfa')">Alfabético</button>
     </div>
     
     <div class="tabla-operas">
-        <div class="fila-header">
+        <div class="fila-header-tabla">
             <span>Estreno</span>
             <span>Título</span>
             <span>Reposiciones</span>
@@ -90,15 +109,24 @@
     let globalData = { mapOp: {}, raw: [], dayStats: {} };
     const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
-    // Diccionario para unificar variaciones de nombres (L'eroe -> L'eroe cinese, etc)
+    // Diccionario Canónico para unificar abreviaturas y variaciones
     const CANON = {
-        "clemenza": "La clemenza di Tito", "angelica": "Angelica e Medoro",
-        "polifemo": "Polifemo y Galatea", "vello": "Vello d’oro conquistato",
-        "artaserse": "Artaserse", "demofoonte": "Demofoonte",
-        "armida": "Armida placata", "demetrio": "Demetrio",
-        "didone": "Didone abbandonata", "siroe": "Siroe",
-        "semiramide": "Semiramide reconocida", "eroe": "L’eroe cinese",
-        "nitteti": "Nitteti", "pastore": "Re pastore", "adriano": "Adriano in Siria"
+        "clemenza": "La clemenza di Tito", 
+        "angelica": "Angelica e Medoro",
+        "polifemo": "Polifemo y Galatea", 
+        "galatea": "Polifemo y Galatea",
+        "vello": "Vello d’oro conquistato",
+        "artaserse": "Artaserse", 
+        "demofoonte": "Demofoonte",
+        "armida": "Armida placata", 
+        "demetrio": "Demetrio",
+        "didone": "Didone abbandonata", 
+        "siroe": "Siroe",
+        "semiramide": "Semiramide reconocida", 
+        "eroe": "L’eroe cinese",
+        "nitteti": "Nitteti", 
+        "pastore": "Re pastore", 
+        "adriano": "Adriano in Siria"
     };
 
     fetch('archivo.json').then(r => r.json()).then(data => {
@@ -117,7 +145,7 @@
         let t = txt.toLowerCase().trim().replace(/\.$/, "");
         const diasSemanales = ["lunes", "martes", "miércoles", "miercoles", "jueves", "viernes", "sábado", "sabado", "domingo"];
         if (diasSemanales.includes(t)) return false;
-        const sagradas = ["pascua", "cuasimodo", "nombre de jesus", "reyes", "navidad", "purificacion", "expectacion"];
+        const sagradas = ["pascua", "cuasimodo", "nombre de jesus", "reyes", "navidad", "purificacion", "expectacion", "cumpleaños", "santo", "gala", "boda"];
         if (sagradas.some(f => t.includes(f))) return true;
         return t.length > 5 && !["se repitió", "distintas noches", "óperas"].some(r => t.includes(r));
     }
@@ -150,13 +178,14 @@
                 let tProc = rawT.includes("...") ? lastFull : rawT;
                 if (!rawT.includes("...") && !rawT.startsWith("“")) lastFull = rawT;
 
-                tProc.split(/, | y | o /i).forEach(frag => {
+                // DIVISIÓN INTELIGENTE: Separamos por " o " o comas, pero NUNCA por " y " o " e " internos del título.
+                tProc.split(/ o |, /i).forEach(frag => {
                     let clean = cleanT(frag);
                     if (clean.length < 3) return;
 
-                    // LÓGICA DE UNIFICACIÓN MEJORADA
                     let finalKey = clean;
-                    let slug = clean.toLowerCase().replace(/l’|l'/g, "").replace(/[^\w]/g, "");
+                    // Normalización para el diccionario: quitamos artículos y buscamos raíz
+                    let slug = clean.toLowerCase().replace(/l’|l'|la |el |l /g, "").replace(/[^\w]/g, "");
                     for (let key in CANON) {
                         if (slug.startsWith(key)) { finalKey = CANON[key]; break; }
                     }
@@ -206,7 +235,7 @@
                 <div class="opera-detalle" id="det-${i}">
                     <strong>Compositor:</strong> ${op.comp}<br>
                     <strong>Libretista:</strong> ${op.lib}<br>
-                    <strong>Ocasiones registradas:</strong> ${Array.from(op.occasions).join(', ') || "Funciones ordinarias"}
+                    <strong>Ocasiones detectadas:</strong> ${Array.from(op.occasions).join(', ') || "Funciones ordinarias"}
                 </div>
             </div>`;
         }).join('');
@@ -235,10 +264,10 @@
     function verDetalleDia(m, d) {
         const stat = globalData.dayStats[`${m}-${d}`];
         const div = document.getElementById('infoDia'); div.style.display = 'block';
-        if (!stat) { div.innerHTML = `<strong>${d} de ${m}:</strong> Sin registros.`; return; }
+        if (!stat) { div.innerHTML = `<strong>${d} de ${m}:</strong> Sin registros documentales.`; return; }
         let top = "Función ordinaria"; let max = 0;
         for (let o in stat.occasions) { if (stat.occasions[o] > max) { max = stat.occasions[o]; top = o; } }
-        div.innerHTML = `<strong>${d} de ${m}:</strong> ${stat.count} registros.<br><span style="color:var(--oro); font-variant:small-caps;">Ocasión:</span> ${top}`;
+        div.innerHTML = `<strong>${d} de ${m}:</strong> ${stat.count} registros históricos.<br><span style="color:var(--oro); font-variant:small-caps;">Ocasión:</span> ${top}`;
     }
 
     function renderCharts() {
@@ -267,7 +296,7 @@
             if (Object.keys(occMap).length > 0) {
                 h += `<div class="mes-bloque"><span style="font-weight:bold; color:var(--azul); border-bottom:2px solid var(--azul); display:block; text-align:center; margin-bottom:12px; text-transform:uppercase; font-size:0.9em;">${m}</span>`;
                 for (let ev in occMap) {
-                    h += `<div class="evento-item"><span class="evento-titulo">${ev}</span><div class="años-wrapper">${Array.from(occMap[ev]).sort().map(a => `<span class="tag-año">${a}</span>`).join('')}</div></div>`;
+                    h += `<div style="margin-bottom:10px;"><span class="evento-titulo">${ev}</span><div class="años-wrapper">${Array.from(occMap[ev]).sort().map(a => `<span class="tag-año">${a}</span>`).join('')}</div></div>`;
                 }
                 h += `</div>`;
             }
