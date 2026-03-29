@@ -26,7 +26,7 @@
         .tabla-operas { max-width: 1000px; margin: 0 auto; background: white; border: 1px solid var(--borde); border-radius: 8px; overflow: hidden; }
         .fila-header { 
             display: grid; 
-            grid-template-columns: 90px 1.5fr 1fr 130px; 
+            grid-template-columns: 90px 1.5fr 1.2fr 130px; 
             background: #f1f2f6; 
             padding: 12px 15px; 
             font-weight: bold; 
@@ -35,10 +35,10 @@
             color: var(--azul);
             border-bottom: 2px solid var(--oro);
         }
-        .scroll-area { max-height: 600px; overflow-y: auto; }
+        .scroll-area { max-height: 550px; overflow-y: auto; }
         .opera-row { 
             display: grid; 
-            grid-template-columns: 90px 1.5fr 1fr 130px; 
+            grid-template-columns: 90px 1.5fr 1.2fr 130px; 
             padding: 12px 15px; 
             border-bottom: 1px solid #eee; 
             align-items: center;
@@ -62,7 +62,7 @@
 <body>
 
 <div class="contenedor">
-    <h1>Análisis Estadístico y Calendario: Ópera en la Corte (1747–1758)</h1>
+    <h1>Estadísticas y Análisis del Calendario Teatral (1747–1758)</h1>
 
     <nav class="nav-farinelli">
         <a href="index.html">Documentario</a>
@@ -73,7 +73,7 @@
         <canvas id="chartAnual"></canvas>
     </div>
 
-    <h2 class="seccion-titulo">Mapa de Actividad diaria</h2>
+    <h2 class="seccion-titulo">Actividad diaria (Mapa de Calor)</h2>
     <div class="calendar-heatmap" id="calendarHeatmap"></div>
     <div id="infoDia"></div>
 
@@ -98,26 +98,17 @@
 </div>
 
 <script>
-    let globalData = { mapOp: {}, raw: [], dayStats: {}, meta: {} };
+    let globalData = { mapOp: {}, raw: [], dayStats: {} };
     const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
-    // Mapeo Canónico para unir abreviaturas y variaciones
     const CANON = {
-        "clemenza": "La clemenza di Tito",
-        "angelica": "Angelica e Medoro",
-        "polifemo": "Polifemo y Galatea",
-        "vello": "Vello d’oro conquistato",
-        "artaserse": "Artaserse",
-        "demofoonte": "Demofoonte",
-        "armida": "Armida placata",
-        "demetrio": "Demetrio",
-        "didone": "Didone abbandonata",
-        "siroe": "Siroe",
-        "semiramide": "Semiramide reconocida",
-        "eroe": "L’eroe cinese",
-        "nitteti": "Nitteti",
-        "pastore": "Re pastore",
-        "adriano": "Adriano in Siria"
+        "clemenza": "La clemenza di Tito", "angelica": "Angelica e Medoro",
+        "polifemo": "Polifemo y Galatea", "vello": "Vello d’oro conquistato",
+        "artaserse": "Artaserse", "demofoonte": "Demofoonte",
+        "armida": "Armida placata", "demetrio": "Demetrio",
+        "didone": "Didone abbandonata", "siroe": "Siroe",
+        "semiramide": "Semiramide reconocida", "eroe": "L’eroe cinese",
+        "nitteti": "Nitteti", "pastore": "Re pastore", "adriano": "Adriano in Siria"
     };
 
     fetch('archivo.json').then(r => r.json()).then(data => {
@@ -131,8 +122,19 @@
 
     function cleanT(t) { return t.replace(/<\/?[^>]+(>|$)/g, "").replace(/\.\.\./g, "").replace(/[¿?]/g, "").trim(); }
 
+    function esFestejoReal(txt) {
+        if (!txt || txt.includes("“") || txt.includes("\"")) return false;
+        const oL = txt.toLowerCase().trim();
+        const dias = ["lunes", "martes", "miércoles", "miercoles", "jueves", "viernes", "sábado", "sabado", "domingo"];
+        // Bloquear si es solo un día de la semana, pero permitir si es "Domingo de Pascua"
+        if (dias.includes(oL.replace(/\.$/,""))) return false;
+        if (["días sucesivos", "se repitió", "distintas noches"].some(r => oL.includes(r))) return false;
+        return oL.length > 4;
+    }
+
     function procesarTodo(data) {
         let lastFull = "";
+        let metaDB = {};
 
         data.forEach(item => {
             const dRaw = item['Día'] || "";
@@ -140,7 +142,6 @@
             const m = detectarMes(dRaw);
             const d = dRaw ? parseInt(dRaw.match(/\d+/)) : null;
 
-            // 1. MAPA CALOR
             if (m && d) {
                 const key = `${m}-${d}`;
                 if (!globalData.dayStats[key]) globalData.dayStats[key] = { count: 0, occasions: {} };
@@ -152,7 +153,6 @@
                 });
             }
 
-            // 2. INVENTARIO (Lógica Canonizadora)
             if (item.Título) {
                 let rawT = item.Título.trim();
                 if (/^\d/.test(rawT) || rawT.toLowerCase().includes("óperas") || rawT.startsWith("“")) return;
@@ -160,13 +160,11 @@
                 let tProc = rawT.includes("...") ? lastFull : rawT;
                 if (!rawT.includes("...") && !rawT.startsWith("“")) lastFull = rawT;
 
-                // Split por "o" para Adriano o Nitteti
-                tProc.split(/\s+o\s+/i).forEach(frag => {
+                tProc.split(/, | y | o /i).forEach(frag => {
                     let isDoubt = frag.includes("?") || rawT.includes("?");
                     let clean = cleanT(frag);
                     if (clean.length < 3) return;
 
-                    // Buscar nombre canónico (Semiramide -> Semiramide reconocida)
                     let finalKey = clean;
                     let base = clean.toLowerCase().split(' ')[0].replace(/[^\w]/g, "");
                     if (CANON[base]) finalKey = CANON[base];
@@ -180,12 +178,15 @@
                     if (!isDoubt) op.seguras++;
                     op.años.add(item.Año);
                     
-                    if (item.Compositor && item.Compositor.length > 3 && !item.Compositor.includes("...")) op.comp = item.Compositor;
-                    if (item.Libreto && item.Libreto.length > 3 && !item.Libreto.includes("...")) op.lib = item.Libreto;
+                    if (item.Compositor && item.Compositor.length > 3 && !item.Compositor.includes("...")) metaDB[finalKey + "_c"] = item.Compositor;
+                    if (item.Libreto && item.Libreto.length > 3 && !item.Libreto.includes("...")) metaDB[finalKey + "_l"] = item.Libreto;
+
+                    op.comp = metaDB[finalKey + "_c"] || "—";
+                    op.lib = metaDB[finalKey + "_l"] || "—";
 
                     if (oRaw) oRaw.split('+').forEach(f => {
                         let txt = f.trim();
-                        if (txt.length > 3 && !txt.includes("“")) op.occasions.add(txt);
+                        if (esFestejoReal(txt)) op.occasions.add(txt);
                     });
                 });
             }
@@ -211,8 +212,8 @@
                 <span class="txt-repos">${repos || "—"}</span>
                 <span class="txt-noches">${noches}</span>
                 <div class="opera-detalle" id="det-${i}">
-                    <strong>Compositor:</strong> ${op.comp || "—"}<br>
-                    <strong>Libretista:</strong> ${op.lib || "—"}<br>
+                    <strong>Compositor:</strong> ${op.comp}<br>
+                    <strong>Libretista:</strong> ${op.lib}<br>
                     <strong>Ocasiones detectadas:</strong> ${Array.from(op.occasions).join(', ') || "Funciones ordinarias"}
                 </div>
             </div>`;
@@ -262,10 +263,13 @@
         MESES.forEach(m => {
             let occMap = {};
             globalData.raw.forEach(item => {
-                if (detectarMes(item['Día']) === m && item['Ocasión'] && item['Ocasión'].length > 5 && !item['Ocasión'].includes("“")) {
+                if (detectarMes(item['Día']) === m && item['Ocasión']) {
                     item['Ocasión'].split('+').forEach(o => {
-                        let txt = o.trim(); if (!occMap[txt]) occMap[txt] = new Set();
-                        occMap[txt].add(item.Año);
+                        let txt = o.trim(); 
+                        if (esFestejoReal(txt)) {
+                            if (!occMap[txt]) occMap[txt] = new Set();
+                            occMap[txt].add(item.Año);
+                        }
                     });
                 }
             });
