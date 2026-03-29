@@ -10,11 +10,10 @@
         body { font-family: 'Georgia', serif; background-color: #f4f1ea; color: #2c3e50; margin: 0; padding: 20px; }
         .contenedor { max-width: 1100px; margin: 0 auto; background: var(--fondo); padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         
-        /* ENCABEZADO INSTITUCIONAL */
-        h1 { color: var(--azul); font-size: 1.3em; text-align: center; line-height: 1.4; max-width: 950px; border-bottom: 2px double var(--oro); padding-bottom: 15px; margin: 0 auto 0.8em auto; }
-        
-        .nav-farinelli { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; font-family: sans-serif; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; }
-        .nav-farinelli a { text-decoration: none; color: var(--azul); font-weight: bold; padding: 5px 10px; border: 1px solid transparent; transition: 0.3s; }
+        /* CABECERA IDÉNTICA A TEXTOS.HTML */
+        h1 { color: var(--azul); font-size: 1.3em; text-align: center; line-height: 1.4; max-width: 900px; border-bottom: 2px double var(--oro); padding-bottom: 15px; margin: 0 auto 0.8em auto; }
+        .nav-farinelli { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
+        .nav-farinelli a { text-decoration: none; color: var(--azul); font-weight: bold; padding: 5px 10px; border: 1px solid transparent; }
         .nav-farinelli .active { border: 1px solid var(--azul); background: var(--azul); color: white !important; border-radius: 4px; }
         
         .seccion-titulo { text-align: center; font-variant: small-caps; color: var(--oro); border-bottom: 1px solid var(--oro); margin: 30px 0 15px 0; padding-bottom: 5px; font-size: 1.2em; }
@@ -26,12 +25,8 @@
         .day-cell { height: 18px; background: #f0f0f0; border-radius: 1px; cursor: pointer; }
         #infoDia { display: none; background: var(--azul); color: white; padding: 15px; border-radius: 8px; margin: 10px auto 30px; text-align: center; border-left: 5px solid var(--oro); }
 
-        /* TABLA INVENTARIO */
         .tabla-operas { max-width: 1000px; margin: 0 auto; background: white; border: 1px solid var(--borde); border-radius: 8px; overflow: hidden; }
-        .fila-header-tabla { 
-            display: grid; grid-template-columns: 100px 1.5fr 1fr 140px; background: #f1f2f6; 
-            padding: 12px 15px; font-weight: bold; font-size: 0.85em; text-transform: uppercase; color: var(--azul); border-bottom: 2px solid var(--oro); 
-        }
+        .fila-header-tabla { display: grid; grid-template-columns: 100px 1.5fr 1fr 140px; background: #f1f2f6; padding: 12px 15px; font-weight: bold; font-size: 0.85em; text-transform: uppercase; color: var(--azul); border-bottom: 2px solid var(--oro); }
         .scroll-area { max-height: 550px; overflow-y: auto; }
         .opera-row { display: grid; grid-template-columns: 100px 1.5fr 1fr 140px; padding: 12px 15px; border-bottom: 1px solid #eee; align-items: center; cursor: pointer; }
         .opera-row:hover { background: #fdfaf3; }
@@ -41,10 +36,8 @@
         .txt-noches { font-size: 0.85em; font-family: sans-serif; text-align: right; color: #333; }
         .opera-detalle { display: none; padding: 20px; background: #f9f6ef; border-bottom: 2px solid var(--oro); font-size: 0.9em; line-height: 1.6; grid-column: 1 / span 4; }
 
-        /* EFEMÉRIDES (AÑOS DEBAJO) */
         #calendarioFestivo { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px; }
         .mes-bloque { background: white; padding: 15px; border: 1px solid var(--borde); border-radius: 8px; width: 280px; box-sizing: border-box; }
-        .evento-item { margin-bottom: 12px; }
         .evento-titulo { font-size: 0.85em; font-weight: bold; display: block; margin-bottom: 5px; line-height: 1.3; color: var(--azul); }
         .años-wrapper { display: flex; flex-wrap: wrap; gap: 4px; }
         .tag-año { background: #d4af37; color: black; padding: 1px 6px; border-radius: 3px; font-size: 0.75em; font-family: sans-serif; font-weight: bold; }
@@ -56,18 +49,16 @@
 <body>
 
 <div class="contenedor">
-    <h1>Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)</h1>
+    <h1>Documentario de prensa de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli (1747–1758)</h1>
 
     <nav class="nav-farinelli">
         <a href="index.html">Documentario</a>
-        <a href="analisis.html" class="active">Análisis del calendario</a>
+        <a href="analisis.html" class="active">Estadísticas y análisis</a>
         <a href="textos.html">Análisis léxico</a>
     </nav>
 
     <h2 class="seccion-titulo">Evolución de la Actividad Lírica (1747–1758)</h2>
-    <div class="chart-container">
-        <canvas id="chartAnual"></canvas>
-    </div>
+    <div class="chart-container"><canvas id="chartAnual"></canvas></div>
 
     <h2 class="seccion-titulo">Mapa de Intensidad de Representaciones Diarias</h2>
     <div class="calendar-heatmap" id="calendarHeatmap"></div>
@@ -108,7 +99,6 @@
         return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/l'|l’|la |el |l /g, "").replace(/[^\w]/g, "").trim();
     }
 
-    // Identifica las óperas "madre" (las que tienen compositor)
     function prepararMaestras(data) {
         data.forEach(item => {
             if (item.Título && item.Compositor && item.Compositor.trim().length > 3) {
@@ -121,7 +111,6 @@
         });
     }
 
-    // Busca a qué ópera maestra pertenece un título cualquiera
     function encontrarMaestra(titulo) {
         let target = normalizar(cleanT(titulo));
         if (!target) return null;
