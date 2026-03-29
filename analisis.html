@@ -73,18 +73,17 @@
         <a href="textos.html">Análisis léxico</a>
     </nav>
 
+        <h2 class="seccion-titulo">Inventario Crítico de Óperas</h2>
+    <div style="text-align: center; margin-bottom: 20px;">
+        <button class="btn-orden active" onclick="reRenderOperas('año')">Por Año de Estreno</button>
+        <button class="btn-orden" onclick="reRenderOperas('alfa')">Alfabético</button></div>
+    
     <h2 class="seccion-titulo">Evolución de la Actividad Lírica (1747–1758)</h2>
     <div class="chart-container"><canvas id="chartAnual"></canvas></div>
 
     <h2 class="seccion-titulo">Mapa de Intensidad de Representaciones Diarias</h2>
     <div class="calendar-heatmap" id="calendarHeatmap"></div>
     <div id="infoDia"></div>
-
-    <h2 class="seccion-titulo">Inventario Crítico de Óperas</h2>
-    <div style="text-align: center; margin-bottom: 20px;">
-        <button class="btn-orden active" onclick="reRenderOperas('año')">Por Año de Estreno</button>
-        <button class="btn-orden" onclick="reRenderOperas('alfa')">Alfabético</button>
-    </div>
     
     <div class="tabla-operas">
         <div class="fila-header-tabla"><span>Estreno</span><span>Título</span><span>Reposiciones</span><span style="text-align: right;">Noches</span></div>
