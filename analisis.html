@@ -22,11 +22,11 @@
         .day-cell { height: 18px; background: #f0f0f0; border-radius: 1px; cursor: pointer; transition: 0.2s; }
         #infoDia { display: none; background: var(--azul); color: white; padding: 15px; border-radius: 8px; margin: 10px auto 30px; max-width: 850px; text-align: center; border-left: 5px solid var(--oro); }
 
-        /* TABLA INVENTARIO */
+        /* TABLA INVENTARIO PROFESIONAL */
         .tabla-operas { max-width: 1000px; margin: 0 auto; background: white; border: 1px solid var(--borde); border-radius: 8px; overflow: hidden; }
         .fila-header { 
             display: grid; 
-            grid-template-columns: 90px 1.5fr 1fr 140px; 
+            grid-template-columns: 100px 1.5fr 1fr 140px; 
             background: #f1f2f6; 
             padding: 12px 15px; 
             font-weight: bold; 
@@ -38,7 +38,7 @@
         .scroll-area { max-height: 550px; overflow-y: auto; }
         .opera-row { 
             display: grid; 
-            grid-template-columns: 90px 1.5fr 1fr 140px; 
+            grid-template-columns: 100px 1.5fr 1fr 140px; 
             padding: 12px 15px; 
             border-bottom: 1px solid #eee; 
             align-items: center;
@@ -51,7 +51,7 @@
         .txt-noches { font-size: 0.85em; font-family: sans-serif; text-align: right; }
         .opera-detalle { display: none; padding: 15px; background: #f9f6ef; border-bottom: 2px solid var(--oro); font-size: 0.9em; line-height: 1.6; grid-column: 1 / span 4; }
 
-        .btn-orden { background: white; border: 1px solid var(--oro); color: var(--oro); padding: 5px 12px; cursor: pointer; font-variant: small-caps; margin: 0 10px; }
+        .btn-orden { background: white; border: 1px solid var(--oro); color: var(--oro); padding: 5px 12px; cursor: pointer; font-variant: small-caps; margin: 0 5px; }
         .btn-orden.active { background: var(--azul); color: white; border-color: var(--azul); }
         .grid-graficas { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0; }
         .lista-compacta { background: white; border: 1px solid var(--borde); border-radius: 8px; max-height: 300px; overflow-y: auto; }
@@ -77,7 +77,7 @@
     <div id="infoDia"></div>
 
     <h2 class="seccion-titulo" style="margin-top:50px">Inventario de Óperas</h2>
-    <div style="text-align: center; margin-bottom: 20px;">
+    <div style="text-align: center; margin-bottom: 15px;">
         <button class="btn-orden active" id="btn-año" onclick="reRenderOperas('año')">Por Estreno</button>
         <button class="btn-orden" id="btn-alfa" onclick="reRenderOperas('alfa')">Alfabético</button>
     </div>
@@ -110,7 +110,7 @@
     let globalData = { mapOp: {}, mapComp: {}, mapLib: {}, mapFest: {}, raw: [], dayStats: {} };
     const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
-    // Listado canónico basado en tu JSON para agrupar abreviaturas
+    // DICCIONARIO CANÓNICO: Mapeo estricto para evitar duplicados por abreviatura o errores de transcripción
     const CANON = {
         "clemenza": "La clemenza di Tito",
         "angelica": "Angelica e Medoro",
@@ -144,9 +144,17 @@
         return txt.replace(/<\/?[^>]+(>|$)/g, "").replace(/\.\.\./g, "").replace(/[¿?]/g, "").trim();
     }
 
+    function esOcasioValida(txt) {
+        if (!txt || txt.includes("“")) return false;
+        const oL = txt.toLowerCase().replace(/\.$/, "");
+        const dSem = ["lunes","martes","miércoles","miercoles","jueves","viernes","sábado","sabado","domingo"];
+        if (dSem.includes(oL)) return false;
+        return !["días sucesivos", "se repitió", "distintas noches"].some(x => oL.includes(x));
+    }
+
     function procesarTodo(data) {
         let uTit = ""; 
-        let metaCache = {};
+        let metaDB = {}; 
 
         data.forEach(item => {
             const oc = item['Ocasión'] || "";
@@ -154,7 +162,7 @@
             const m = detectarMes(dia);
             const dN = dia ? parseInt(dia.match(/\d+/)) : null;
 
-            // 1. MAPA Y FESTIVIDADES (SECUENCIA GLOBAL, SIN FILTROS)
+            // 1. CALENDARIO Y MAPA (Sin filtros para que cuente todo)
             if (m) {
                 if (dN) {
                     const key = `${m}-${dN}`;
@@ -162,7 +170,7 @@
                     globalData.dayStats[key].count++;
                     if (oc) oc.split('+').forEach(p => {
                         let o = p.trim();
-                        if (o.length > 3 && !o.toLowerCase().includes("domingo") && !o.includes("“")) {
+                        if (o.length > 3 && o.toLowerCase() !== "domingo" && !o.includes("“")) {
                             globalData.dayStats[key].occasions[o] = (globalData.dayStats[key].occasions[o] || 0) + 1;
                         }
                     });
@@ -171,9 +179,7 @@
                     if (!globalData.mapFest[m]) globalData.mapFest[m] = {};
                     oc.split('+').forEach(p => {
                         let o = p.trim();
-                        let oL = o.toLowerCase().replace(/\.$/,"");
-                        const dSem = ["lunes","martes","miércoles","miercoles","jueves","viernes","sábado","sabado","domingo"];
-                        if (o.length > 3 && !dSem.includes(oL) && !oL.includes("días sucesivos") && !o.includes("“")) {
+                        if (o.length > 3 && esOcasioValida(o)) {
                             if (!globalData.mapFest[m][o]) globalData.mapFest[m][o] = new Set();
                             globalData.mapFest[m][o].add(item.Año);
                         }
@@ -181,26 +187,34 @@
                 }
             }
 
-            // 2. INVENTARIO DE ÓPERAS (AGRUPACIÓN INTELIGENTE)
+            // 2. INVENTARIO (LÓGICA ANTI-DUPLICADOS)
             if (item.Título) {
-                let rawT = item.Título.trim();
+                let raw = item.Título.trim();
                 
-                // Ignorar filas de noticias ("3 óperas", listas con comas, etc)
-                if ((rawT.includes(",") && !rawT.toLowerCase().includes(" o ")) || /^\d/.test(rawT) || rawT.toLowerCase().includes("óperas") || rawT.startsWith("“")) return;
+                // Filtro radical: Ignorar filas que no son títulos reales (números, citas, "óperas...")
+                if (/^\d/.test(raw) || raw.includes("óperas") || raw.startsWith("“")) return;
 
-                let tActual = rawT.includes("...") ? uTit : rawT;
-                if (!rawT.includes("...") && !rawT.startsWith("“")) uTit = rawT;
+                let tActual = raw.includes("...") ? uTit : raw;
+                if (!raw.includes("...") && !raw.startsWith("“")) uTit = raw;
 
-                // Separar por " o " para casos como "Adriano o Nitteti"
-                tActual.split(/\s+o\s+/i).forEach(parte => {
-                    let esDuda = parte.includes("?") || rawT.includes("?");
-                    let tL = normalizar(parte);
+                // DIVISIÓN Y ASIGNACIÓN CANÓNICA
+                // Dividimos por "o", "y" o coma para procesar elementos de forma independiente
+                let partes = tActual.split(/, | y | o /i);
+
+                partes.forEach(p => {
+                    let esDuda = p.includes("?") || raw.includes("?");
+                    let tL = normalizar(p);
                     if (!tL || tL.length < 3) return;
 
-                    // Mapeo canónico (Semiramide -> Semiramide riconosciuta)
+                    // Resolución por prefijo (Semiramide -> Semiramide riconosciuta)
                     let finalT = tL;
-                    let base = tL.split(' ')[0].toLowerCase().replace(/[^\w]/g, "");
-                    if (CANON[base]) finalT = CANON[base];
+                    let slug = tL.toLowerCase().replace(/[^\w]/g, "");
+                    for (let key in CANON) {
+                        if (slug.startsWith(key)) {
+                            finalT = CANON[key];
+                            break;
+                        }
+                    }
 
                     if (!globalData.mapOp[finalT]) {
                         globalData.mapOp[finalT] = { años: new Set(), seguras: 0, totales: 0, occasions: new Set(), comp: "", lib: "" };
@@ -211,19 +225,19 @@
                     if (!esDuda) op.seguras++;
                     op.años.add(item.Año);
                     
-                    // Guardar y heredar autores
-                    if (item.Compositor && item.Compositor.length > 3 && !item.Compositor.includes("...")) metaCache[finalT + "_c"] = item.Compositor;
-                    if (item.Libreto && item.Libreto.length > 3 && !item.Libreto.includes("...")) metaCache[finalT + "_l"] = item.Libreto;
+                    // Registro de metadatos (Compositor/Libretista)
+                    if (item.Compositor && item.Compositor.length > 3 && !item.Compositor.includes("...")) metaDB[finalT + "_c"] = item.Compositor;
+                    if (item.Libreto && item.Libreto.length > 3 && !item.Libreto.includes("...")) metaDB[finalT + "_l"] = item.Libreto;
                     
-                    op.comp = metaCache[finalT + "_c"] || "No consta";
-                    op.lib = metaCache[finalT + "_l"] || "No consta";
+                    op.comp = metaDB[finalT + "_c"] || "No consta";
+                    op.lib = metaDB[finalT + "_l"] || "No consta";
 
                     if (oc) oc.split('+').forEach(f => {
-                        let txt = f.trim();
-                        if (txt.length > 3 && !txt.includes("“")) op.occasions.add(txt);
+                        let text = f.trim();
+                        if (text.length > 3 && !text.includes("“")) op.occasions.add(text);
                     });
 
-                    // Autores para listas inferiores
+                    // Autores para las listas inferiores
                     const regAut = (v, target) => {
                         if (v && v !== "No consta") {
                             let aut = v.replace(/\([^\)]+\)/g, "").replace(/ y | , |,/g, " / ").replace(/\s+/g, " ").trim();
@@ -288,10 +302,10 @@
     function verDetalleDia(m, d) {
         const stat = globalData.dayStats[`${m}-${d}`];
         const infoDiv = document.getElementById('infoDia'); infoDiv.style.display = 'block';
-        if (!stat || stat.count === 0) { infoDiv.innerHTML = `<strong>${d} de ${m}:</strong> No hay registros.`; return; }
+        if (!stat || stat.count === 0) { infoDiv.innerHTML = `<strong>${d} de ${m}:</strong> Sin registros.`; return; }
         let topOcc = "Función ordinaria"; let max = 0;
         for (let o in stat.occasions) { if (stat.occasions[o] > max) { max = stat.occasions[o]; topOcc = o; } }
-        infoDiv.innerHTML = `<strong>${d} de ${m}:</strong> ${stat.count} registros históricos.<br><span style="color:var(--oro); font-variant: small-caps;">Causa frecuente:</span> ${topOcc}`;
+        infoDiv.innerHTML = `<strong>${d} de ${m}:</strong> ${stat.count} registros.<br><span style="color:var(--oro); font-variant: small-caps;">Causa:</span> ${topOcc}`;
     }
 
     function renderAutores() {
