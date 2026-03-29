@@ -7,53 +7,28 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --azul: #1a3a5a; --oro: #b8860b; --fondo: #fdfaf3; --borde: #dcdde1; }
-        
         body { font-family: 'Georgia', serif; background-color: #f4f1ea; color: #2c3e50; margin: 0; padding: 20px; }
-        
         .contenedor { max-width: 1100px; margin: 0 auto; background: var(--fondo); padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        
-        h1 {
-            color: var(--azul); font-size: 1.3em; 
-            text-align: center; line-height: 1.4; max-width: 850px;            
-            border-bottom: 2px double var(--oro); padding-bottom: 15px;
-            margin: 0 auto 0.8em auto;
-        }
-
-        .nav-farinelli {
-            display: flex; justify-content: center; gap: 20px; margin-bottom: 30px;
-            font-family: sans-serif; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px;
-        }
-        .nav-farinelli a {
-            text-decoration: none; color: var(--azul); font-weight: bold; padding: 5px 10px; border: 1px solid transparent; transition: 0.3s;
-        }
-        .nav-farinelli a:hover { color: var(--oro); border-bottom: 1px solid var(--oro); }
+        h1 { color: var(--azul); font-size: 1.3em; text-align: center; line-height: 1.4; max-width: 850px; border-bottom: 2px double var(--oro); padding-bottom: 15px; margin: 0 auto 0.8em auto; }
+        .nav-farinelli { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; font-family: sans-serif; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-farinelli a { text-decoration: none; color: var(--azul); font-weight: bold; padding: 5px 10px; border: 1px solid transparent; transition: 0.3s; }
         .nav-farinelli .active { border: 1px solid var(--azul); background: var(--azul); color: white !important; border-radius: 4px; }
-
-        @media (max-width: 600px) { .nav-farinelli { flex-direction: column; align-items: center; gap: 5px; } }
-
         .seccion-titulo { text-align: center; font-variant: small-caps; color: var(--oro); border-bottom: 1px solid var(--oro); margin: 30px 0 15px 0; padding-bottom: 5px; font-size: 1.2em; }
-
         .calendar-heatmap { background: white; padding: 20px; border: 1px solid var(--borde); border-radius: 8px; overflow-x: auto; }
         .heatmap-month-row { display: grid; grid-template-columns: 80px repeat(31, 1fr); gap: 2px; align-items: center; margin-bottom: 4px; }
         .heatmap-month-name { font-size: 0.7em; font-weight: bold; color: var(--azul); text-transform: uppercase; }
         .day-cell { height: 18px; background: #f0f0f0; border-radius: 1px; cursor: pointer; transition: 0.2s; }
-        .day-cell:hover { transform: scale(1.3); z-index: 5; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
-
-        #infoDia { display: none; background: var(--azul); color: white; padding: 15px; border-radius: 8px; margin: 10px auto 30px; max-width: 850px; text-align: center; border-left: 5px solid var(--oro); animation: slideIn 0.3s; }
-        @keyframes slideIn { from { opacity:0; transform: translateY(-10px); } to { opacity:1; transform: translateY(0); } }
-
+        #infoDia { display: none; background: var(--azul); color: white; padding: 15px; border-radius: 8px; margin: 10px auto 30px; max-width: 850px; text-align: center; border-left: 5px solid var(--oro); }
         .lista-compacta { max-width: 850px; margin: 0 auto; background: white; border: 1px solid var(--borde); border-radius: 8px; max-height: 450px; overflow-y: scroll; }
         .opera-header { padding: 12px; display: flex; justify-content: space-between; cursor: pointer; border-bottom: 1px solid #eee; align-items: center; }
         .titulo-opera { font-style: italic; font-weight: bold; color: var(--azul); }
-        .tag-año { background: var(--azul); color: white; padding: 1px 6px; border-radius: 3px; font-size: 0.75em; margin-left: 4px; font-family: sans-serif; }
         .opera-detalle { display: none; padding: 15px; background: #f9f6ef; font-size: 0.9em; border-bottom: 2px solid var(--oro); line-height: 1.6; }
-
         .btn-orden { background: white; border: 1px solid var(--oro); color: var(--oro); padding: 5px 12px; cursor: pointer; font-variant: small-caps; margin: 0 5px; }
         .btn-orden.active { background: var(--azul); color: white; border-color: var(--azul); }
-
         .grid-graficas { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0; }
         #calendarioFestivo { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
         .mes-bloque { background: white; padding: 15px; border: 1px solid var(--borde); border-radius: 8px; width: 250px; flex-grow: 1; min-width: 250px; max-width: 350px; }
+        .tag-año { background: var(--azul); color: white; padding: 1px 6px; border-radius: 3px; font-size: 0.75em; margin-left: 4px; font-family: sans-serif; }
     </style>
 </head>
 <body>
@@ -100,7 +75,6 @@
 <script>
     let globalData = { mapOp: {}, mapComp: {}, mapLib: {}, mapFest: {}, raw: [], dayStats: {} };
     const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-    const HITOS = { 1750: "Boda Infanta Mª Antonia", 1754: "Muerte Carvajal", 1758: "Muerte Bárbara de Braganza" };
 
     fetch('archivo.json').then(r => r.json()).then(data => {
         globalData.raw = data;
@@ -114,86 +88,141 @@
 
     function normalizar(txt) {
         if (!txt) return "";
-        return txt.replace(/<\/?[^>]+(>|$)/g, "").replace(/\.\.\./g, "").trim();
+        return txt.replace(/<\/?[^>]+(>|$)/g, "").replace(/\.\.\./g, "").replace(/[¿?]/g, "").trim();
     }
 
     function procesarTodo(data) {
         let uTit = "";
+        let metaCache = {}; // Cache para arrastrar autores de obras principales a reposiciones
+
         data.forEach(item => {
             const ocasionRaw = item['Ocasión'] || "";
             const diaRaw = item['Día'] || "";
             const m = detectarMes(diaRaw);
             const d = diaRaw ? parseInt(diaRaw.match(/\d+/)) : null;
 
-            // 1. EFEMÉRIDES (CON FILTRO DE PRECISIÓN)
-            if (m && ocasionRaw) {
-                if (!globalData.mapFest[m]) globalData.mapFest[m] = {};
+            if (item.Título) {
+                // Manejo de títulos compuestos ("o") y de herencia ("...")
+                let titBruto = item.Título;
+                if (titBruto.includes("...")) {
+                    titBruto = uTit;
+                } else if (!titBruto.includes("“")) {
+                    uTit = titBruto;
+                }
+
+                // Separar por " o " para generar entradas independientes
+                const partes = titBruto.split(/\s+o\s+/i);
                 
-                ocasionRaw.split('+').forEach(occ => {
-                    let o = occ.trim();
-                    let oLow = o.toLowerCase();
-                    // Limpieza para comparar (ej: "Lunes." -> "lunes")
-                    let oCheck = oLow.replace(/\.$/, "");
+                partes.forEach(p => {
+                    let esDudosa = p.includes("?");
+                    let t = normalizar(p);
+                    if (t === "") return;
 
-                    // Definimos días de la semana "random"
-                    const diasSemana = ["lunes", "martes", "miércoles", "miercoles", "jueves", "viernes", "sábado", "sabado", "domingo"];
-                    
-                    // Solo es "día random" si el texto es exactamente el día.
-                    // Si contiene más info (como "Domingo de Pascua"), es festivo y se guarda.
-                    const esDiaRandom = diasSemana.includes(oCheck);
-                    
-                    const esRelleno = oLow.includes("días sucesivos") || oLow.includes("dias sucesivos") || 
-                                     oLow.includes("“") || oLow.includes("se repitió") || 
-                                     oLow.includes("se repitio") || oLow.includes("distintas noches");
+                    // Registrar o recuperar metadatos
+                    if (item.Compositor && item.Compositor.trim() !== "") metaCache[t + "_comp"] = item.Compositor;
+                    if (item.Libreto && item.Libreto.trim() !== "") metaCache[t + "_lib"] = item.Libreto;
 
-                    if (o.length > 3 && !esDiaRandom && !esRelleno) {
-                        if (!globalData.mapFest[m][o]) globalData.mapFest[m][o] = new Set();
-                        globalData.mapFest[m][o].add(item.Año);
+                    if (!globalData.mapOp[t]) {
+                        globalData.mapOp[t] = { 
+                            años: new Set(), seguras: 0, totales: 0, occasions: new Set(), 
+                            comp: metaCache[t + "_comp"] || "No consta", 
+                            lib: metaCache[t + "_lib"] || "No consta",
+                            fechas: [] 
+                        };
                     }
+
+                    let op = globalData.mapOp[t];
+                    op.totales++;
+                    if (!esDudosa) op.seguras++;
+                    op.años.add(item.Año);
+                    op.fechas.push({ dia: diaRaw, año: item.Año });
+                    
+                    // Asegurar que siempre tenga el autor si ya se conoció en el pasado
+                    if (op.comp === "No consta" && metaCache[t + "_comp"]) op.comp = metaCache[t + "_comp"];
+                    if (op.lib === "No consta" && metaCache[t + "_lib"]) op.lib = metaCache[t + "_lib"];
+
+                    // Registrar Autores para listas
+                    const reg = (valor, target) => {
+                        if (valor && valor !== "No consta") {
+                            let aut = valor.replace(/\([^\)]+\)/g, "").replace(/ y | , |,/g, " / ").replace(/\s+/g, " ").trim();
+                            if (aut) { if (!target[aut]) target[aut] = new Set(); target[aut].add(t); }
+                        }
+                    };
+                    reg(op.comp, globalData.mapComp);
+                    reg(op.lib, globalData.mapLib);
                 });
             }
 
-            // 2. MAPA DE CALOR
-            if (m && d) {
-                const key = `${m}-${d}`;
-                if (!globalData.dayStats[key]) globalData.dayStats[key] = { count: 0, occasions: {} };
-                globalData.dayStats[key].count++;
-                if (ocasionRaw) {
-                    ocasionRaw.split('+').forEach(occ => {
+            // Estadísticas de Efemérides y Mapa de Calor
+            if (m) {
+                if (d) {
+                    const key = `${m}-${d}`;
+                    if (!globalData.dayStats[key]) globalData.dayStats[key] = { count: 0, occasions: {} };
+                    globalData.dayStats[key].count++;
+                    if (ocasionRaw) ocasionRaw.split('+').forEach(occ => {
                         let o = occ.trim();
-                        // En el mapa de calor filtramos domingos sueltos para limpiar el popup
                         if (o.length > 3 && o.toLowerCase() !== "domingo" && !o.includes("“")) {
                             globalData.dayStats[key].occasions[o] = (globalData.dayStats[key].occasions[o] || 0) + 1;
                         }
                     });
                 }
-            }
-
-            // 3. INVENTARIO ÓPERAS (CON FILTRO TÍTULO)
-            let t = normalizar(item.Título);
-            if (item.Título && item.Título.includes("...")) t = uTit;
-            else if (t !== "" && !t.includes("?") && !t.includes("“")) uTit = t;
-
-            if (t !== "" && !t.includes("?") && !t.includes("“")) {
-                if (!globalData.mapOp[t]) globalData.mapOp[t] = { años: new Set(), funciones: 0, occasions: new Set(), comp: item.Compositor || "No consta", lib: item.Libreto || "No consta" };
-                globalData.mapOp[t].años.add(item.Año);
-                globalData.mapOp[t].funciones++;
-                const reg = (campo, target) => {
-                    if (item[campo]) {
-                        let aut = item[campo].replace(/\([^\)]+\)/g, "").replace(/ y | , |,/g, " / ").replace(/\s+/g, " ").trim();
-                        if (aut && !target[aut]) target[aut] = new Set();
-                        if (aut) target[aut].add(t);
-                    }
-                };
-                reg('Compositor', globalData.mapComp);
-                reg('Libreto', globalData.mapLib);
+                if (ocasionRaw) {
+                    if (!globalData.mapFest[m]) globalData.mapFest[m] = {};
+                    ocasionRaw.split('+').forEach(occ => {
+                        let o = occ.trim();
+                        let oLow = o.toLowerCase().replace(/\.$/, "");
+                        const ruidos = ["lunes", "martes", "miercoles", "miércoles", "jueves", "viernes", "sabado", "sábado", "domingo"];
+                        if (o.length > 3 && !ruidos.includes(oLow) && !oLow.includes("días sucesivos") && !o.includes("“")) {
+                            if (!globalData.mapFest[m][o]) globalData.mapFest[m][o] = new Set();
+                            globalData.mapFest[m][o].add(item.Año);
+                        }
+                    });
+                }
             }
         });
     }
 
+    function reRenderOperas(criterio) {
+        const keys = Object.keys(globalData.mapOp);
+        if (criterio === 'alfa') keys.sort();
+        else keys.sort((a,b) => globalData.mapOp[a].fechas[0].año - globalData.mapOp[b].fechas[0].año);
+        
+        document.getElementById('btn-alfa').className = criterio === 'alfa' ? 'btn-orden active' : 'btn-orden';
+        document.getElementById('btn-año').className = criterio === 'año' ? 'btn-orden active' : 'btn-orden';
+
+        document.getElementById('listaOperas').innerHTML = keys.map((k, i) => {
+            const op = globalData.mapOp[k];
+            const estreno = op.fechas[0];
+            const repos = op.fechas.slice(1).map(f => `${f.dia} ${f.año}`).join(', ');
+            const nochesTxt = op.seguras === op.totales ? op.totales : `entre ${op.seguras} y ${op.totales}`;
+
+            return `
+            <div class="opera-row">
+                <div class="opera-header" onclick="toggleDetalle(${i})">
+                    <div style="flex: 1; display: flex; gap: 20px; align-items: center;">
+                        <span style="font-size: 0.75em; color: var(--oro); min-width: 130px; font-family: sans-serif; text-transform: uppercase;">Estreno: ${estreno.dia} ${estreno.año}</span>
+                        <span class="titulo-opera">${k}</span>
+                    </div>
+                    <span style="font-size: 0.85em; font-family: sans-serif;">Noches: ${nochesTxt}</span>
+                </div>
+                <div class="opera-detalle" id="det-${i}">
+                    <strong>Compositor:</strong> ${op.comp}<br>
+                    <strong>Libretista:</strong> ${op.lib}<br>
+                    <strong>Reposiciones:</strong> ${repos || "Ninguna registrada en este periodo."}
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function toggleDetalle(id) {
+        const el = document.getElementById('det-' + id);
+        const disp = el.style.display;
+        document.querySelectorAll('.opera-detalle').forEach(d => d.style.display = 'none');
+        el.style.display = disp === 'block' ? 'none' : 'block';
+    }
+
     function renderCalendarHeatmap() {
-        const container = document.getElementById('calendarHeatmap');
-        container.innerHTML = "";
+        const container = document.getElementById('calendarHeatmap'); container.innerHTML = "";
         MESES.forEach(m => {
             let row = `<div class="heatmap-month-row"><div class="heatmap-month-name">${m}</div>`;
             for (let d = 1; d <= 31; d++) {
@@ -209,52 +238,16 @@
 
     function verDetalleDia(mes, dia) {
         const stat = globalData.dayStats[`${mes}-${dia}`];
-        const infoDiv = document.getElementById('infoDia');
-        infoDiv.style.display = 'block';
-        if (!stat || stat.count === 0) {
-            infoDiv.innerHTML = `<strong>${dia} de ${mes}:</strong> No se registran funciones.`;
-            return;
-        }
-        let topOcc = "Función ordinaria";
-        let max = 0;
-        for (let o in stat.occasions) {
-            if (stat.occasions[o] > max) { max = stat.occasions[o]; topOcc = o; }
-        }
+        const infoDiv = document.getElementById('infoDia'); infoDiv.style.display = 'block';
+        if (!stat || stat.count === 0) { infoDiv.innerHTML = `<strong>${dia} de ${mes}:</strong> No hay funciones.`; return; }
+        let topOcc = "Función ordinaria"; let max = 0;
+        for (let o in stat.occasions) { if (stat.occasions[o] > max) { max = stat.occasions[o]; topOcc = o; } }
         infoDiv.innerHTML = `<strong>${dia} de ${mes}:</strong> ${stat.count} funciones registradas.<br><span style="color:var(--oro); font-variant: small-caps;">Causa:</span> ${topOcc}`;
-    }
-
-    function reRenderOperas(criterio) {
-        const keys = Object.keys(globalData.mapOp);
-        if (criterio === 'alfa') keys.sort();
-        else keys.sort((a,b) => Math.min(...globalData.mapOp[a].años) - Math.min(...globalData.mapOp[b].años));
-        document.getElementById('btn-alfa').className = criterio === 'alfa' ? 'btn-orden active' : 'btn-orden';
-        document.getElementById('btn-año').className = criterio === 'año' ? 'btn-orden active' : 'btn-orden';
-        document.getElementById('listaOperas').innerHTML = keys.map((k, i) => `
-            <div class="opera-row">
-                <div class="opera-header" onclick="toggleDetalle(${i})">
-                    <span class="titulo-opera">${k}</span>
-                    <div>${Array.from(globalData.mapOp[k].años).sort().map(a => `<span class="tag-año">${a}</span>`).join('')}</div>
-                </div>
-                <div class="opera-detalle" id="det-${i}">
-                    <strong>Compositor:</strong> ${globalData.mapOp[k].comp}<br>
-                    <strong>Libretista:</strong> ${globalData.mapOp[k].lib}<br>
-                    <strong>Frecuencia:</strong> ${globalData.mapOp[k].funciones} noches en cartel.
-                </div>
-            </div>`).join('');
-    }
-
-    function toggleDetalle(id) {
-        const el = document.getElementById('det-' + id);
-        const disp = el.style.display;
-        document.querySelectorAll('.opera-detalle').forEach(d => d.style.display = 'none');
-        el.style.display = disp === 'block' ? 'none' : 'block';
     }
 
     function renderAutores() {
         const draw = (map, id) => {
-            document.getElementById(id).innerHTML = "<ul>" + Object.keys(map).sort().map(k => `
-                <li style="padding:8px; border-bottom:1px solid #eee; font-size:0.85em;">
-                <strong>${k}</strong><br><small><i>${Array.from(map[k]).join(', ')}</i></small></li>`).join('') + "</ul>";
+            document.getElementById(id).innerHTML = "<ul>" + Object.keys(map).sort().map(k => `<li style="padding:8px; border-bottom:1px solid #eee; font-size:0.85em;"><strong>${k}</strong><br><small><i>${Array.from(map[k]).join(', ')}</i></small></li>`).join('') + "</ul>";
         };
         draw(globalData.mapComp, 'listaCompositores');
         draw(globalData.mapLib, 'listaLibretistas');
