@@ -19,8 +19,17 @@
   letter-spacing: 1px;
 }
 .nav-farinelli a {
-      text-decoration: none; color: var(--azul); font-weight: bold; padding: 5px 10px; transition: 0.3s;
-    }
+  text-decoration: none;
+  color: #1a3a5a;
+  font-weight: bold;
+  padding: 5px 10px;
+  border: 1px solid transparent;
+  transition: 0.3s;
+}
+.nav-farinelli a:hover {
+  color: #b8860b;
+  border-bottom: 1px solid #b8860b;
+}
 .nav-farinelli .active {
   border: 1px solid #1a3a5a;
   background: #1a3a5a;
@@ -100,9 +109,14 @@
     }
     /* Título general */
     h1 {
-      color: var(--azul); font-size: 1.3em; margin: 0 auto 0.8em auto;
-      text-align: center; line-height: 1.4; max-width: 850px;            
-      border-bottom: 2px double var(--oro); padding-bottom: 15px;
+      color: #1a3a5a; /* Ajuste sintonía */
+      font-size: 1.3em; 
+      text-align: center; 
+      line-height: 1.4; 
+      max-width: 850px;    
+      margin: 0 auto 0.8em auto;
+      border-bottom: 2px double #b8860b; /* Ajuste sintonía */
+      padding-bottom: 15px; /* Ajuste sintonía */
     }
 
   /* Texto bajo el título, centrado */
@@ -506,7 +520,8 @@ td button.btn-ver-referencia {
 <body>
     <div class="contenedor">
   <h1>
-    Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)
+    Documentario de prensa y calendario de las representaciones de ópera italiana 
+    organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)
   </h1>
 
   <nav class="nav-farinelli">
