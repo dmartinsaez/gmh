@@ -35,7 +35,7 @@
             color: var(--azul);
             border-bottom: 2px solid var(--oro);
         }
-        .scroll-area { max-height: 550px; overflow-y: auto; }
+        .scroll-area { max-height: 600px; overflow-y: auto; }
         .opera-row { 
             display: grid; 
             grid-template-columns: 90px 1.5fr 1.2fr 130px; 
@@ -73,7 +73,7 @@
         <canvas id="chartAnual"></canvas>
     </div>
 
-    <h2 class="seccion-titulo">Actividad diaria (Mapa de Calor)</h2>
+    <h2 class="seccion-titulo">Mapa de Actividad Diaria</h2>
     <div class="calendar-heatmap" id="calendarHeatmap"></div>
     <div id="infoDia"></div>
 
@@ -101,6 +101,7 @@
     let globalData = { mapOp: {}, raw: [], dayStats: {} };
     const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
+    // Mapeo Canónico Estricto para agrupar abreviaturas y unificar Semiramides
     const CANON = {
         "clemenza": "La clemenza di Tito", "angelica": "Angelica e Medoro",
         "polifemo": "Polifemo y Galatea", "vello": "Vello d’oro conquistato",
@@ -124,12 +125,21 @@
 
     function esFestejoReal(txt) {
         if (!txt || txt.includes("“") || txt.includes("\"")) return false;
-        const oL = txt.toLowerCase().trim();
-        const dias = ["lunes", "martes", "miércoles", "miercoles", "jueves", "viernes", "sábado", "sabado", "domingo"];
-        // Bloquear si es solo un día de la semana, pero permitir si es "Domingo de Pascua"
-        if (dias.includes(oL.replace(/\.$/,""))) return false;
-        if (["días sucesivos", "se repitió", "distintas noches"].some(r => oL.includes(r))) return false;
-        return oL.length > 4;
+        let t = txt.toLowerCase().trim().replace(/\.$/, "");
+        const diasSemanales = ["lunes", "martes", "miércoles", "miercoles", "jueves", "viernes", "sábado", "sabado", "domingo"];
+        
+        // Bloquear si es SOLO un día de la semana, pero permitir si es una fiesta específica
+        if (diasSemanales.includes(t)) return false;
+        
+        // Excepciones para mantener fiestas que contienen nombres de días
+        const fiestasSagradas = ["pascua", "cuasimodo", "nombre de jesus", "espíritu santo", "nochebuena", "navidad", "reyes", "purificacion", "expectacion"];
+        if (fiestasSagradas.some(f => t.includes(f))) return true;
+
+        // Eliminar otros ruidos comunes
+        const ruidos = ["días sucesivos", "dias sucesivos", "se repitió", "se repitio", "distintas noches", "diferentes noches", "se continuan", "se continúan", "óperas", "operas"];
+        if (ruidos.some(r => t.includes(r))) return false;
+
+        return t.length > 5;
     }
 
     function procesarTodo(data) {
@@ -142,6 +152,7 @@
             const m = detectarMes(dRaw);
             const d = dRaw ? parseInt(dRaw.match(/\d+/)) : null;
 
+            // 1. LÓGICA DE CALENDARIO (MAPA Y GRÁFICAS)
             if (m && d) {
                 const key = `${m}-${d}`;
                 if (!globalData.dayStats[key]) globalData.dayStats[key] = { count: 0, occasions: {} };
@@ -153,18 +164,22 @@
                 });
             }
 
+            // 2. LÓGICA DE INVENTARIO (AGRUPACIÓN Y LIMPIEZA)
             if (item.Título) {
                 let rawT = item.Título.trim();
+                // Ignorar filas que no son títulos reales (notas de prensa)
                 if (/^\d/.test(rawT) || rawT.toLowerCase().includes("óperas") || rawT.startsWith("“")) return;
 
                 let tProc = rawT.includes("...") ? lastFull : rawT;
                 if (!rawT.includes("...") && !rawT.startsWith("“")) lastFull = rawT;
 
+                // Separar títulos dobles o dudas para repartir el conteo
                 tProc.split(/, | y | o /i).forEach(frag => {
                     let isDoubt = frag.includes("?") || rawT.includes("?");
                     let clean = cleanT(frag);
                     if (clean.length < 3) return;
 
+                    // Unificar bajo nombre canónico (ej. Semiramide -> Semiramide reconocida)
                     let finalKey = clean;
                     let base = clean.toLowerCase().split(' ')[0].replace(/[^\w]/g, "");
                     if (CANON[base]) finalKey = CANON[base];
@@ -178,6 +193,7 @@
                     if (!isDoubt) op.seguras++;
                     op.años.add(item.Año);
                     
+                    // Mantener metadatos vinculados
                     if (item.Compositor && item.Compositor.length > 3 && !item.Compositor.includes("...")) metaDB[finalKey + "_c"] = item.Compositor;
                     if (item.Libreto && item.Libreto.length > 3 && !item.Libreto.includes("...")) metaDB[finalKey + "_l"] = item.Libreto;
 
@@ -214,7 +230,7 @@
                 <div class="opera-detalle" id="det-${i}">
                     <strong>Compositor:</strong> ${op.comp}<br>
                     <strong>Libretista:</strong> ${op.lib}<br>
-                    <strong>Ocasiones detectadas:</strong> ${Array.from(op.occasions).join(', ') || "Funciones ordinarias"}
+                    <strong>Festividades asociadas:</strong> ${Array.from(op.occasions).join(', ') || "Funciones ordinarias"}
                 </div>
             </div>`;
         }).join('');
@@ -243,17 +259,17 @@
     function verDetalleDia(m, d) {
         const stat = globalData.dayStats[`${m}-${d}`];
         const infoDiv = document.getElementById('infoDia'); infoDiv.style.display = 'block';
-        if (!stat) { infoDiv.innerHTML = `<strong>${d} de ${m}:</strong> Sin registros.`; return; }
+        if (!stat) { infoDiv.innerHTML = `<strong>${d} de ${m}:</strong> Sin registros documentales.`; return; }
         let topOcc = "Función ordinaria"; let max = 0;
         for (let o in stat.occasions) { if (stat.occasions[o] > max) { max = stat.occasions[o]; topOcc = o; } }
-        infoDiv.innerHTML = `<strong>${d} de ${m}:</strong> ${stat.count} registros.<br><span style="color:var(--oro); font-variant: small-caps;">Ocasión:</span> ${topOcc}`;
+        infoDiv.innerHTML = `<strong>${d} de ${m}:</strong> ${stat.count} registros históricos.<br><span style="color:var(--oro); font-variant: small-caps;">Ocasión:</span> ${topOcc}`;
     }
 
     function renderCharts() {
         const años = [...new Set(globalData.raw.map(i => i.Año))].sort();
         new Chart(document.getElementById('chartAnual').getContext('2d'), {
             type: 'line',
-            data: { labels: años, datasets: [{ label: 'Funciones totales', data: años.map(a => globalData.raw.filter(i => i.Año === a).length), borderColor: '#1a3a5a', tension: 0.3 }] },
+            data: { labels: años, datasets: [{ label: 'Actividad Total (Funciones)', data: años.map(a => globalData.raw.filter(i => i.Año === a).length), borderColor: '#1a3a5a', tension: 0.3 }] },
             options: { responsive: true, maintainAspectRatio: false }
         });
     }
