@@ -150,15 +150,15 @@ let rawTextos = [];
         return p;
     }
     
-    function procesarYRenderizar() {
+function procesarYRenderizar() {
         totalBrutasGlobal = 0;
         totalNetasGlobal = 0;
         vocabularioLemasNeto = {};
         palabrasNetasPorAño = {};
         palabrasExcluidasPorAño = {};
 
-        let setTodasLasFormas = new Set(); // Todas las palabras únicas (Señor, Señora...)
-        let setFormasSinExcluidas = new Set(); // Palabras únicas quitando las vacías
+        let setTodasLasFormas = new Set(); 
+        let setFormasSinExcluidas = new Set(); 
 
         rawTextos.forEach(item => {
             let año = item.Año || "S/D";
@@ -167,22 +167,27 @@ let rawTextos = [];
                 palabrasExcluidasPorAño[año] = 0;
             }
 
-            let palabras = item.Transcripción.replace(/<[^>]+>/g, " ").match(/[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]+/g) || [];
+            // 1. LIMPIEZA CRÍTICA: Quitamos HTML y luego TODO lo que no sean letras o números
+            // Esto evita que "ópera," y "ópera" cuenten como dos cosas distintas.
+            let textoLimpio = item.Transcripción.replace(/<[^>]+>/g, " ");
+            
+            // 2. EXTRACCIÓN PURA: Solo cogemos las palabras, ignorando signos de puntuación
+            let palabras = textoLimpio.match(/[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]+/g) || [];
             
             palabras.forEach(p => {
                 let pLimpia = p.toLowerCase().trim();
-                if (!pLimpia) return;
+                if (pLimpia.length <= 1 && pLimpia !== "y" && pLimpia !== "a") return; 
 
                 totalBrutasGlobal++;
-                setTodasLasFormas.add(pLimpia); // AQUÍ: Contamos la forma real
+                setTodasLasFormas.add(pLimpia); 
 
+                // Comprobamos contra tu lista de stopwords (que está perfecta)
                 if (EXCLUIDAS.includes(pLimpia) || EXCLUIDAS.includes(normalizar(pLimpia))) {
                     palabrasExcluidasPorAño[año]++;
                 } else {
                     totalNetasGlobal++;
-                    setFormasSinExcluidas.add(pLimpia); // AQUÍ: Contamos la forma real sin vacías
+                    setFormasSinExcluidas.add(pLimpia); 
                     
-                    // Solo lematizamos para el conteo de la gráfica Top 10
                     let lema = lematizarParaGrafica(pLimpia);
                     vocabularioLemasNeto[lema] = (vocabularioLemasNeto[lema] || 0) + 1;
                     palabrasNetasPorAño[año]++;
@@ -193,11 +198,10 @@ let rawTextos = [];
             densidadPorAño[año] = totalAnual > 0 ? (palabrasNetasPorAño[año] / totalAnual) * 100 : 0;
         });
 
-        // ACTUALIZACIÓN DE TARJETAS (Petición explícita del usuario)
+        // Actualización de Tarjetas con la limpieza aplicada
         document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
         document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString() + " (Total tras exclusión)";
         
-        // Derecha: Palabras únicas reales | Subtítulo: Únicas sin excluidas
         document.getElementById('m-unicas-bruto').innerText = setTodasLasFormas.size.toLocaleString();
         document.getElementById('m-unicas-neto').innerText = setFormasSinExcluidas.size.toLocaleString() + " (Palabras únicas con significado)";
         
