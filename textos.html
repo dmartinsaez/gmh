@@ -92,6 +92,11 @@
             <div class="recuadro-metodo">
                 <strong>Metodología:</strong> Ranking de los 10 términos con significado pleno más repetidos.
             </div>
+            <div class="recuadro-metodo" style="margin-top: 20px; border-left-color: var(--oro);">
+            <strong>Nota sobre la normalización léxica:</strong> 
+            Para garantizar la coherencia estadística, se han normalizado los términos eliminando tildes e igualando mayúsculas y minúsculas. 
+            Se entiende por <em>lema</em> la unidad abstracta que agrupa las diversas formas de una palabra; en este análisis se han unificado los plurales con sus singulares (p. ej., "óperas" y "opera" computan como un mismo lema).
+        </div>
         </div>
     </div>
 
@@ -113,6 +118,10 @@
 
     const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","43","44","45","5","6","60","7","8","9","a","al","alguna","algunas","alguno","algunos","algún","ambos","ante","antes","aquel","aquellas","aquellos","aqui","bajo","bastante","bien","cada","cierta","como","con","consigue","consiguen","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleo","en","encima","entonces","entre","era","eran","es","esta","estaba","estado","estan","este","fin","fue","fueron","fui","ha","hace","hacen","hacer","han","haviendo","huvo","incluso","ir","la","largo","las","lo","los","m","mas","mayor","mientras","misma","modo","muchos","muy","nos","o","otras","otro","para","pero","poder","podria","podrian","por","porque","primero","puede","pueden","que","quien","s","sabe","saben","saber","se","ser","si","sic","siendo","sin","sobre","solamente","solo","su","sus","tambien","también","tener","tiempo","tiene","tienen","toda","todo","trabajo","tras","tuvo","ultimo","un","una","unas","uno","unos","usa","uso","va","valor","verdad","y"];
 
+    function normalizar(texto) {
+        return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+    
     fetch('archivo.json').then(r => r.json()).then(data => {
         let vistos = new Set();
         rawTextos = data.filter(item => {
@@ -126,25 +135,19 @@
         renderCharts();
         mostrarDiccionario();
     });
-function lematizarSimple(palabra) {
-        // No procesamos palabras muy cortas
-        if (palabra.length <= 3) return palabra;
-        
-        // Norma 1: Si termina en 'es', eliminamos la marca de plural (reyes -> rey, canciones -> cancion)
-        if (palabra.endsWith("es")) {
-            // Excepción para plurales de palabras terminadas en 'z' (voces -> voz)
-            if (palabra.endsWith("ces")) return palabra.slice(0, -3) + "z";
-            return palabra.slice(0, -2);
-        }
-        
-        // Norma 2: Si termina en 's' precedida de vocal, quitamos la 's' (operas -> opera)
-        if (palabra.endsWith("s")) {
-            return palabra.slice(0, -1);
-        }
-        
-        return palabra;
-    }
 
+    function lematizarSimple(palabra) {
+        let p = normalizar(palabra);
+        if (p.length <= 3) return p;
+        if (p.endsWith("es")) {
+            if (p.endsWith("ces")) return p.slice(0, -3) + "z";
+            return p.slice(0, -2);
+        }
+        if (p.endsWith("s")) {
+            return p.slice(0, -1);
+        }
+        return p;
+    }
     function procesarDatos() {
 let setFormasBrutas = new Set(); 
         let setFormasNetas = new Set(); // Para las palabras únicas que NO son vacías
@@ -164,8 +167,8 @@ palabras.forEach(p => {
                 totalBrutasGlobal++;
                 setFormasBrutas.add(pLimpia);
 
-                if (EXCLUIDAS.includes(pLimpia)) {
-                    palabrasExcluidasPorAño[año]++;
+if (EXCLUIDAS.includes(pLimpia) || EXCLUIDAS.includes(normalizar(pLimpia))) {
+    palabrasExcluidasPorAño[año]++;
 } else {
                     totalNetasGlobal++;
                     let lemaBase = lematizarSimple(pLimpia);
@@ -186,11 +189,6 @@ palabras.forEach(p => {
 
 document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
         document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString() + " (Tras exclusión)";
-        
-document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
-        document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString() + " (Tras exclusión)";
-        
-        // Ahora sí: arriba las formas distintas filtradas y abajo los lemas
         document.getElementById('m-unicas-bruto').innerText = setFormasNetas.size.toLocaleString();
         document.getElementById('m-unicas-neto').innerText = setLemasNetos.size.toLocaleString() + " (Lemas únicos)";
         
