@@ -206,12 +206,16 @@
         Chart.getChart("chartTop10")?.destroy();
         Chart.getChart("chartCobertura")?.destroy();
 
+        // Cálculo del máximo real para fijar el eje y que no salte
+        const maxVal = Math.max(...años.map(a => palabrasNetasPorAño[a] + palabrasExcluidasPorAño[a]));
+        const yMaxFijo = Math.ceil(maxVal / 100) * 100;
+
         new Chart(document.getElementById('chartEvolucionAnual'), {
             type: 'line',
             data: {
                 labels: años,
                 datasets: [
-                    { label: '% Densidad', data: años.map(a => densidadPorAño[a]), borderColor: '#e74c3c', yAxisID: 'yRight', fill: false, tension: 0.3, zIndex: 10 },
+                    { label: '% Densidad', data: años.map(a => densidadPorAño[a]), borderColor: '#e74c3c', yAxisID: 'yRight', fill: false, tension: 0.3, zIndex: 10, pointRadius: 4 },
                     { label: 'Palabras con significado', data: años.map(a => palabrasNetasPorAño[a]), backgroundColor: 'rgba(26, 58, 90, 0.7)', fill: true, yAxisID: 'yLeft' },
                     { label: 'Palabras vacías', data: años.map(a => palabrasExcluidasPorAño[a]), backgroundColor: 'rgba(184, 134, 11, 0.3)', fill: true, yAxisID: 'yLeft' }
                 ]
@@ -220,15 +224,30 @@
                 responsive: true, maintainAspectRatio: false, 
                 interaction: { mode: 'index', intersect: false },
                 scales: { 
-                    yLeft: { stacked: true, position: 'left', beginAtZero: true, title: { display: true, text: 'Nº Palabras' } },
-                    yRight: { position: 'right', min: 0, max: 100, grid: { drawOnChartArea: false }, title: { display: true, text: '%' } }
+                    yLeft: { 
+                        stacked: true, 
+                        position: 'left', 
+                        beginAtZero: true, 
+                        max: yMaxFijo, // ESTO FIJA EL EJE PARA QUE NO SALTE
+                        title: { display: true, text: 'Nº Palabras' } 
+                    },
+                    yRight: { 
+                        position: 'right', 
+                        min: 0, max: 100, 
+                        grid: { drawOnChartArea: false }, 
+                        title: { display: true, text: '%' } 
+                    }
                 },
                 plugins: {
                     legend: {
                         onClick: function(e, legendItem, legend) {
                             const index = legendItem.datasetIndex;
                             const ci = legend.chart;
-                            if (ci.isDatasetVisible(index)) { ci.hide(index); } else { ci.show(index); }
+                            if (ci.isDatasetVisible(index)) {
+                                ci.hide(index);
+                            } else {
+                                ci.show(index);
+                            }
                         }
                     }
                 }
