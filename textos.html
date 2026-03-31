@@ -124,11 +124,17 @@
     
 fetch('archivo.json').then(r => r.json()).then(data => {
         let vistos = new Set();
-        rawTextos = data.filter(item => {
+
+rawTextos = data.filter(item => {
             if (!item.Transcripción) return false;
             let txtLimpio = item.Transcripción.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+            if (!txtLimpio || vistos.has(txtLimpio)) return false;
+            vistos.add(txtLimpio);
+            return true;
+        });
 
         totalBrutasGlobal = 0;
+    
         totalNetasGlobal = 0;
         vocabularioLemasNeto = {};
         palabrasNetasPorAño = {};
@@ -199,13 +205,13 @@ if (EXCLUIDAS.includes(pLimpia) || EXCLUIDAS.includes(normalizar(pLimpia))) {
 
 document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
         document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString() + " (Tras exclusión)";
-        document.getElementById('m-unicas-bruto').innerText = setFormasNetas.size.toLocaleString();
-        document.getElementById('m-unicas-neto').innerText = setLemasNetos.size.toLocaleString() + " (Lemas únicos)";
         
-        document.getElementById('totalExcluidasTxt').innerText = 
+document.getElementById('totalExcluidasTxt').innerText = 
             `Diccionario: ${EXCLUIDAS.length} palabras vacías | Total eliminadas del corpus: ${(totalBrutasGlobal - totalNetasGlobal).toLocaleString()}`;
     }
+
     function renderCharts() {
+        
         const años = Object.keys(palabrasNetasPorAño).sort();
         
         // GRÁFICO 1: COMPLEJO (COMPOSICIÓN Y DENSIDAD)
