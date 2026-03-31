@@ -259,16 +259,18 @@
             options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
         });
 
-        // 3. Gráfica de Cobertura (RECORTADA AL 50)
+// 3. Gráfica de Cobertura (RECORTADA ESTRICTAMENTE AL 50)
         const freqs = Object.values(vocabularioLemasNeto).sort((a, b) => b - a);
         const totalNetoLocal = freqs.reduce((a, b) => a + b, 0); 
         let sum = 0;
-        const top50Data = freqs.slice(0, 50).map(f => { sum += f; return (sum / totalNetoLocal) * 100; });
+        const top50Data = freqs.slice(0, 50).map((f, i) => { 
+            sum += f; 
+            return { x: i + 1, y: (sum / totalNetoLocal) * 100 }; 
+        });
 
         new Chart(document.getElementById('chartCobertura'), {
             type: 'line',
             data: { 
-                labels: Array.from({length: 50}, (_, i) => i + 1), 
                 datasets: [{ 
                     label: '% Cobertura acumulada (Top 50)', 
                     data: top50Data, 
@@ -283,13 +285,29 @@
                 responsive: true, 
                 maintainAspectRatio: false, 
                 scales: { 
-                    y: { min: 0, max: 100, title: { display: true, text: '%' } },
+                    y: { 
+                        min: 0, 
+                        max: 100,
+                        title: { display: true, text: '%' }
+                    },
                     x: { 
-                        type: 'category', 
-                        title: { display: true, text: 'Top 50 palabras' },
-                        grid: { display: false }
+                        type: 'linear',
+                        min: 1,
+                        max: 50, // ESTO CORTA LA TABLA EN EL 50 EXACTO
+                        ticks: {
+                            stepSize: 1,
+                            maxRotation: 0,
+                            callback: function(value) {
+                                // Solo mostrar números enteros en el eje
+                                return value;
+                            }
+                        },
+                        title: { display: true, text: 'Top 50 palabras' }
                     }
-                } 
+                },
+                plugins: {
+                    legend: { onClick: null }
+                }
             }
         });
     }
