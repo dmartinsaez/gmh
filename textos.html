@@ -95,7 +95,7 @@
             <div class="recuadro-metodo" style="margin-top: 20px; border-left-color: var(--oro);">
             <strong>Nota sobre la normalización léxica:</strong> 
             Para garantizar la coherencia estadística, se han normalizado los términos eliminando tildes e igualando mayúsculas y minúsculas. 
-            Se entiende por <em>lema</em> la unidad abstracta que agrupa las diversas formas de una palabra; en este análisis se han unificado tanto los plurales como las variaciones de género (p. ej., "óperas", "señor" y "señora" se agrupan en sus lemas base masculinos singulares) para reflejar la frecuencia real de los conceptos.
+            Se entiende por <em>lema</em> la unidad abstracta que agrupa las diversas formas de una palabra; en este análisis se han unificado tanto los plurales como las variaciones de género para reflejar la frecuencia real de los conceptos.
         </div>
         </div>
     </div>
@@ -260,17 +260,22 @@
         });
 
 // 3. Gráfica de Cobertura (RECORTADA ESTRICTAMENTE AL 50)
+// 3. Gráfica de Cobertura (CORRECCIÓN DEFINITIVA DEL EJE)
         const freqs = Object.values(vocabularioLemasNeto).sort((a, b) => b - a);
         const totalNetoLocal = freqs.reduce((a, b) => a + b, 0); 
         let sum = 0;
-        const top50Data = freqs.slice(0, 50).map((f, i) => { 
+        
+        // Solo tomamos los datos de las primeras 50
+        const top50Data = freqs.slice(0, 50).map(f => { 
             sum += f; 
-            return { x: i + 1, y: (sum / totalNetoLocal) * 100 }; 
+            return (sum / totalNetoLocal) * 100; 
         });
 
         new Chart(document.getElementById('chartCobertura'), {
             type: 'line',
             data: { 
+                // Usamos etiquetas de texto para que el gráfico se CORTA en el 50
+                labels: Array.from({length: 50}, (_, i) => (i + 1).toString()), 
                 datasets: [{ 
                     label: '% Cobertura acumulada (Top 50)', 
                     data: top50Data, 
@@ -285,24 +290,15 @@
                 responsive: true, 
                 maintainAspectRatio: false, 
                 scales: { 
-                    y: { 
-                        min: 0, 
-                        max: 100,
-                        title: { display: true, text: '%' }
-                    },
+                    y: { min: 0, max: 100, title: { display: true, text: '%' } },
                     x: { 
-                        type: 'linear',
-                        min: 1,
-                        max: 50, // ESTO CORTA LA TABLA EN EL 50 EXACTO
+                        type: 'category', // CAMBIO CLAVE: Elimina el espacio sobrante a la derecha
+                        title: { display: true, text: 'Top 50 palabras' },
+                        grid: { display: true },
                         ticks: {
-                            stepSize: 1,
-                            maxRotation: 0,
-                            callback: function(value) {
-                                // Solo mostrar números enteros en el eje
-                                return value;
-                            }
-                        },
-                        title: { display: true, text: 'Top 50 palabras' }
+                            autoSkip: true,
+                            maxTicksLimit: 20 // Para que no se amontonen los números abajo
+                        }
                     }
                 },
                 plugins: {
@@ -310,7 +306,6 @@
                 }
             }
         });
-    }
 
     function mostrarDiccionario() {
         const box = document.getElementById('visualizarExcluidas');
