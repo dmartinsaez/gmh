@@ -88,7 +88,7 @@
 
     <div class="seccion-anexos-dupla">
         <div class="col-anexo">
-            <span class="anexo-titulo">Anexo I: Diccionario de Exclusión (A-Z)</span>
+            <span class="anexo-titulo">Anexo I: Términos Excluidos Detectados (A-Z)</span>
             <div id="visualizarExcluidas" class="scroll-anexo"></div>
         </div>
         <div class="col-anexo">
@@ -105,7 +105,8 @@
     let palabrasNetasPorAño = {};
     let palabrasExcluidasPorAño = {}; 
     let densidadPorAño = {};
-    const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","43","44","45","5","6","60","7","8","9","49","51","75","90","114","200","1753","1755","abundantes","ademas","ahora","ambas","anade","p","ni","no","a","al","alguna","algunas","alguno","algunos","algún","ambos","ante","antes","aquel","aquellas","aquellos","aqui","bajo","bastante","bien","cada","cierta","como","con","consigue","consiguen","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleo","en","encima","entonces","entre","era","eran","es","esta","estaba","estado","estan","este","fin","fue","fueron","fui","ha","hace","hacen","hacer","han","haviendo","huvo","incluso","ir","la","largo","las","lo","los","m","mas","mayor","mientras","misma","modo","muchos","muy","nos","o","otras","otro","para","pero","poder","podria","podrian","por","porque","primero","puede","pueden","que","quien","s","sabe","saben","saber","se","ser","si","sic","siendo","sin","sobre","solamente","solo","su","sus","tambien","también","tener","tiempo","tiene","tienen","toda","todo","trabajo","tras","tuvo","ultimo","un","una","unas","uno","unos","usa","uso","va","valor","verdad","y", "habiendo", "habido", "assi", "haviendola", "hecho", "igualmente", "havia", "estas"];
+
+    const EXCLUIDAS_MASTER = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","43","44","45","5","6","60","7","8","9","49","51","75","90","114","200","1753","1755","abundantes","ademas","ahora","ambas","anade","p","ni","no","a","al","alguna","algunas","alguno","algunos","algún","ambos","ante","antes","aquel","aquellas","aquellos","aqui","bajo","bastante","bien","cada","cierta","como","con","consigue","consiguen","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleo","en","encima","entonces","entre","era","eran","es","esta","estaba","estado","estan","este","fin","fue","fueron","fui","ha","hace","hacen","hacer","han","haviendo","huvo","incluso","ir","la","largo","las","lo","los","m","mas","mayor","mientras","misma","modo","muchos","muy","nos","o","otras","otro","para","pero","poder","podria","podrian","por","porque","primero","puede","pueden","que","quien","s","sabe","saben","saber","se","ser","si","sic","siendo","sin","sobre","solamente","solo","su","sus","tambien","también","tener","tiempo","tiene","tienen","toda","todo","trabajo","tras","tuvo","ultimo","un","una","unas","uno","unos","usa","uso","va","valor","verdad","y", "habiendo", "habido", "assi", "haviendola", "hecho", "igualmente", "havia", "estas"];
 
     const collator = new Intl.Collator('es', { sensitivity: 'base', numeric: true });
 
@@ -138,7 +139,7 @@
     
     function procesarYRenderizar() {
         let tNetas = 0, tBrutas = 0;
-        let setTodas = new Set(), setNetas = new Set();
+        let setTodas = new Set(), setNetas = new Set(), setExcluidasReales = new Set();
         vocabularioLemasNeto = {}; 
 
         rawTextos.forEach(item => {
@@ -152,8 +153,10 @@
                 if (pBase.length < 1) return;
                 tBrutas++;
                 setTodas.add(pBase);
-                if (EXCLUIDAS.includes(pBase)) {
+                
+                if (EXCLUIDAS_MASTER.includes(pBase)) {
                     palabrasExcluidasPorAño[año]++;
+                    setExcluidasReales.add(pBase); // Solo añadimos al anexo si estaba en el texto
                 } else {
                     tNetas++;
                     setNetas.add(pBase);
@@ -166,8 +169,9 @@
             densidadPorAño[año] = totalAnual > 0 ? (palabrasNetasPorAño[año] / totalAnual) * 100 : 0;
         });
 
+        // ORDEN ALFABÉTICO DINÁMICO
         const unicasA = Array.from(setNetas).sort(collator.compare);
-        const excluidasA = [...new Set(EXCLUIDAS)].sort(collator.compare);
+        const excluidasA = Array.from(setExcluidasReales).sort(collator.compare);
 
         document.getElementById('listaUnicasPalabras').innerHTML = unicasA.map((p, i) => 
             `<div class="item-linea"><span class="n-idx">${i+1}.</span><span class="p-txt">${p}</span></div>`).join("");
