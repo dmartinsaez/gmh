@@ -127,10 +127,6 @@ fetch('archivo.json').then(r => r.json()).then(data => {
         rawTextos = data.filter(item => {
             if (!item.Transcripción) return false;
             let txtLimpio = item.Transcripción.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-            if (!txtLimpio || vistos.has(txtLimpio)) return false;
-            vistos.add(txtLimpio);
-            return true;
-        });
 
         totalBrutasGlobal = 0;
         totalNetasGlobal = 0;
@@ -138,14 +134,6 @@ fetch('archivo.json').then(r => r.json()).then(data => {
         palabrasNetasPorAño = {};
         palabrasExcluidasPorAño = {};
 
-        procesarDatos();
-        renderCharts();
-        mostrarDiccionario();
-    });
-            if (!txtLimpio || vistos.has(txtLimpio)) return false;
-            vistos.add(txtLimpio);
-            return true;
-        });
         procesarDatos();
         renderCharts();
         mostrarDiccionario();
@@ -216,7 +204,7 @@ document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleS
         
         document.getElementById('totalExcluidasTxt').innerText = 
             `Diccionario: ${EXCLUIDAS.length} palabras vacías | Total eliminadas del corpus: ${(totalBrutasGlobal - totalNetasGlobal).toLocaleString()}`;
-
+    }
     function renderCharts() {
         const años = Object.keys(palabrasNetasPorAño).sort();
         
