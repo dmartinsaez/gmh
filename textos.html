@@ -95,7 +95,7 @@
             <div class="recuadro-metodo" style="margin-top: 20px; border-left-color: var(--oro);">
             <strong>Nota sobre la normalización léxica:</strong> 
             Para garantizar la coherencia estadística, se han normalizado los términos eliminando tildes e igualando mayúsculas y minúsculas. 
-            Se entiende por <em>lema</em> la unidad abstracta que agrupa las diversas formas de una palabra; en este análisis se han unificado los plurales con sus singulares (p. ej., "óperas" y "opera" computan como un mismo lema).
+            Se entiende por <em>lema</em> la unidad abstracta que agrupa las diversas formas de una palabra; en este análisis se han unificado tanto los plurales como las variaciones de género (p. ej., "óperas", "señor" y "señora" se agrupan en sus lemas base masculinos singulares) para reflejar la frecuencia real de los conceptos.
         </div>
         </div>
     </div>
@@ -136,9 +136,16 @@
         mostrarDiccionario();
     });
 
-    function lematizarSimple(palabra) {
+function lematizarSimple(palabra) {
         let p = normalizar(palabra);
         if (p.length <= 3) return p;
+
+        // 1. Unificación de género (femenino a masculino base)
+        // señora -> senor, reinas -> reinos (luego se quita la s)
+        if (p.endsWith("as")) p = p.slice(0, -2) + "o";
+        if (p.endsWith("a")) p = p.slice(0, -1) + "o";
+        
+        // 2. Unificación de plurales
         if (p.endsWith("es")) {
             if (p.endsWith("ces")) return p.slice(0, -3) + "z";
             return p.slice(0, -2);
@@ -148,6 +155,7 @@
         }
         return p;
     }
+    
     function procesarDatos() {
 let setFormasBrutas = new Set(); 
         let setFormasNetas = new Set(); // Para las palabras únicas que NO son vacías
