@@ -109,8 +109,7 @@
 
 
 <script>
-
-let rawTextos = []; 
+    let rawTextos = []; 
     let vocabularioLemasNeto = {}; 
     let palabrasNetasPorAño = {};
     let palabrasExcluidasPorAño = {}; 
@@ -204,7 +203,7 @@ let rawTextos = [];
         Chart.getChart("chartTop10")?.destroy();
         Chart.getChart("chartCobertura")?.destroy();
 
-        // 1. Gráfica de Evolución (ESTÁTICA Y SIN SALTOS)
+        // 1. Gráfica de Evolución (ESTÁTICA)
         new Chart(document.getElementById('chartEvolucionAnual'), {
             type: 'line',
             data: {
@@ -244,9 +243,7 @@ let rawTextos = [];
                     yRight: { position: 'right', min: 0, max: 100, grid: { drawOnChartArea: false }, title: { display: true, text: '%' } }
                 },
                 plugins: {
-                    legend: {
-                        onClick: null // DESACTIVA EL CLIC: YA NO SE MUEVE NADA
-                    }
+                    legend: { onClick: null } 
                 }
             }
         });
@@ -278,15 +275,20 @@ let rawTextos = [];
                     borderColor: '#b8860b', 
                     backgroundColor: 'rgba(184, 134, 11, 0.1)',
                     fill: true,
-                    tension: 0.3
+                    tension: 0.3,
+                    pointRadius: 2
                 }] 
             },
             options: { 
                 responsive: true, 
                 maintainAspectRatio: false, 
                 scales: { 
-                    y: { min: 0, max: 100 },
-                    x: { min: 1, max: 50, title: { display: true, text: 'Top 50 palabras' } }
+                    y: { min: 0, max: 100, title: { display: true, text: '%' } },
+                    x: { 
+                        type: 'category', 
+                        title: { display: true, text: 'Top 50 palabras' },
+                        grid: { display: false }
+                    }
                 } 
             }
         });
@@ -301,8 +303,7 @@ let rawTextos = [];
             s.innerText = p;
             box.appendChild(s);
         });
-    }
-    
+    }    
 </script>
 
     
