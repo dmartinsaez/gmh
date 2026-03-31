@@ -145,16 +145,20 @@
                 palabrasExcluidasPorAño[año] = 0;
             }
 
-            let palabras = item.Transcripción.replace(/<[^>]+>/g, " ").toLowerCase().match(/[a-záéíóúñ]{2,}/gi) || [];
+            let palabras = item.Transcripción.replace(/<[^>]+>/g, " ").toLowerCase().match(/[a-záéíóúñ0-9]+/gi) || [];
             
-            palabras.forEach(p => {
+palabras.forEach(p => {
                 let pLimpia = p.trim();
+                
+                // 1. Conteo BRUTO: Se cuenta SIEMPRE, sea excluida o no
                 totalBrutasGlobal++;
                 setUnicasBrutas.add(pLimpia);
 
+                // 2. Clasificación
                 if (EXCLUIDAS.includes(pLimpia)) {
                     palabrasExcluidasPorAño[año]++;
                 } else {
+                    // 3. Conteo NETO: Solo si no está en tu lista
                     totalNetasGlobal++;
                     let lemaBase = lematizarSimple(pLimpia);
                     setUnicasNetas.add(lemaBase);
