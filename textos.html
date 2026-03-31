@@ -62,12 +62,12 @@
     <div class="metricas-grid">
         <div class="metrica-card">
             <span class="metrica-val-grande" id="m-total-bruto">0</span>
-            <span class="metrica-val-sub" id="m-total-neto">0 (Crítico)</span>
+<span class="metrica-val-sub" id="m-total-neto">0 (Tras exclusión)</span>
             <span class="metrica-lab">Volumen Total de Palabras</span>
         </div>
         <div class="metrica-card">
             <span class="metrica-val-grande" id="m-unicas-bruto">0</span>
-            <span class="metrica-val-sub" id="m-unicas-neto">0 (Críticas)</span>
+<span class="metrica-val-sub" id="m-unicas-neto">0 (Lemas únicos)</span>
             <span class="metrica-lab">Vocabulario Único (Formas)</span>
         </div>
     </div>
@@ -135,8 +135,8 @@
     }
 
     function procesarDatos() {
-        let setUnicasBrutas = new Set();
-        let setUnicasNetas = new Set();
+let setBrutas = new Set(); 
+        let setNetas = new Set();
 
         rawTextos.forEach(item => {
             let año = item.Año || "S/D";
@@ -152,8 +152,7 @@ palabras.forEach(p => {
                 
                 // 1. Conteo BRUTO: Se cuenta SIEMPRE, sea excluida o no
                 totalBrutasGlobal++;
-                setUnicasBrutas.add(pLimpia);
-
+setBrutas.add(pLimpia);
                 // 2. Clasificación
                 if (EXCLUIDAS.includes(pLimpia)) {
                     palabrasExcluidasPorAño[año]++;
@@ -161,7 +160,7 @@ palabras.forEach(p => {
                     // 3. Conteo NETO: Solo si no está en tu lista
                     totalNetasGlobal++;
                     let lemaBase = lematizarSimple(pLimpia);
-                    setUnicasNetas.add(lemaBase);
+setNetas.add(lemaBase);
                     vocabularioLemasNeto[lemaBase] = (vocabularioLemasNeto[lemaBase] || 0) + 1;
                     palabrasNetasPorAño[año]++;
                 }
@@ -171,10 +170,10 @@ palabras.forEach(p => {
             densidadPorAño[año] = totalAño > 0 ? (palabrasNetasPorAño[año] / totalAño) * 100 : 0;
         });
 
-        document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
-        document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString() + " (Crítico)";
-        document.getElementById('m-unicas-bruto').innerText = setUnicasBrutas.size.toLocaleString();
-        document.getElementById('m-unicas-neto').innerText = setUnicasNetas.size.toLocaleString() + " (Críticas)";
+document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
+        document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString() + " (Tras exclusión)";
+        document.getElementById('m-unicas-bruto').innerText = setBrutas.size.toLocaleString();
+        document.getElementById('m-unicas-neto').innerText = setNetas.size.toLocaleString() + " (Lemas únicos)";
         
         document.getElementById('totalExcluidasTxt').innerText = 
             `Diccionario: ${EXCLUIDAS.length} palabras vacías | Total eliminadas del corpus: ${(totalBrutasGlobal - totalNetasGlobal).toLocaleString()}`;
