@@ -126,7 +126,12 @@
         let vistos = new Set();
         rawTextos = data.filter(item => {
             if (!item.Transcripción) return false;
+            // Primero limpiamos HTML y espacios sobrantes
             let txtLimpio = item.Transcripción.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+            if (!txtLimpio || vistos.has(txtLimpio)) return false;
+            vistos.add(txtLimpio);
+            return true;
+        });
             if (!txtLimpio || vistos.has(txtLimpio)) return false;
             vistos.add(txtLimpio);
             return true;
@@ -136,22 +141,33 @@
         mostrarDiccionario();
     });
 
-function lematizarSimple(palabra) {
+    function lematizarSimple(palabra) {
+        // 1. Normalizamos (quitamos acentos)
         let p = normalizar(palabra);
+        
         if (p.length <= 3) return p;
 
-        // 1. Unificación de género (femenino a masculino base)
-        // señora -> senor, reinas -> reinos (luego se quita la s)
-        if (p.endsWith("as")) p = p.slice(0, -2) + "o";
-        if (p.endsWith("a")) p = p.slice(0, -1) + "o";
-        
-        // 2. Unificación de plurales
+        // 2. Unificación MANUAL de género para prensa del XVIII
+        // (Evita inventar palabras como "opero")
+        const mapeoGenero = {
+            "senora": "senor",
+            "senoras": "senor",
+            "reina": "rey",
+            "reinas": "rey",
+            "comedianta": "comediante",
+            "comediantas": "comediante",
+            "actriz": "actor",
+            "actrices": "actor"
+        };
+        if (mapeoGenero[p]) return mapeoGenero[p];
+
+        // 3. Unificación general de plurales
         if (p.endsWith("es")) {
-            if (p.endsWith("ces")) return p.slice(0, -3) + "z";
-            return p.slice(0, -2);
+            if (p.endsWith("ces")) return p.slice(0, -3) + "z"; // voces -> voz
+            return p.slice(0, -2); // reyes -> rey
         }
         if (p.endsWith("s")) {
-            return p.slice(0, -1);
+            return p.slice(0, -1); // operas -> opera
         }
         return p;
     }
