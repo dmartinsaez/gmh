@@ -64,7 +64,7 @@
         </div>
         <div>
             <div class="card-grafica"><canvas id="chartCobertura"></canvas></div>
-            <div class="recuadro-metodo"><strong>Metodología:</strong> Cobertura acumulada (Top 50 lemas).</div>
+            <div class="recuadro-metodo"><strong>Metodología:</strong> Cobertura acumulada (Top 50 lemas). El gráfico se ajusta automáticamente al valor máximo real.</div>
         </div>
         <div>
             <div class="card-grafica"><canvas id="chartTop10"></canvas></div>
@@ -77,14 +77,9 @@
         <div id="visualizarExcluidas" class="lista-excluidas"></div>
     </div>
 
-    <div class="anexo-metodologico">
-        <span class="anexo-titulo">Anexo II: Registro completo de palabras (6.036 términos)</span>
-        <div id="listaCompletaPalabras" class="lista-excluidas" style="font-family: Georgia, serif;"></div>
-    </div>
-
-    <div class="anexo-metodologico">
-        <span class="anexo-titulo">Anexo III: Vocabulario Único / Formas (1.076 términos)</span>
-        <div id="listaUnicasPalabras" class="lista-excluidas" style="font-family: Georgia, serif; border-left: 5px solid var(--oro);"></div>
+    <div class="anexo-metodologico" style="margin-top:30px;">
+        <span class="anexo-titulo">Anexo II: Vocabulario Único / Formas (Términos enumerados por orden alfabético)</span>
+        <div id="listaUnicasPalabras" class="lista-excluidas" style="font-size: 0.85em; border-left: 5px solid var(--oro); font-family: Georgia, serif;"></div>
     </div>
 </div>
 
@@ -97,7 +92,6 @@
     let totalBrutasGlobal = 0;
     let totalNetasGlobal = 0;
 
-    // 1. LISTA DE EXCLUIDAS ACTUALIZADA
     const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","43","44","45","5","6","60","7","8","9","a","al","alguna","algunas","alguno","algunos","algún","ambos","ante","antes","aquel","aquellas","aquellos","aqui","bajo","bastante","bien","cada","cierta","como","con","consigue","consiguen","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleo","en","encima","entonces","entre","era","eran","es","esta","estaba","estado","estan","este","fin","fue","fueron","fui","ha","hace","hacen","hacer","han","haviendo","huvo","incluso","ir","la","largo","las","lo","los","m","mas","mayor","mientras","misma","modo","muchos","muy","nos","o","otras","otro","para","pero","poder","podria","podrian","por","porque","primero","puede","pueden","que","quien","s","sabe","saben","saber","se","ser","si","sic","siendo","sin","sobre","solamente","solo","su","sus","tambien","también","tener","tiempo","tiene","tienen","toda","todo","trabajo","tras","tuvo","ultimo","un","una","unas","uno","unos","usa","uso","va","valor","verdad","y", "habiendo", "habido", "assi", "haviendola", "hecho", "igualmente", "havia", "estas"];
 
     function normalizar(texto) {
@@ -133,7 +127,6 @@
         vocabularioLemasNeto = {}; palabrasNetasPorAño = {}; palabrasExcluidasPorAño = {};
         let setTodasLasFormas = new Set(); 
         let setFormasSinExcluidas = new Set(); 
-        let registroPalabrasNetas = []; // Para el Anexo II
 
         rawTextos.forEach(item => {
             let año = item.Año || "S/D";
@@ -155,7 +148,6 @@
                 } else {
                     totalNetasGlobal++;
                     setFormasSinExcluidas.add(pBase);
-                    registroPalabrasNetas.push(p.toLowerCase()); // Guardamos para la lista completa
                     let lema = lematizarParaGrafica(pBase);
                     vocabularioLemasNeto[lema] = (vocabularioLemasNeto[lema] || 0) + 1;
                     palabrasNetasPorAño[año]++;
@@ -165,17 +157,11 @@
             densidadPorAño[año] = totalAnual > 0 ? (palabrasNetasPorAño[año] / totalAnual) * 100 : 0;
         });
 
-        // ANEXO II: REGISTRO COMPLETO (ORDENADO Y ENUMERADO)
-        const contCompleto = document.getElementById('listaCompletaPalabras');
-        if (contCompleto) {
-            const completoOrdenado = registroPalabrasNetas.sort((a, b) => a.localeCompare('es'));
-            contCompleto.innerHTML = completoOrdenado.map((p, i) => `<span class="num-indice">${i+1}.</span> <strong>${p}</strong>`).join(" | ");
-        }
-
-        // ANEXO III: VOCABULARIO ÚNICO (ORDENADO Y ENUMERADO)
+        // RENDERIZAR VOCABULARIO ÚNICO (ORDEN ALFABÉTICO REAL)
         const contUnicas = document.getElementById('listaUnicasPalabras');
         if (contUnicas) {
-            const unicasOrdenadas = Array.from(new Set(Object.keys(vocabularioLemasNeto))).sort((a, b) => a.localeCompare('es'));
+            // Usamos localeCompare con sensibilidad base para ordenación alfabética real del español
+            const unicasOrdenadas = Array.from(setFormasSinExcluidas).sort((a, b) => a.localeCompare('es', { sensitivity: 'base' }));
             contUnicas.innerHTML = unicasOrdenadas.map((p, i) => `<span class="num-indice">${i+1}.</span> <strong>${p}</strong>`).join(" | ");
         }
 
@@ -194,6 +180,7 @@
         Chart.getChart("chartTop10")?.destroy();
         Chart.getChart("chartCobertura")?.destroy();
 
+        // 1. Evolución
         new Chart(document.getElementById('chartEvolucionAnual'), {
             type: 'line',
             data: {
@@ -208,12 +195,13 @@
                 responsive: true, maintainAspectRatio: false, 
                 scales: { 
                     yLeft: { stacked: true, position: 'left', beginAtZero: true },
-                    yRight: { position: 'right', min: 0, max: 100 } 
+                    yRight: { position: 'right', min: 0, max: 100 } // Escala de densidad
                 },
                 plugins: { legend: { onClick: null } }
             }
         });
 
+        // 2. Top 10
         const top10 = Object.entries(vocabularioLemasNeto).sort((a,b) => b[1]-a[1]).slice(0, 10);
         new Chart(document.getElementById('chartTop10'), {
             type: 'bar',
@@ -224,6 +212,7 @@
             options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
         });
 
+        // 3. Cobertura (CORREGIDA: EL GRÁFICO TOCA EL TECHO VISUAL)
         const freqs = Object.values(vocabularioLemasNeto).sort((a, b) => b - a);
         const totalNetoLocal = freqs.reduce((a, b) => a + b, 0); 
         let sum = 0;
@@ -233,12 +222,29 @@
             type: 'line',
             data: { 
                 labels: Array.from({length: 50}, (_, i) => (i + 1).toString()), 
-                datasets: [{ label: '% Cobertura acumulada', data: top50Data, borderColor: '#b8860b', backgroundColor: 'rgba(184, 134, 11, 0.1)', fill: true, tension: 0.3, pointRadius: 2 }] 
+                datasets: [{ 
+                    label: '% Cobertura acumulada (Top 50 lemas)', 
+                    data: top50Data, 
+                    borderColor: '#b8860b', 
+                    backgroundColor: 'rgba(184, 134, 11, 0.1)', 
+                    fill: true, 
+                    tension: 0.3, 
+                    pointRadius: 2 
+                }] 
             },
             options: { 
-                responsive: true, maintainAspectRatio: false, 
+                responsive: true, 
+                maintainAspectRatio: false, 
                 scales: { 
-                    y: { min: 0, max: 100 },
+                    // Eliminamos max: 100 y beginAtZero: true para que el techo se ajuste automáticamente al valor máximo real de los datos
+                    y: {
+                        ticks: {
+                            // Opcional: añade el símbolo '%' a los ticks
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    },
                     x: { type: 'category', boundaryGap: false }
                 },
                 plugins: { legend: { onClick: null } }
@@ -250,6 +256,7 @@
         const box = document.getElementById('visualizarExcluidas');
         if (box) {
             box.innerHTML = "";
+            // Diccionario también ordenado alfabéticamente
             [...EXCLUIDAS].sort((a, b) => a.localeCompare('es')).forEach(p => {
                 const s = document.createElement('span');
                 s.className = 'palabra-tag';
@@ -259,6 +266,5 @@
         }
     }
 </script>
-    
 </body>
 </html>
