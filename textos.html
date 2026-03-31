@@ -147,7 +147,8 @@ function lematizarSimple(palabra) {
 
     function procesarDatos() {
 let setFormasBrutas = new Set(); 
-        let setLemasNetos = new Set();
+        let setFormasNetas = new Set(); // Para las palabras únicas que NO son vacías
+        let setLemasNetos = new Set();  // Para los conceptos agrupados
 
         rawTextos.forEach(item => {
             let año = item.Año || "S/D";
@@ -165,11 +166,15 @@ palabras.forEach(p => {
 
                 if (EXCLUIDAS.includes(pLimpia)) {
                     palabrasExcluidasPorAño[año]++;
-                } else {
+} else {
                     totalNetasGlobal++;
                     let lemaBase = lematizarSimple(pLimpia);
-                    // AQUÍ ESTÁ EL CAMBIO: El set neto solo guarda lemas (conceptos únicos)
+                    
+                    // IMPORTANTE: Guardamos la forma original en un sitio
+                    // y el lema agrupado en otro para que los números difieran
+                    setFormasNetas.add(pLimpia); 
                     setLemasNetos.add(lemaBase);
+                    
                     vocabularioLemasNeto[lemaBase] = (vocabularioLemasNeto[lemaBase] || 0) + 1;
                     palabrasNetasPorAño[año]++;
                 }
@@ -182,15 +187,11 @@ palabras.forEach(p => {
 document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
         document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString() + " (Tras exclusión)";
         
-        // Calculamos cuántas palabras diferentes quedan tras quitar las EXCLUIDAS
-        // Esto permite comparar vocabulario real filtrado vs lemas finales
-        let formasFiltradasUnicas = new Set();
-        // Recorremos los lemas guardados para extraer las formas únicas procesadas
-        Object.keys(vocabularioLemasNeto).forEach(l => formasFiltradasUnicas.add(l));
-
-        // Arriba: El total de palabras distintas que NO son vacías
-        document.getElementById('m-unicas-bruto').innerText = formasFiltradasUnicas.size.toLocaleString();
-        // Abajo: Esos mismos términos agrupados por su raíz (lematizados)
+document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
+        document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString() + " (Tras exclusión)";
+        
+        // Ahora sí: arriba las formas distintas filtradas y abajo los lemas
+        document.getElementById('m-unicas-bruto').innerText = setFormasNetas.size.toLocaleString();
         document.getElementById('m-unicas-neto').innerText = setLemasNetos.size.toLocaleString() + " (Lemas únicos)";
         
         document.getElementById('totalExcluidasTxt').innerText = 
