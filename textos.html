@@ -270,10 +270,9 @@
             return (sum / totalNetoLocal) * 100; 
         });
 
-        new Chart(document.getElementById('chartCobertura'), {
+new Chart(document.getElementById('chartCobertura'), {
             type: 'line',
             data: { 
-                // Usamos etiquetas de texto para que el gráfico se CORTA en el 50
                 labels: Array.from({length: 50}, (_, i) => (i + 1).toString()), 
                 datasets: [{ 
                     label: '% Cobertura acumulada (Top 50)', 
@@ -289,15 +288,17 @@
                 responsive: true, 
                 maintainAspectRatio: false, 
                 scales: { 
-                    y: { min: 0, max: 100, title: { display: true, text: '%' } },
+                    y: { 
+                        min: 0,
+                        max: 50, // Forzamos el techo al 50% como dijimos
+                        beginAtZero: true,
+                        title: { display: true, text: '%' }
+                    },
                     x: { 
-                        type: 'category', // CAMBIO CLAVE: Elimina el espacio sobrante a la derecha
+                        type: 'category',
+                        boundaryGap: false, // CLAVE: Esto pega el punto 1 y el 50 a los bordes laterales
                         title: { display: true, text: 'Top 50 palabras' },
-                        grid: { display: true },
-                        ticks: {
-                            autoSkip: true,
-                            maxTicksLimit: 20 // Para que no se amontonen los números abajo
-                        }
+                        grid: { display: true }
                     }
                 },
                 plugins: {
