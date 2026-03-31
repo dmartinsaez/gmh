@@ -26,9 +26,11 @@
         
         .anexo-metodologico { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--borde); }
         .anexo-titulo { font-weight: bold; font-size: 1.1em; color: var(--azul); display: block; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .lista-excluidas { background: white; padding: 20px; border: 1px solid #eee; border-radius: 8px; max-height: 300px; overflow-y: auto; font-family: Georgia, serif; font-size: 0.9em; text-align: justify; line-height: 2.2; }
-        .palabra-tag { display: inline-block; background: #f8f9fa; padding: 2px 8px; margin: 3px; border-radius: 4px; border: 1px solid #ddd; font-family: sans-serif; font-size: 0.85em; color: #333; }
-        .num-indice { color: #999; font-size: 0.8em; margin-right: 4px; font-weight: normal; }
+        .lista-excluidas { background: white; padding: 20px; border: 1px solid #eee; border-radius: 8px; max-height: 400px; overflow-y: auto; font-family: Georgia, serif; font-size: 0.9em; text-align: justify; line-height: 2.8; }
+        
+        /* ESTILO UNIFICADO PARA AMBOS ANEXOS */
+        .palabra-tag { display: inline-block; background: #f8f9fa; padding: 2px 10px; margin: 4px; border-radius: 4px; border: 1px solid #ddd; white-space: nowrap; }
+        .num-indice { color: #999; font-size: 0.85em; margin-right: 5px; font-family: sans-serif; }
 
         @media (max-width: 900px) { .metricas-grid { grid-template-columns: 1fr; } }
     </style>
@@ -36,7 +38,7 @@
 <body>
 
 <div class="contenedor">
-    <h1>Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)</h1>
+    <h1>Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli (1747–1758)</h1>
 
     <nav class="nav-farinelli">
         <a href="index.html">Documentario y Buscador</a>
@@ -58,27 +60,18 @@
     </div>
 
     <div class="grid-graficas">
-        <div>
-            <div class="card-grafica"><canvas id="chartEvolucionAnual"></canvas></div>
-            <div class="recuadro-metodo"><strong>Metodología:</strong> Composición del volumen anual y densidad léxica.</div>
-        </div>
-        <div>
-            <div class="card-grafica"><canvas id="chartCobertura"></canvas></div>
-            <div class="recuadro-metodo"><strong>Metodología:</strong> Cobertura acumulada (Top 50 lemas).</div>
-        </div>
-        <div>
-            <div class="card-grafica"><canvas id="chartTop10"></canvas></div>
-            <div class="recuadro-metodo"><strong>Metodología:</strong> Ranking de los 10 términos con significado pleno más repetidos.</div>
-        </div>
+        <div class="card-grafica"><canvas id="chartEvolucionAnual"></canvas></div>
+        <div class="card-grafica"><canvas id="chartCobertura"></canvas></div>
+        <div class="card-grafica"><canvas id="chartTop10"></canvas></div>
     </div>
 
     <div class="anexo-metodologico">
-        <span class="anexo-titulo">Anexo I: Diccionario de Exclusión (palabras vacías)</span>
+        <span class="anexo-titulo">Anexo I: Diccionario de Exclusión (Palabras vacías - Orden Alfabético)</span>
         <div id="visualizarExcluidas" class="lista-excluidas"></div>
     </div>
 
     <div class="anexo-metodologico" style="margin-top:30px;">
-        <span class="anexo-titulo">Anexo II: Vocabulario Único / Formas (Términos enumerados por orden alfabético)</span>
+        <span class="anexo-titulo">Anexo II: Vocabulario Único / Formas (Términos con significado - Orden Alfabético)</span>
         <div id="listaUnicasPalabras" class="lista-excluidas" style="border-left: 5px solid var(--oro);"></div>
     </div>
 </div>
@@ -116,7 +109,6 @@
         if (p.length <= 3) return p;
         if (p.startsWith("senor")) return "señor";
         if (p.startsWith("opera")) return "ópera";
-        if (p === "reina" || p === "reinas") return "rey";
         if (p.endsWith("es")) return p.slice(0, -2);
         if (p.endsWith("s")) return p.slice(0, -1);
         return p;
@@ -130,10 +122,7 @@
 
         rawTextos.forEach(item => {
             let año = item.Año || "S/D";
-            if (!palabrasNetasPorAño[año]) {
-                palabrasNetasPorAño[año] = 0;
-                palabrasExcluidasPorAño[año] = 0;
-            }
+            if (!palabrasNetasPorAño[año]) { palabrasNetasPorAño[año] = 0; palabrasExcluidasPorAño[año] = 0; }
             let textoLimpio = item.Transcripción.replace(/<[^>]+>/g, " ").replace(/\[\d+\]/g, " ").replace(/\[sic\]/gi, " ");
             const regexUnicode = /[\p{L}]+/gu;
             let palabras = textoLimpio.match(regexUnicode) || [];
@@ -157,15 +146,24 @@
             densidadPorAño[año] = totalAnual > 0 ? (palabrasNetasPorAño[año] / totalAnual) * 100 : 0;
         });
 
-        // RENDERIZAR VOCABULARIO ÚNICO (ORDEN ALFABÉTICO REAL A-Z)
+        // RENDER ANEXO II: ALFABÉTICO REAL
         const contUnicas = document.getElementById('listaUnicasPalabras');
         if (contUnicas) {
             const unicasOrdenadas = Array.from(setFormasSinExcluidas)
                 .sort((a, b) => a.localeCompare('es', { sensitivity: 'base' }));
-            
-            contUnicas.innerHTML = unicasOrdenadas.map((p, i) => {
-                return `<span style="white-space: nowrap;"><span class="num-indice">${i+1}.</span> <strong>${p}</strong></span>`;
-            }).join(" &nbsp; | &nbsp; ");
+            contUnicas.innerHTML = unicasOrdenadas.map((p, i) => 
+                `<span class="palabra-tag"><span class="num-indice">${i+1}.</span><strong>${p}</strong></span>`
+            ).join("");
+        }
+
+        // RENDER ANEXO I: ALFABÉTICO REAL
+        const box = document.getElementById('visualizarExcluidas');
+        if (box) {
+            const excluidasOrdenadas = [...new Set(EXCLUIDAS)]
+                .sort((a, b) => a.localeCompare('es', { sensitivity: 'base' }));
+            box.innerHTML = excluidasOrdenadas.map((p, i) => 
+                `<span class="palabra-tag"><span class="num-indice">${i+1}.</span><strong>${p}</strong></span>`
+            ).join("");
         }
 
         document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
@@ -174,7 +172,6 @@
         document.getElementById('m-unicas-neto').innerText = setFormasSinExcluidas.size.toLocaleString();
         
         renderCharts();
-        mostrarDiccionario();
     }
 
     function renderCharts() {
@@ -188,19 +185,12 @@
             data: {
                 labels: años,
                 datasets: [
-                    { label: '% Densidad', data: años.map(a => densidadPorAño[a]), borderColor: '#e74c3c', yAxisID: 'yRight', fill: false, tension: 0.3, pointRadius: 4 },
+                    { label: '% Densidad', data: años.map(a => densidadPorAño[a]), borderColor: '#e74c3c', yAxisID: 'yRight', fill: false, tension: 0.3 },
                     { label: 'Palabras con significado', data: años.map(a => palabrasNetasPorAño[a]), backgroundColor: 'rgba(26, 58, 90, 0.7)', fill: true, yAxisID: 'yLeft' },
                     { label: 'Palabras vacías', data: años.map(a => palabrasExcluidasPorAño[a]), backgroundColor: 'rgba(184, 134, 11, 0.3)', fill: true, yAxisID: 'yLeft' }
                 ]
             },
-            options: { 
-                responsive: true, maintainAspectRatio: false, 
-                scales: { 
-                    yLeft: { stacked: true, position: 'left', beginAtZero: true },
-                    yRight: { position: 'right', min: 0, max: 100 } 
-                },
-                plugins: { legend: { onClick: null } }
-            }
+            options: { responsive: true, maintainAspectRatio: false, scales: { yLeft: { stacked: true }, yRight: { position: 'right', max: 100 } } }
         });
 
         const top10 = Object.entries(vocabularioLemasNeto).sort((a,b) => b[1]-a[1]).slice(0, 10);
@@ -214,41 +204,18 @@
         });
 
         const freqs = Object.values(vocabularioLemasNeto).sort((a, b) => b - a);
-        const totalNetoLocal = freqs.reduce((a, b) => a + b, 0); 
+        const total = freqs.reduce((a, b) => a + b, 0); 
         let sum = 0;
-        const top50Data = freqs.slice(0, 50).map(f => { sum += f; return (sum / totalNetoLocal) * 100; });
+        const top50Data = freqs.slice(0, 50).map(f => { sum += f; return (sum / total) * 100; });
 
         new Chart(document.getElementById('chartCobertura'), {
             type: 'line',
             data: { 
                 labels: Array.from({length: 50}, (_, i) => (i + 1).toString()), 
-                datasets: [{ label: '% Cobertura acumulada', data: top50Data, borderColor: '#b8860b', backgroundColor: 'rgba(184, 134, 11, 0.1)', fill: true, tension: 0.3, pointRadius: 2 }] 
+                datasets: [{ label: '% Cobertura acumulada', data: top50Data, borderColor: '#b8860b', backgroundColor: 'rgba(184, 134, 11, 0.1)', fill: true }] 
             },
-            options: { 
-                responsive: true, maintainAspectRatio: false, 
-                scales: { 
-                    y: { 
-                        min: 0,
-                        ticks: { callback: function(value) { return value + '%'; } }
-                    },
-                    x: { type: 'category', boundaryGap: false }
-                },
-                plugins: { legend: { onClick: null } }
-            }
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 100 } } }
         });
-    }
-
-    function mostrarDiccionario() {
-        const box = document.getElementById('visualizarExcluidas');
-        if (box) {
-            box.innerHTML = "";
-            [...EXCLUIDAS].sort((a, b) => a.localeCompare('es')).forEach(p => {
-                const s = document.createElement('span');
-                s.className = 'palabra-tag';
-                s.innerText = p;
-                box.appendChild(s);
-            });
-        }
     }
 </script>
 </body>
