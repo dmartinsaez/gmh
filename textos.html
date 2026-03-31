@@ -174,24 +174,20 @@ let palabras = texto
   .filter(p => /^[a-zñ]+$/.test(p))
   .filter(p => p.length >= 3)
   .filter(p => !EXCLUIDAS_SET.has(p));
-            palabras.forEach(p => {
-let pLimpia = normalizacionHistorica(p);
-    totalBrutasGlobal++;
-    setUnicasBrutas.add(pLimpia);
+            
+palabras.forEach(p => {
+    setUnicasBrutas.add(p);
 
-    if (EXCLUIDAS_SET.has(pLimpia)) {
-        palabrasExcluidasPorAño[año]++;
-        return;
-    }
-
-    totalNetasGlobal++;
-
-    let lemaBase = lematizarSimple(pLimpia);
+    let lemaBase = lematizarSimple(p);
 
     setUnicasNetas.add(lemaBase);
     vocabularioLemasNeto[lemaBase] = (vocabularioLemasNeto[lemaBase] || 0) + 1;
-    palabrasNetasPorAño[año]++;
+    palabrasNetasPorAño[año] = (palabrasNetasPorAño[año] || 0) + 1;
+
+    totalNetasGlobal++;
 });
+
+totalBrutasGlobal += texto.split(' ').length;
 
             let totalAño = palabrasNetasPorAño[año] + palabrasExcluidasPorAño[año];
             densidadPorAño[año] = totalAño > 0 ? (palabrasNetasPorAño[año] / totalAño) * 100 : 0;
