@@ -13,19 +13,24 @@
         .nav-farinelli { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; font-family: sans-serif; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; }
         .nav-farinelli a { text-decoration: none; color: var(--azul); font-weight: bold; padding: 5px 10px; transition: 0.3s; }
         .nav-farinelli .active { border: 1px solid var(--azul); background: var(--azul); color: white !important; border-radius: 4px; }
+        
         .metricas-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px; }
         .metrica-card { background: white; padding: 20px; border: 1px solid var(--borde); border-radius: 8px; text-align: center; }
         .metrica-val-grande { font-size: 2.2em; font-weight: bold; color: var(--azul); display: block; line-height: 1; }
-        .metrica-val-sub { font-size: 1.1em; color: #666; display: block; margin-top: 5px; border-top: 1px solid #eee; padding-top: 5px; }
+        .metrica-val-sub { font-size: 0.85em; color: #888; display: block; margin-top: 8px; font-style: italic; border-top: 1px solid #eee; padding-top: 5px; }
         .metrica-lab { font-size: 0.75em; text-transform: uppercase; color: var(--oro); font-weight: bold; letter-spacing: 1px; display: block; margin-top: 10px; }
+
         .grid-graficas { display: grid; grid-template-columns: 1fr; gap: 40px; margin-bottom: 30px; }
         .card-grafica { background: white; padding: 25px; border: 1px solid var(--borde); border-radius: 8px; height: 450px; position: relative; }
         .recuadro-metodo { background-color: var(--gris-metodo); border-left: 5px solid var(--azul); padding: 15px 20px; margin-top: -10px; margin-bottom: 20px; font-size: 0.9em; border: 1px solid #e9ecef; }
+        
         .anexo-metodologico { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--borde); }
         .anexo-titulo { font-weight: bold; font-size: 1.1em; color: var(--azul); display: block; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
         .lista-excluidas { background: white; padding: 20px; border: 1px solid #eee; border-radius: 8px; max-height: 400px; overflow-y: auto; font-family: Georgia, serif; font-size: 0.9em; text-align: justify; line-height: 2.8; }
+        
         .palabra-tag { display: inline-block; background: #f8f9fa; padding: 2px 10px; margin: 4px; border-radius: 4px; border: 1px solid #ddd; white-space: nowrap; }
         .num-indice { color: #999; font-size: 0.85em; margin-right: 5px; font-family: sans-serif; }
+
         @media (max-width: 900px) { .metricas-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -42,14 +47,14 @@
 
     <div class="metricas-grid">
         <div class="metrica-card">
-            <span class="metrica-val-grande" id="m-total-bruto">0</span>
-            <span class="metrica-val-sub" id="m-total-neto">0 (Tras exclusión)</span>
+            <span class="metrica-val-grande" id="m-total-neto">0</span>
+            <span class="metrica-val-sub">(sin contar palabras vacías)</span>
             <span class="metrica-lab">Volumen Total de Palabras</span>
         </div>
         <div class="metrica-card">
-            <span class="metrica-val-grande" id="m-unicas-bruto">0</span>
-            <span class="metrica-val-sub" id="m-unicas-neto">0 (Formas únicas)</span>
-            <span class="metrica-lab">Vocabulario Único</span>
+            <span class="metrica-val-grande" id="m-unicas-neto">0</span>
+            <span class="metrica-val-sub">(sin contar palabras vacías)</span>
+            <span class="metrica-lab">Vocabulario Único / Formas</span>
         </div>
     </div>
 
@@ -64,7 +69,7 @@
         </div>
         <div>
             <div class="card-grafica"><canvas id="chartTop10"></canvas></div>
-            <div class="recuadro-metodo"><strong>Metodología:</strong> Ranking de los 10 términos más repetidos.</div>
+            <div class="recuadro-metodo"><strong>Metodología:</strong> Ranking de los 10 términos con significado pleno más repetidos.</div>
         </div>
     </div>
 
@@ -74,7 +79,7 @@
     </div>
 
     <div class="anexo-metodologico" style="margin-top:30px;">
-        <span class="anexo-titulo">Anexo II: Vocabulario Único / Formas (Palabras con significado - Orden Alfabético)</span>
+        <span class="anexo-titulo">Anexo II: Vocabulario Único / Formas (Términos con significado - Orden Alfabético)</span>
         <div id="listaUnicasPalabras" class="lista-excluidas" style="border-left: 5px solid var(--oro);"></div>
     </div>
 </div>
@@ -85,7 +90,6 @@
     let palabrasNetasPorAño = {};
     let palabrasExcluidasPorAño = {}; 
     let densidadPorAño = {};
-    let totalBrutasGlobal = 0;
     let totalNetasGlobal = 0;
 
     const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","43","44","45","5","6","60","7","8","9","a","al","alguna","algunas","alguno","algunos","algún","ambos","ante","antes","aquel","aquellas","aquellos","aqui","bajo","bastante","bien","cada","cierta","como","con","consigue","consiguen","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleo","en","encima","entonces","entre","era","eran","es","esta","estaba","estado","estan","este","fin","fue","fueron","fui","ha","hace","hacen","hacer","han","haviendo","huvo","incluso","ir","la","largo","las","lo","los","m","mas","mayor","mientras","misma","modo","muchos","muy","nos","o","otras","otro","para","pero","poder","podria","podrian","por","porque","primero","puede","pueden","que","quien","s","sabe","saben","saber","se","ser","si","sic","siendo","sin","sobre","solamente","solo","su","sus","tambien","también","tener","tiempo","tiene","tienen","toda","todo","trabajo","tras","tuvo","ultimo","un","una","unas","uno","unos","usa","uso","va","valor","verdad","y", "habiendo", "habido", "assi", "haviendola", "hecho", "igualmente", "havia", "estas"];
@@ -118,9 +122,8 @@
     }
     
     function procesarYRenderizar() {
-        totalBrutasGlobal = 0; totalNetasGlobal = 0;
+        totalNetasGlobal = 0;
         vocabularioLemasNeto = {}; palabrasNetasPorAño = {}; palabrasExcluidasPorAño = {};
-        let setTodasLasFormas = new Set(); 
         let setFormasSinExcluidas = new Set(); 
 
         rawTextos.forEach(item => {
@@ -133,8 +136,6 @@
             palabras.forEach(p => {
                 let pBase = normalizar(p);
                 if (pBase.length < 2) return;
-                totalBrutasGlobal++;
-                setTodasLasFormas.add(pBase);
                 if (EXCLUIDAS.includes(pBase)) {
                     palabrasExcluidasPorAño[año]++;
                 } else {
@@ -149,22 +150,28 @@
             densidadPorAño[año] = totalAnual > 0 ? (palabrasNetasPorAño[año] / totalAnual) * 100 : 0;
         });
 
-        // ORDEN ALFABÉTICO FINAL A-Z ANTES DE PINTAR
-        const unicasFinales = Array.from(setFormasSinExcluidas).sort((a, b) => a.localeCompare('es', { sensitivity: 'base' }));
-        const excluidasFinales = Array.from(new Set(EXCLUIDAS)).sort((a, b) => a.localeCompare('es', { sensitivity: 'base' }));
+        // --- SOLUCIÓN AL ORDEN ALFABÉTICO REAL ---
+        
+        // 1. Convertimos el Set de palabras únicas a Array y ORDENAMOS ALFABÉTICAMENTE de la A a la Z
+        const unicasOrdenadas = Array.from(setFormasSinExcluidas)
+            .sort((a, b) => a.localeCompare('es', { sensitivity: 'base' }));
 
-        document.getElementById('listaUnicasPalabras').innerHTML = unicasFinales.map((p, i) => 
+        // 2. Renderizamos el Anexo II (ahora numerado después de ordenar)
+        document.getElementById('listaUnicasPalabras').innerHTML = unicasOrdenadas.map((p, i) => 
             `<span class="palabra-tag"><span class="num-indice">${i+1}.</span><strong>${p}</strong></span>`
         ).join("");
 
-        document.getElementById('visualizarExcluidas').innerHTML = excluidasFinales.map((p, i) => 
+        // 3. Hacemos lo mismo con el Diccionario de Exclusión
+        const excluidasOrdenadas = [...new Set(EXCLUIDAS)]
+            .sort((a, b) => a.localeCompare('es', { sensitivity: 'base' }));
+
+        document.getElementById('visualizarExcluidas').innerHTML = excluidasOrdenadas.map((p, i) => 
             `<span class="palabra-tag"><span class="num-indice">${i+1}.</span><strong>${p}</strong></span>`
         ).join("");
 
-        document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
+        // Actualizamos números de las tarjetas
         document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString();
-        document.getElementById('m-unicas-bruto').innerText = setTodasLasFormas.size.toLocaleString();
-        document.getElementById('m-unicas-neto').innerText = setFormasSinExcluidas.size.toLocaleString();
+        document.getElementById('m-unicas-neto').innerText = unicasOrdenadas.length.toLocaleString();
         
         renderCharts();
     }
@@ -208,7 +215,11 @@
             },
             options: { 
                 responsive: true, maintainAspectRatio: false, 
-                scales: { y: { min: 0, max: 100 }, x: { boundaryGap: false } }
+                scales: { 
+                    y: { min: 0, max: 100 },
+                    x: { type: 'category', boundaryGap: false }
+                },
+                plugins: { legend: { onClick: null } }
             }
         });
 
