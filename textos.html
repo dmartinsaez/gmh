@@ -99,8 +99,10 @@
 
     const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","43","44","45","5","6","60","7","8","9","a","al","alguna","algunas","alguno","algunos","algún","ambos","ante","antes","aquel","aquellas","aquellos","aqui","bajo","bastante","bien","cada","cierta","como","con","consigue","consiguen","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleo","en","encima","entonces","entre","era","eran","es","esta","estaba","estado","estan","este","fin","fue","fueron","fui","ha","hace","hacen","hacer","han","haviendo","huvo","incluso","ir","la","largo","las","lo","los","m","mas","mayor","mientras","misma","modo","muchos","muy","nos","o","otras","otro","para","pero","poder","podria","podrian","por","porque","primero","puede","pueden","que","quien","s","sabe","saben","saber","se","ser","si","sic","siendo","sin","sobre","solamente","solo","su","sus","tambien","también","tener","tiempo","tiene","tienen","toda","todo","trabajo","tras","tuvo","ultimo","un","una","unas","uno","unos","usa","uso","va","valor","verdad","y"];
 
+    // Función de normalización mejorada
     function normalizar(texto) {
         if (!texto) return "";
+        // Eliminamos acentos pero mantenemos la ñ antes de pasar a minúsculas
         return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
     }
     
@@ -140,12 +142,22 @@
                 palabrasNetasPorAño[año] = 0;
                 palabrasExcluidasPorAño[año] = 0;
             }
-            let textoLimpio = item.Transcripción.replace(/<[^>]+>/g, " ").replace(/\[\d+\]/g, " ").replace(/\[sic\]/gi, " ").replace(/[.,;:()“”"']/g, " ");
-            let palabras = textoLimpio.match(/[a-zA-ZáéíóúÁÉÍÓÚñÑ]+/g) || [];
+
+            // LIMPIEZA PREVIA DE ETIQUETAS
+            let textoLimpio = item.Transcripción
+                .replace(/<[^>]+>/g, " ")
+                .replace(/\[\d+\]/g, " ")
+                .replace(/\[sic\]/gi, " ");
+
+            // EXPRESIÓN REGULAR UNICODE: Captura cualquier letra de cualquier idioma (p.ej. à, é, ç, ñ)
+            // \p{L} significa "any letter" en cualquier bloque Unicode
+            const regexUnicode = /[\p{L}]+/gu;
+            let palabras = textoLimpio.match(regexUnicode) || [];
             
             palabras.forEach(p => {
-                let pBase = normalizar(p);
+                let pBase = normalizar(p); // Normalizamos después de extraer la palabra entera
                 if (pBase.length < 2) return;
+                
                 totalBrutasGlobal++;
                 setTodasLasFormas.add(pBase);
 
@@ -154,24 +166,31 @@
                 } else {
                     totalNetasGlobal++;
                     setFormasSinExcluidas.add(pBase);
-                    registroPalabrasNetas.push(p.toLowerCase());
+                    registroPalabrasNetas.push(p.toLowerCase()); // Guardamos la palabra real
+
                     let lema = lematizarParaGrafica(pBase);
                     vocabularioLemasNeto[lema] = (vocabularioLemasNeto[lema] || 0) + 1;
                     palabrasNetasPorAño[año]++;
                 }
             });
+
             let totalAnual = (palabrasNetasPorAño[año] || 0) + (palabrasExcluidasPorAño[año] || 0);
             densidadPorAño[año] = totalAnual > 0 ? (palabrasNetasPorAño[año] / totalAnual) * 100 : 0;
         });
 
-        // Llenar Lista Total
-        document.getElementById('listaCompletaPalabras').innerHTML = registroPalabrasNetas.map((p, i) => `<span class="num-indice">${i+1}.</span><strong>${p}</strong>`).join(" | ");
+        // Actualizar Listas HTML
+        const contTotal = document.getElementById('listaCompletaPalabras');
+        if (contTotal) {
+            contTotal.innerHTML = registroPalabrasNetas.map((p, i) => `<span style="color:#999">${i+1}.</span> <strong>${p}</strong>`).join(" | ");
+        }
 
-        // Llenar Vocabulario Único
-        const unicas = Array.from(setFormasSinExcluidas).sort((a,b) => a.localeCompare('es'));
-        document.getElementById('listaUnicasPalabras').innerHTML = unicas.map((p, i) => `<span class="num-indice">${i+1}.</span><strong>${p}</strong>`).join(" | ");
+        const contUnicas = document.getElementById('listaUnicasPalabras');
+        if (contUnicas) {
+            const unicas = Array.from(setFormasSinExcluidas).sort((a,b) => a.localeCompare('es'));
+            contUnicas.innerHTML = unicas.map((p, i) => `<span style="color:#999">${i+1}.</span> <strong>${p}</strong>`).join(" | ");
+        }
 
-        // Metricas
+        // Actualizar contadores
         document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
         document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString();
         document.getElementById('m-unicas-bruto').innerText = setTodasLasFormas.size.toLocaleString();
@@ -229,7 +248,7 @@
             type: 'line',
             data: { 
                 labels: Array.from({length: 50}, (_, i) => (i + 1).toString()), 
-                datasets: [{ label: '% Cobertura acumulada', data: top50Data, borderColor: '#b8860b', backgroundColor: 'rgba(184, 134, 11, 0.1)', fill: true, tension: 0.3, pointRadius: 2 }] 
+                datasets: [{ label: '% Cobertura acumulada (Top 50)', data: top50Data, borderColor: '#b8860b', backgroundColor: 'rgba(184, 134, 11, 0.1)', fill: true, tension: 0.3, pointRadius: 2 }] 
             },
             options: { 
                 responsive: true, maintainAspectRatio: false, 
@@ -244,14 +263,18 @@
 
     function mostrarDiccionario() {
         const box = document.getElementById('visualizarExcluidas');
-        box.innerHTML = "";
-        [...EXCLUIDAS].sort().forEach(p => {
-            const s = document.createElement('span');
-            s.className = 'palabra-tag';
-            s.innerText = p;
-            box.appendChild(s);
-        });
+        if (box) {
+            box.innerHTML = "";
+            [...EXCLUIDAS].sort().forEach(p => {
+                const s = document.createElement('span');
+                s.className = 'palabra-tag';
+                s.innerText = p;
+                box.appendChild(s);
+            });
+        }
     }
 </script>
+
+    
 </body>
 </html>
