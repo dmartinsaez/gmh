@@ -109,7 +109,9 @@
 
 
 <script>
-    let rawTextos = []; 
+
+
+let rawTextos = []; 
     let vocabularioLemasNeto = {}; 
     let palabrasNetasPorAño = {};
     let palabrasExcluidasPorAño = {}; 
@@ -206,54 +208,63 @@
         Chart.getChart("chartTop10")?.destroy();
         Chart.getChart("chartCobertura")?.destroy();
 
-        // Cálculo del máximo real para fijar el eje y que no salte
         const maxVal = Math.max(...años.map(a => palabrasNetasPorAño[a] + palabrasExcluidasPorAño[a]));
         const yMaxFijo = Math.ceil(maxVal / 100) * 100;
 
+        // 1. Gráfica de Evolución
         new Chart(document.getElementById('chartEvolucionAnual'), {
             type: 'line',
             data: {
                 labels: años,
                 datasets: [
-                    { label: '% Densidad', data: años.map(a => densidadPorAño[a]), borderColor: '#e74c3c', yAxisID: 'yRight', fill: false, tension: 0.3, zIndex: 10, pointRadius: 4 },
-                    { label: 'Palabras con significado', data: años.map(a => palabrasNetasPorAño[a]), backgroundColor: 'rgba(26, 58, 90, 0.7)', fill: true, yAxisID: 'yLeft' },
-                    { label: 'Palabras vacías', data: años.map(a => palabrasExcluidasPorAño[a]), backgroundColor: 'rgba(184, 134, 11, 0.3)', fill: true, yAxisID: 'yLeft' }
+                    { 
+                        label: '% Densidad', 
+                        data: años.map(a => densidadPorAño[a]), 
+                        borderColor: '#e74c3c', 
+                        yAxisID: 'yRight', 
+                        fill: false, 
+                        tension: 0.3, 
+                        zIndex: 10, 
+                        pointRadius: 4 
+                    },
+                    { 
+                        label: 'Palabras con significado', 
+                        data: años.map(a => palabrasNetasPorAño[a]), 
+                        backgroundColor: 'rgba(26, 58, 90, 0.7)', 
+                        fill: true, 
+                        yAxisID: 'yLeft',
+                        order: 2
+                    },
+                    { 
+                        label: 'Palabras vacías', 
+                        data: años.map(a => palabrasExcluidasPorAño[a]), 
+                        backgroundColor: 'rgba(184, 134, 11, 0.3)', 
+                        fill: '-1', 
+                        yAxisID: 'yLeft',
+                        order: 1
+                    }
                 ]
             },
             options: { 
                 responsive: true, maintainAspectRatio: false, 
                 interaction: { mode: 'index', intersect: false },
                 scales: { 
-                    yLeft: { 
-                        stacked: true, 
-                        position: 'left', 
-                        beginAtZero: true, 
-                        max: yMaxFijo, // ESTO FIJA EL EJE PARA QUE NO SALTE
-                        title: { display: true, text: 'Nº Palabras' } 
-                    },
-                    yRight: { 
-                        position: 'right', 
-                        min: 0, max: 100, 
-                        grid: { drawOnChartArea: false }, 
-                        title: { display: true, text: '%' } 
-                    }
+                    yLeft: { stacked: true, position: 'left', beginAtZero: true, max: yMaxFijo, title: { display: true, text: 'Volumen de Palabras' } },
+                    yRight: { position: 'right', min: 0, max: 100, grid: { drawOnChartArea: false }, title: { display: true, text: '%' } }
                 },
                 plugins: {
                     legend: {
-                        onClick: function(e, legendItem, legend) {
+                        onClick: (e, legendItem, legend) => {
                             const index = legendItem.datasetIndex;
                             const ci = legend.chart;
-                            if (ci.isDatasetVisible(index)) {
-                                ci.hide(index);
-                            } else {
-                                ci.show(index);
-                            }
+                            if (ci.isDatasetVisible(index)) { ci.hide(index); } else { ci.show(index); }
                         }
                     }
                 }
             }
         });
 
+        // 2. Gráfica Top 10
         const top10 = Object.entries(vocabularioLemasNeto).sort((a,b) => b[1]-a[1]).slice(0, 10);
         new Chart(document.getElementById('chartTop10'), {
             type: 'bar',
@@ -264,13 +275,37 @@
             options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
         });
 
+        // 3. Gráfica de Cobertura
         const freqs = Object.values(vocabularioLemasNeto).sort((a, b) => b - a);
+        const totalNetoLocal = freqs.reduce((a, b) => a + b, 0); 
         let sum = 0;
-        const dataY = freqs.slice(0, 50).map(f => { sum += f; return (sum / totalNetasGlobal) * 100; });
+        const dataY = freqs.slice(0, 50).map(f => { 
+            sum += f; 
+            return (sum / totalNetoLocal) * 100; 
+        });
+
         new Chart(document.getElementById('chartCobertura'), {
             type: 'line',
-            data: { labels: Array.from({length: dataY.length}, (_, i) => i + 1), datasets: [{ label: '% Cobertura', data: dataY, borderColor: 'blue', fill: true, backgroundColor: 'rgba(0,0,255,0.05)' }] },
-            options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 100 } } }
+            data: { 
+                labels: Array.from({length: dataY.length}, (_, i) => i + 1), 
+                datasets: [{ 
+                    label: '% Cobertura acumulada del vocabulario crítico', 
+                    data: dataY, 
+                    borderColor: '#b8860b', 
+                    backgroundColor: 'rgba(184, 134, 11, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 2
+                }] 
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                scales: { 
+                    y: { min: 0, max: 100, title: { display: true, text: 'Porcentaje del total neto' } },
+                    x: { title: { display: true, text: 'Top N palabras más frecuentes' } }
+                } 
+            }
         });
     }
 
@@ -284,6 +319,7 @@
             box.appendChild(s);
         });
     }
+    
 </script>
 
     
