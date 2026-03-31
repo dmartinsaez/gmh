@@ -135,8 +135,8 @@
     }
 
     function procesarDatos() {
-let setBrutas = new Set(); 
-        let setNetas = new Set();
+let setFormasBrutas = new Set(); 
+        let setLemasNetos = new Set();
 
         rawTextos.forEach(item => {
             let año = item.Año || "S/D";
@@ -149,18 +149,16 @@ let setBrutas = new Set();
             
 palabras.forEach(p => {
                 let pLimpia = p.trim();
-                
-                // 1. Conteo BRUTO: Se cuenta SIEMPRE, sea excluida o no
                 totalBrutasGlobal++;
-setBrutas.add(pLimpia);
-                // 2. Clasificación
+                setFormasBrutas.add(pLimpia);
+
                 if (EXCLUIDAS.includes(pLimpia)) {
                     palabrasExcluidasPorAño[año]++;
                 } else {
-                    // 3. Conteo NETO: Solo si no está en tu lista
                     totalNetasGlobal++;
                     let lemaBase = lematizarSimple(pLimpia);
-setNetas.add(lemaBase);
+                    // AQUÍ ESTÁ EL CAMBIO: El set neto solo guarda lemas (conceptos únicos)
+                    setLemasNetos.add(lemaBase);
                     vocabularioLemasNeto[lemaBase] = (vocabularioLemasNeto[lemaBase] || 0) + 1;
                     palabrasNetasPorAño[año]++;
                 }
@@ -172,8 +170,10 @@ setNetas.add(lemaBase);
 
 document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
         document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString() + " (Tras exclusión)";
-        document.getElementById('m-unicas-bruto').innerText = setBrutas.size.toLocaleString();
-        document.getElementById('m-unicas-neto').innerText = setNetas.size.toLocaleString() + " (Lemas únicos)";
+        // Arriba: todas las palabras distintas del texto original
+        document.getElementById('m-unicas-bruto').innerText = setFormasBrutas.size.toLocaleString();
+        // Abajo: solo los conceptos únicos después de filtrar y lematizar
+        document.getElementById('m-unicas-neto').innerText = setLemasNetos.size.toLocaleString() + " (Lemas únicos)";
         
         document.getElementById('totalExcluidasTxt').innerText = 
             `Diccionario: ${EXCLUIDAS.length} palabras vacías | Total eliminadas del corpus: ${(totalBrutasGlobal - totalNetasGlobal).toLocaleString()}`;
