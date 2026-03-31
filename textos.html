@@ -187,8 +187,6 @@ if (EXCLUIDAS.includes(pLimpia) || EXCLUIDAS.includes(normalizar(pLimpia))) {
             densidadPorAño[año] = totalAño > 0 ? (palabrasNetasPorAño[año] / totalAño) * 100 : 0;
         });
 
-document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
-        document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString() + " (Tras exclusión)";
         document.getElementById('m-unicas-bruto').innerText = setFormasNetas.size.toLocaleString();
         document.getElementById('m-unicas-neto').innerText = setLemasNetos.size.toLocaleString() + " (Lemas únicos)";
         
