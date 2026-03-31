@@ -126,12 +126,23 @@
         renderCharts();
         mostrarDiccionario();
     });
-
-    function lematizarSimple(palabra) {
-        const mapeoEspecifico = {
-            "operas": "ópera", "óperas": "ópera", "festejos": "festejo", "festexos": "festejo", "reyes": "rey"
-        };
-        return mapeoEspecifico[palabra] || palabra;
+function lematizarSimple(palabra) {
+        // No procesamos palabras muy cortas
+        if (palabra.length <= 3) return palabra;
+        
+        // Norma 1: Si termina en 'es', eliminamos la marca de plural (reyes -> rey, canciones -> cancion)
+        if (palabra.endsWith("es")) {
+            // Excepción para plurales de palabras terminadas en 'z' (voces -> voz)
+            if (palabra.endsWith("ces")) return palabra.slice(0, -3) + "z";
+            return palabra.slice(0, -2);
+        }
+        
+        // Norma 2: Si termina en 's' precedida de vocal, quitamos la 's' (operas -> opera)
+        if (palabra.endsWith("s")) {
+            return palabra.slice(0, -1);
+        }
+        
+        return palabra;
     }
 
     function procesarDatos() {
@@ -170,9 +181,16 @@ palabras.forEach(p => {
 
 document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
         document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString() + " (Tras exclusión)";
-        // Arriba: todas las palabras distintas del texto original
-        document.getElementById('m-unicas-bruto').innerText = setFormasBrutas.size.toLocaleString();
-        // Abajo: solo los conceptos únicos después de filtrar y lematizar
+        
+        // Calculamos cuántas palabras diferentes quedan tras quitar las EXCLUIDAS
+        // Esto permite comparar vocabulario real filtrado vs lemas finales
+        let formasFiltradasUnicas = new Set();
+        // Recorremos los lemas guardados para extraer las formas únicas procesadas
+        Object.keys(vocabularioLemasNeto).forEach(l => formasFiltradasUnicas.add(l));
+
+        // Arriba: El total de palabras distintas que NO son vacías
+        document.getElementById('m-unicas-bruto').innerText = formasFiltradasUnicas.size.toLocaleString();
+        // Abajo: Esos mismos términos agrupados por su raíz (lematizados)
         document.getElementById('m-unicas-neto').innerText = setLemasNetos.size.toLocaleString() + " (Lemas únicos)";
         
         document.getElementById('totalExcluidasTxt').innerText = 
