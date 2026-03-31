@@ -97,6 +97,7 @@
     let totalBrutasGlobal = 0;
     let totalNetasGlobal = 0;
 
+    // 1. LISTA DE EXCLUIDAS ACTUALIZADA
     const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","43","44","45","5","6","60","7","8","9","a","al","alguna","algunas","alguno","algunos","algún","ambos","ante","antes","aquel","aquellas","aquellos","aqui","bajo","bastante","bien","cada","cierta","como","con","consigue","consiguen","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleo","en","encima","entonces","entre","era","eran","es","esta","estaba","estado","estan","este","fin","fue","fueron","fui","ha","hace","hacen","hacer","han","haviendo","huvo","incluso","ir","la","largo","las","lo","los","m","mas","mayor","mientras","misma","modo","muchos","muy","nos","o","otras","otro","para","pero","poder","podria","podrian","por","porque","primero","puede","pueden","que","quien","s","sabe","saben","saber","se","ser","si","sic","siendo","sin","sobre","solamente","solo","su","sus","tambien","también","tener","tiempo","tiene","tienen","toda","todo","trabajo","tras","tuvo","ultimo","un","una","unas","uno","unos","usa","uso","va","valor","verdad","y", "habiendo", "habido", "assi", "haviendola", "hecho", "igualmente", "havia", "estas"];
 
     function normalizar(texto) {
@@ -132,6 +133,7 @@
         vocabularioLemasNeto = {}; palabrasNetasPorAño = {}; palabrasExcluidasPorAño = {};
         let setTodasLasFormas = new Set(); 
         let setFormasSinExcluidas = new Set(); 
+        let registroPalabrasNetas = []; // Para el Anexo II
 
         rawTextos.forEach(item => {
             let año = item.Año || "S/D";
@@ -153,6 +155,7 @@
                 } else {
                     totalNetasGlobal++;
                     setFormasSinExcluidas.add(pBase);
+                    registroPalabrasNetas.push(p.toLowerCase()); // Guardamos para la lista completa
                     let lema = lematizarParaGrafica(pBase);
                     vocabularioLemasNeto[lema] = (vocabularioLemasNeto[lema] || 0) + 1;
                     palabrasNetasPorAño[año]++;
@@ -162,11 +165,18 @@
             densidadPorAño[año] = totalAnual > 0 ? (palabrasNetasPorAño[año] / totalAnual) * 100 : 0;
         });
 
-        // RENDERIZAR VOCABULARIO ÚNICO (ORDEN ALFABÉTICO REAL)
+        // ANEXO II: REGISTRO COMPLETO (ORDENADO Y ENUMERADO)
+        const contCompleto = document.getElementById('listaCompletaPalabras');
+        if (contCompleto) {
+            const completoOrdenado = registroPalabrasNetas.sort((a, b) => a.localeCompare('es'));
+            contCompleto.innerHTML = completoOrdenado.map((p, i) => `<span class="num-indice">${i+1}.</span> <strong>${p}</strong>`).join(" | ");
+        }
+
+        // ANEXO III: VOCABULARIO ÚNICO (ORDENADO Y ENUMERADO)
         const contUnicas = document.getElementById('listaUnicasPalabras');
         if (contUnicas) {
-            const unicasOrdenadas = Array.from(setFormasSinExcluidas).sort((a, b) => a.localeCompare('es', { sensitivity: 'base' }));
-            contUnicas.innerHTML = unicasOrdenadas.map((p, i) => `<span style="color:#999; font-size:0.8em;">${i+1}.</span> <strong>${p}</strong>`).join(" | ");
+            const unicasOrdenadas = Array.from(new Set(Object.keys(vocabularioLemasNeto))).sort((a, b) => a.localeCompare('es'));
+            contUnicas.innerHTML = unicasOrdenadas.map((p, i) => `<span class="num-indice">${i+1}.</span> <strong>${p}</strong>`).join(" | ");
         }
 
         document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
@@ -198,7 +208,7 @@
                 responsive: true, maintainAspectRatio: false, 
                 scales: { 
                     yLeft: { stacked: true, position: 'left', beginAtZero: true },
-                    yRight: { position: 'right', min: 0, max: 50 } 
+                    yRight: { position: 'right', min: 0, max: 100 } 
                 },
                 plugins: { legend: { onClick: null } }
             }
@@ -228,7 +238,7 @@
             options: { 
                 responsive: true, maintainAspectRatio: false, 
                 scales: { 
-                    y: { min: 0, max: 50 },
+                    y: { min: 0, max: 100 },
                     x: { type: 'category', boundaryGap: false }
                 },
                 plugins: { legend: { onClick: null } }
@@ -249,7 +259,6 @@
         }
     }
 </script>
-
     
 </body>
 </html>
