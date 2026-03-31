@@ -47,11 +47,15 @@
 
     <div class="metricas-grid">
         <div class="metrica-card">
+            <span class="metrica-val-grande" id="m-total-bruto" style="font-size: 1.4em; color: #999; opacity: 0.7;">0</span>
+            <span class="metrica-lab" style="margin-bottom:10px; font-size: 0.65em;">Palabras Totales (Bruto)</span>
             <span class="metrica-val-grande" id="m-total-neto">0</span>
             <span class="metrica-val-sub">(sin contar palabras vacías)</span>
             <span class="metrica-lab">Volumen Total de Palabras</span>
         </div>
         <div class="metrica-card">
+            <span class="metrica-val-grande" id="m-unicas-bruto" style="font-size: 1.4em; color: #999; opacity: 0.7;">0</span>
+            <span class="metrica-lab" style="margin-bottom:10px; font-size: 0.65em;">Formas Únicas (Bruto)</span>
             <span class="metrica-val-grande" id="m-unicas-neto">0</span>
             <span class="metrica-val-sub">(sin contar palabras vacías)</span>
             <span class="metrica-lab">Vocabulario Único / Formas</span>
@@ -59,18 +63,9 @@
     </div>
 
     <div class="grid-graficas">
-        <div>
-            <div class="card-grafica"><canvas id="chartEvolucionAnual"></canvas></div>
-            <div class="recuadro-metodo"><strong>Metodología:</strong> Composición del volumen anual y densidad léxica.</div>
-        </div>
-        <div>
-            <div class="card-grafica"><canvas id="chartCobertura"></canvas></div>
-            <div class="recuadro-metodo"><strong>Metodología:</strong> Cobertura acumulada (Top 50 lemas).</div>
-        </div>
-        <div>
-            <div class="card-grafica"><canvas id="chartTop10"></canvas></div>
-            <div class="recuadro-metodo"><strong>Metodología:</strong> Ranking de los 10 términos con significado pleno más repetidos.</div>
-        </div>
+        <div class="card-grafica"><canvas id="chartEvolucionAnual"></canvas></div>
+        <div class="card-grafica"><canvas id="chartCobertura"></canvas></div>
+        <div class="card-grafica"><canvas id="chartTop10"></canvas></div>
     </div>
 
     <div class="anexo-metodologico">
@@ -91,6 +86,7 @@
     let palabrasExcluidasPorAño = {}; 
     let densidadPorAño = {};
     let totalNetasGlobal = 0;
+    let totalBrutasGlobal = 0;
 
     const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","43","44","45","5","6","60","7","8","9","a","al","alguna","algunas","alguno","algunos","algún","ambos","ante","antes","aquel","aquellas","aquellos","aqui","bajo","bastante","bien","cada","cierta","como","con","consigue","consiguen","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleo","en","encima","entonces","entre","era","eran","es","esta","estaba","estado","estan","este","fin","fue","fueron","fui","ha","hace","hacen","hacer","han","haviendo","huvo","incluso","ir","la","largo","las","lo","los","m","mas","mayor","mientras","misma","modo","muchos","muy","nos","o","otras","otro","para","pero","poder","podria","podrian","por","porque","primero","puede","pueden","que","quien","s","sabe","saben","saber","se","ser","si","sic","siendo","sin","sobre","solamente","solo","su","sus","tambien","también","tener","tiempo","tiene","tienen","toda","todo","trabajo","tras","tuvo","ultimo","un","una","unas","uno","unos","usa","uso","va","valor","verdad","y", "habiendo", "habido", "assi", "haviendola", "hecho", "igualmente", "havia", "estas"];
 
@@ -122,8 +118,9 @@
     }
     
     function procesarYRenderizar() {
-        totalNetasGlobal = 0;
+        totalNetasGlobal = 0; totalBrutasGlobal = 0;
         vocabularioLemasNeto = {}; palabrasNetasPorAño = {}; palabrasExcluidasPorAño = {};
+        let setTodasLasFormas = new Set(); 
         let setFormasSinExcluidas = new Set(); 
 
         rawTextos.forEach(item => {
@@ -136,6 +133,8 @@
             palabras.forEach(p => {
                 let pBase = normalizar(p);
                 if (pBase.length < 2) return;
+                totalBrutasGlobal++;
+                setTodasLasFormas.add(pBase);
                 if (EXCLUIDAS.includes(pBase)) {
                     palabrasExcluidasPorAño[año]++;
                 } else {
@@ -150,28 +149,23 @@
             densidadPorAño[año] = totalAnual > 0 ? (palabrasNetasPorAño[año] / totalAnual) * 100 : 0;
         });
 
-        // --- SOLUCIÓN AL ORDEN ALFABÉTICO REAL ---
-        
-        // 1. Convertimos el Set de palabras únicas a Array y ORDENAMOS ALFABÉTICAMENTE de la A a la Z
-        const unicasOrdenadas = Array.from(setFormasSinExcluidas)
-            .sort((a, b) => a.localeCompare('es', { sensitivity: 'base' }));
+        // --- ORDENACIÓN ALFABÉTICA FORZADA AL FINAL ---
+        const unicasArray = Array.from(setFormasSinExcluidas).sort((a, b) => a.localeCompare('es'));
+        const excluidasArray = [...new Set(EXCLUIDAS)].sort((a, b) => a.localeCompare('es'));
 
-        // 2. Renderizamos el Anexo II (ahora numerado después de ordenar)
-        document.getElementById('listaUnicasPalabras').innerHTML = unicasOrdenadas.map((p, i) => 
-            `<span class="palabra-tag"><span class="num-indice">${i+1}.</span><strong>${p}</strong></span>`
-        ).join("");
+        // Render Anexo I
+        document.getElementById('visualizarExcluidas').innerHTML = excluidasArray.map((p, i) => 
+            `<span class="palabra-tag"><span class="num-indice">${i+1}.</span><strong>${p}</strong></span>`).join("");
 
-        // 3. Hacemos lo mismo con el Diccionario de Exclusión
-        const excluidasOrdenadas = [...new Set(EXCLUIDAS)]
-            .sort((a, b) => a.localeCompare('es', { sensitivity: 'base' }));
+        // Render Anexo II
+        document.getElementById('listaUnicasPalabras').innerHTML = unicasArray.map((p, i) => 
+            `<span class="palabra-tag"><span class="num-indice">${i+1}.</span><strong>${p}</strong></span>`).join("");
 
-        document.getElementById('visualizarExcluidas').innerHTML = excluidasOrdenadas.map((p, i) => 
-            `<span class="palabra-tag"><span class="num-indice">${i+1}.</span><strong>${p}</strong></span>`
-        ).join("");
-
-        // Actualizamos números de las tarjetas
+        // Marcadores
+        document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
         document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString();
-        document.getElementById('m-unicas-neto').innerText = unicasOrdenadas.length.toLocaleString();
+        document.getElementById('m-unicas-bruto').innerText = setTodasLasFormas.size.toLocaleString();
+        document.getElementById('m-unicas-neto').innerText = unicasArray.length.toLocaleString();
         
         renderCharts();
     }
@@ -197,8 +191,7 @@
                 scales: { 
                     yLeft: { stacked: true, position: 'left', beginAtZero: true },
                     yRight: { position: 'right', min: 0, max: 100, grid: { drawOnChartArea: false } }
-                },
-                plugins: { legend: { onClick: null } }
+                }
             }
         });
 
@@ -216,10 +209,9 @@
             options: { 
                 responsive: true, maintainAspectRatio: false, 
                 scales: { 
-                    y: { min: 0, max: 100 },
-                    x: { type: 'category', boundaryGap: false }
-                },
-                plugins: { legend: { onClick: null } }
+                    y: { min: 0, max: 100 }, 
+                    x: { boundaryGap: false } 
+                }
             }
         });
 
