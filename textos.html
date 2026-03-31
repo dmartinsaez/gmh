@@ -28,7 +28,6 @@
         .anexo-titulo { font-weight: bold; font-size: 1.1em; color: var(--azul); display: block; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
         .lista-excluidas { background: white; padding: 20px; border: 1px solid #eee; border-radius: 8px; max-height: 400px; overflow-y: auto; font-family: Georgia, serif; font-size: 0.9em; text-align: justify; line-height: 2.8; }
         
-        /* ESTILO UNIFICADO PARA AMBOS ANEXOS */
         .palabra-tag { display: inline-block; background: #f8f9fa; padding: 2px 10px; margin: 4px; border-radius: 4px; border: 1px solid #ddd; white-space: nowrap; }
         .num-indice { color: #999; font-size: 0.85em; margin-right: 5px; font-family: sans-serif; }
 
@@ -60,9 +59,18 @@
     </div>
 
     <div class="grid-graficas">
-        <div class="card-grafica"><canvas id="chartEvolucionAnual"></canvas></div>
-        <div class="card-grafica"><canvas id="chartCobertura"></canvas></div>
-        <div class="card-grafica"><canvas id="chartTop10"></canvas></div>
+        <div>
+            <div class="card-grafica"><canvas id="chartEvolucionAnual"></canvas></div>
+            <div class="recuadro-metodo"><strong>Metodología:</strong> Composición del volumen anual y densidad léxica.</div>
+        </div>
+        <div>
+            <div class="card-grafica"><canvas id="chartCobertura"></canvas></div>
+            <div class="recuadro-metodo"><strong>Metodología:</strong> Cobertura acumulada (Top 50 lemas).</div>
+        </div>
+        <div>
+            <div class="card-grafica"><canvas id="chartTop10"></canvas></div>
+            <div class="recuadro-metodo"><strong>Metodología:</strong> Ranking de los 10 términos más repetidos.</div>
+        </div>
     </div>
 
     <div class="anexo-metodologico">
@@ -71,7 +79,7 @@
     </div>
 
     <div class="anexo-metodologico" style="margin-top:30px;">
-        <span class="anexo-titulo">Anexo II: Vocabulario Único / Formas (Términos con significado - Orden Alfabético)</span>
+        <span class="anexo-titulo">Anexo II: Vocabulario Único / Formas (Palabras con significado - Orden Alfabético)</span>
         <div id="listaUnicasPalabras" class="lista-excluidas" style="border-left: 5px solid var(--oro);"></div>
     </div>
 </div>
@@ -146,7 +154,7 @@
             densidadPorAño[año] = totalAnual > 0 ? (palabrasNetasPorAño[año] / totalAnual) * 100 : 0;
         });
 
-        // RENDER ANEXO II: ALFABÉTICO REAL
+        // ANEXO II: ORDENADO ALFABÉTICAMENTE A-Z REAL
         const contUnicas = document.getElementById('listaUnicasPalabras');
         if (contUnicas) {
             const unicasOrdenadas = Array.from(setFormasSinExcluidas)
@@ -156,7 +164,7 @@
             ).join("");
         }
 
-        // RENDER ANEXO I: ALFABÉTICO REAL
+        // ANEXO I: ORDENADO ALFABÉTICAMENTE A-Z REAL
         const box = document.getElementById('visualizarExcluidas');
         if (box) {
             const excluidasOrdenadas = [...new Set(EXCLUIDAS)]
@@ -180,19 +188,51 @@
         Chart.getChart("chartTop10")?.destroy();
         Chart.getChart("chartCobertura")?.destroy();
 
+        // 1. Evolución (ESTÁTICA)
         new Chart(document.getElementById('chartEvolucionAnual'), {
             type: 'line',
             data: {
                 labels: años,
                 datasets: [
-                    { label: '% Densidad', data: años.map(a => densidadPorAño[a]), borderColor: '#e74c3c', yAxisID: 'yRight', fill: false, tension: 0.3 },
+                    { label: '% Densidad', data: años.map(a => densidadPorAño[a]), borderColor: '#e74c3c', yAxisID: 'yRight', fill: false, tension: 0.3, pointRadius: 4 },
                     { label: 'Palabras con significado', data: años.map(a => palabrasNetasPorAño[a]), backgroundColor: 'rgba(26, 58, 90, 0.7)', fill: true, yAxisID: 'yLeft' },
                     { label: 'Palabras vacías', data: años.map(a => palabrasExcluidasPorAño[a]), backgroundColor: 'rgba(184, 134, 11, 0.3)', fill: true, yAxisID: 'yLeft' }
                 ]
             },
-            options: { responsive: true, maintainAspectRatio: false, scales: { yLeft: { stacked: true }, yRight: { position: 'right', max: 100 } } }
+            options: { 
+                responsive: true, maintainAspectRatio: false, 
+                interaction: { mode: 'index', intersect: false },
+                scales: { 
+                    yLeft: { stacked: true, position: 'left', beginAtZero: true },
+                    yRight: { position: 'right', min: 0, max: 100, grid: { drawOnChartArea: false } }
+                },
+                plugins: { legend: { onClick: null } }
+            }
         });
 
+        // 2. Cobertura (BLOQUEADA A LOS BORDES)
+        const freqs = Object.values(vocabularioLemasNeto).sort((a, b) => b - a);
+        const totalNetoLocal = freqs.reduce((a, b) => a + b, 0); 
+        let sum = 0;
+        const top50Data = freqs.slice(0, 50).map(f => { sum += f; return (sum / totalNetoLocal) * 100; });
+
+        new Chart(document.getElementById('chartCobertura'), {
+            type: 'line',
+            data: { 
+                labels: Array.from({length: 50}, (_, i) => (i + 1).toString()), 
+                datasets: [{ label: '% Cobertura acumulada (Top 50 lemas)', data: top50Data, borderColor: '#b8860b', backgroundColor: 'rgba(184, 134, 11, 0.1)', fill: true, tension: 0.3, pointRadius: 2 }] 
+            },
+            options: { 
+                responsive: true, maintainAspectRatio: false, 
+                scales: { 
+                    y: { beginAtZero: true },
+                    x: { type: 'category', boundaryGap: false }
+                },
+                plugins: { legend: { onClick: null } }
+            }
+        });
+
+        // 3. Top 10
         const top10 = Object.entries(vocabularioLemasNeto).sort((a,b) => b[1]-a[1]).slice(0, 10);
         new Chart(document.getElementById('chartTop10'), {
             type: 'bar',
@@ -201,20 +241,6 @@
                 datasets: [{ label: 'Frecuencia', data: top10.map(t => t[1]), backgroundColor: '#1a3a5a' }]
             },
             options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
-        });
-
-        const freqs = Object.values(vocabularioLemasNeto).sort((a, b) => b - a);
-        const total = freqs.reduce((a, b) => a + b, 0); 
-        let sum = 0;
-        const top50Data = freqs.slice(0, 50).map(f => { sum += f; return (sum / total) * 100; });
-
-        new Chart(document.getElementById('chartCobertura'), {
-            type: 'line',
-            data: { 
-                labels: Array.from({length: 50}, (_, i) => (i + 1).toString()), 
-                datasets: [{ label: '% Cobertura acumulada', data: top50Data, borderColor: '#b8860b', backgroundColor: 'rgba(184, 134, 11, 0.1)', fill: true }] 
-            },
-            options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 100 } } }
         });
     }
 </script>
