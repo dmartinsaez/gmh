@@ -168,8 +168,13 @@ let texto = item.Transcripción
   .replace(/\s+/g, ' ')
   .trim();
 
-let palabras = texto.split(' ').filter(p => p.length > 1);            
-palabras.forEach(p => {
+let palabras = texto
+  .split(' ')
+  .map(p => normalizacionHistorica(p))
+  .filter(p => /^[a-zñ]+$/.test(p))
+  .filter(p => p.length >= 3)
+  .filter(p => !EXCLUIDAS_SET.has(p));
+            palabras.forEach(p => {
 let pLimpia = normalizacionHistorica(p);
     totalBrutasGlobal++;
     setUnicasBrutas.add(pLimpia);
