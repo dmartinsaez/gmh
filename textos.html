@@ -108,6 +108,10 @@
 </div>
 
 <script>
+
+
+
+
 let rawTextos = []; 
     let vocabularioLemasNeto = {}; 
     let palabrasNetasPorAño = {};
@@ -131,40 +135,30 @@ let rawTextos = [];
             vistos.add(txtLimpio);
             return true;
         });
-
         procesarYRenderizar();
     });
 
-    function lematizarFarinelli(palabra) {
+    // Esta función SOLO se usará para las gráficas, no para los contadores de arriba
+    function lematizarParaGrafica(palabra) {
         let p = normalizar(palabra);
         if (p.length <= 3) return p;
-
-        // 1. Unificación Manual Crítica (Prioridad absoluta)
-        // Esto garantiza que Señor/a/es/as y Ópera/s siempre sean lo mismo
-        if (p.startsWith("senor")) return "senor";
-        if (p.startsWith("opera")) return "opera";
+        if (p.startsWith("senor")) return "señor";
+        if (p.startsWith("opera")) return "ópera";
         if (p === "reina" || p === "reinas") return "rey";
-
-        // 2. Regla formal de plurales para el resto
-        if (p.endsWith("es")) {
-            return p.endsWith("ces") ? p.slice(0, -3) + "z" : p.slice(0, -2);
-        }
-        if (p.endsWith("s") && p.length > 4) {
-            return p.slice(0, -1);
-        }
-
+        if (p.endsWith("es")) return p.slice(0, -2);
+        if (p.endsWith("s")) return p.slice(0, -1);
         return p;
     }
     
     function procesarYRenderizar() {
-        // Reset de contadores
         totalBrutasGlobal = 0;
         totalNetasGlobal = 0;
         vocabularioLemasNeto = {};
         palabrasNetasPorAño = {};
         palabrasExcluidasPorAño = {};
-        let setFormasNetas = new Set(); 
-        let setLemasNetos = new Set();  
+
+        let setTodasLasFormas = new Set(); // Todas las palabras únicas (Señor, Señora...)
+        let setFormasSinExcluidas = new Set(); // Palabras únicas quitando las vacías
 
         rawTextos.forEach(item => {
             let año = item.Año || "S/D";
@@ -173,7 +167,6 @@ let rawTextos = [];
                 palabrasExcluidasPorAño[año] = 0;
             }
 
-            // EXPRESIÓN REGULAR CORREGIDA: Captura palabras con eñes y números sin romper el flujo
             let palabras = item.Transcripción.replace(/<[^>]+>/g, " ").match(/[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]+/g) || [];
             
             palabras.forEach(p => {
@@ -181,16 +174,16 @@ let rawTextos = [];
                 if (!pLimpia) return;
 
                 totalBrutasGlobal++;
+                setTodasLasFormas.add(pLimpia); // AQUÍ: Contamos la forma real
 
                 if (EXCLUIDAS.includes(pLimpia) || EXCLUIDAS.includes(normalizar(pLimpia))) {
                     palabrasExcluidasPorAño[año]++;
                 } else {
                     totalNetasGlobal++;
-                    let lema = lematizarFarinelli(pLimpia);
+                    setFormasSinExcluidas.add(pLimpia); // AQUÍ: Contamos la forma real sin vacías
                     
-                    setFormasNetas.add(pLimpia); 
-                    setLemasNetos.add(lema);
-                    
+                    // Solo lematizamos para el conteo de la gráfica Top 10
+                    let lema = lematizarParaGrafica(pLimpia);
                     vocabularioLemasNeto[lema] = (vocabularioLemasNeto[lema] || 0) + 1;
                     palabrasNetasPorAño[año]++;
                 }
@@ -200,37 +193,46 @@ let rawTextos = [];
             densidadPorAño[año] = totalAnual > 0 ? (palabrasNetasPorAño[año] / totalAnual) * 100 : 0;
         });
 
-        // Inyectar resultados en el HTML
+        // ACTUALIZACIÓN DE TARJETAS (Petición explícita del usuario)
         document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
-        document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString() + " (Tras exclusión)";
-        document.getElementById('m-unicas-bruto').innerText = setFormasNetas.size.toLocaleString();
-        document.getElementById('m-unicas-neto').innerText = setLemasNetos.size.toLocaleString() + " (Lemas únicos)";
+        document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString() + " (Total tras exclusión)";
         
-        document.getElementById('totalExcluidasTxt').innerText = 
-            `Diccionario: ${EXCLUIDAS.length} palabras vacías | Total eliminadas: ${(totalBrutasGlobal - totalNetasGlobal).toLocaleString()}`;
-
+        // Derecha: Palabras únicas reales | Subtítulo: Únicas sin excluidas
+        document.getElementById('m-unicas-bruto').innerText = setTodasLasFormas.size.toLocaleString();
+        document.getElementById('m-unicas-neto').innerText = setFormasSinExcluidas.size.toLocaleString() + " (Palabras únicas con significado)";
+        
         renderCharts();
         mostrarDiccionario();
     }
 
     function renderCharts() {
         const años = Object.keys(palabrasNetasPorAño).sort();
-        
-        // Gráfico Evolución
+        Chart.getChart("chartEvolucionAnual")?.destroy();
+        Chart.getChart("chartTop10")?.destroy();
+        Chart.getChart("chartCobertura")?.destroy();
+
+        // 1. Evolución con DOBLE EJE para que se vea la montaña de palabras
         new Chart(document.getElementById('chartEvolucionAnual'), {
             type: 'line',
             data: {
                 labels: años,
                 datasets: [
-                    { label: '% Densidad', data: años.map(a => densidadPorAño[a]), borderColor: '#e74c3c', yAxisID: 'y1', fill: false },
-                    { label: 'Netas', data: años.map(a => palabrasNetasPorAño[a]), backgroundColor: 'rgba(26, 58, 90, 0.7)', fill: true, stacked: true },
-                    { label: 'Vacías', data: años.map(a => palabrasExcluidasPorAño[a]), backgroundColor: 'rgba(184, 134, 11, 0.3)', fill: true, stacked: true }
+                    { label: '% Densidad', data: años.map(a => densidadPorAño[a]), borderColor: '#e74c3c', yAxisID: 'yRight', fill: false, tension: 0.3 },
+                    { label: 'Palabras con significado', data: años.map(a => palabrasNetasPorAño[a]), backgroundColor: 'rgba(26, 58, 90, 0.7)', fill: true, yAxisID: 'yLeft' },
+                    { label: 'Palabras vacías', data: años.map(a => palabrasExcluidasPorAño[a]), backgroundColor: 'rgba(184, 134, 11, 0.3)', fill: true, yAxisID: 'yLeft' }
                 ]
             },
-            options: { responsive: true, maintainAspectRatio: false, scales: { y1: { position: 'right', min: 0, max: 100 } } }
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                scales: { 
+                    yLeft: { stacked: true, position: 'left', title: { display: true, text: 'Nº Palabras' } },
+                    yRight: { position: 'right', min: 0, max: 100, title: { display: true, text: '%' }, grid: { drawOnChartArea: false } }
+                } 
+            }
         });
 
-        // Gráfico Top 10
+        // 2. Top 10 (Aquí sí agrupamos Señor/a para que la gráfica tenga sentido)
         const top10 = Object.entries(vocabularioLemasNeto).sort((a,b) => b[1]-a[1]).slice(0, 10);
         new Chart(document.getElementById('chartTop10'), {
             type: 'bar',
@@ -241,14 +243,14 @@ let rawTextos = [];
             options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
         });
 
-        // Gráfico Cobertura
+        // 3. Cobertura
         const freqs = Object.values(vocabularioLemasNeto).sort((a, b) => b - a);
         let sum = 0;
         const dataY = freqs.slice(0, 50).map(f => { sum += f; return (sum / totalNetasGlobal) * 100; });
         new Chart(document.getElementById('chartCobertura'), {
             type: 'line',
-            data: { labels: Array.from({length: 50}, (_, i) => i + 1), datasets: [{ label: '% Cobertura', data: dataY, borderColor: 'blue' }] },
-            options: { responsive: true, maintainAspectRatio: false }
+            data: { labels: Array.from({length: dataY.length}, (_, i) => i + 1), datasets: [{ label: '% Cobertura', data: dataY, borderColor: 'blue', fill: true, backgroundColor: 'rgba(0,0,255,0.05)' }] },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 100 } } }
         });
     }
 
@@ -262,6 +264,8 @@ let rawTextos = [];
             box.appendChild(s);
         });
     }
+
+    
 </script>
 </body>
 </html>
