@@ -9,6 +9,7 @@
         :root { --azul: #1a3a5a; --oro: #b8860b; --fondo: #fdfaf3; --borde: #dcdde1; --gris-metodo: #f8f9fa; }
         body { font-family: 'Georgia', serif; background-color: #f4f1ea; color: #2c3e50; line-height: 1.8; margin: 0; padding: 20px; }
         .contenedor { max-width: 1200px; margin: 0 auto; background: var(--fondo); padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        
         h1 { color: var(--azul); font-size: 1.3em; margin: 0 auto 0.8em auto; text-align: center; line-height: 1.4; max-width: 850px; border-bottom: 2px double var(--oro); padding-bottom: 15px; }
         
         .nav-farinelli { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; font-family: sans-serif; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; }
@@ -26,7 +27,6 @@
         .card-grafica { background: white; padding: 25px; border: 1px solid var(--borde); border-radius: 8px; height: 450px; }
         .recuadro-metodo { background-color: var(--gris-metodo); border-left: 5px solid var(--azul); padding: 15px 20px; margin-top: -10px; margin-bottom: 20px; font-size: 0.9em; border: 1px solid #e9ecef; }
 
-        /* CONTENEDORES DE ANEXOS EN PARALELO */
         .seccion-anexos-dupla { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; border-top: 1px solid var(--borde); padding-top: 20px; }
         .col-anexo { display: flex; flex-direction: column; }
         .anexo-titulo { font-weight: bold; font-size: 0.95em; color: var(--azul); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; height: 45px; display: flex; align-items: center; }
@@ -34,6 +34,7 @@
         .item-linea { display: flex; border-bottom: 1px solid #f2f2f2; padding: 6px 0; font-size: 0.95em; align-items: center; }
         .n-idx { color: #999; width: 55px; flex-shrink: 0; font-family: sans-serif; font-size: 0.8em; border-right: 1px solid #eee; margin-right: 10px; }
         .p-txt { color: #333; font-weight: bold; }
+        .nota-anexos { margin-top: 15px; font-size: 0.85em; color: #7f8c8d; font-style: italic; }
 
         @media (max-width: 900px) { .seccion-anexos-dupla { grid-template-columns: 1fr; } .metricas-grid { grid-template-columns: repeat(2, 1fr); } }
     </style>
@@ -41,7 +42,7 @@
 <body>
 
 <div class="contenedor">
-    <h1>Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli (1747–1758)</h1>
+    <h1>Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)</h1>
 
     <nav class="nav-farinelli">
         <a href="index.html">Documentario y Buscador</a>
@@ -73,15 +74,15 @@
     <div class="grid-graficas">
         <div>
             <div class="card-grafica"><canvas id="chartEvolucionAnual"></canvas></div>
-            <div class="recuadro-metodo"><strong>Metodología:</strong> Evolución anual y densidad léxica (Relación entre palabras con significado y vacías).</div>
+            <div class="recuadro-metodo"><strong>Metodología:</strong> Composición del volumen anual y densidad léxica (relación entre palabras con significado y palabras vacías).</div>
         </div>
         <div>
             <div class="card-grafica"><canvas id="chartCobertura"></canvas></div>
-            <div class="recuadro-metodo"><strong>Metodología:</strong> Cobertura acumulada de los 50 lemas más frecuentes (Corte al 50%).</div>
+            <div class="recuadro-metodo"><strong>Metodología:</strong> Cobertura acumulada. Proporción del texto analizado que es cubierto por los 50 lemas más frecuentes (Corte al 50%).</div>
         </div>
         <div>
             <div class="card-grafica"><canvas id="chartTop10"></canvas></div>
-            <div class="recuadro-metodo"><strong>Metodología:</strong> Los 10 términos con significado pleno más repetidos tras lematización.</div>
+            <div class="recuadro-metodo"><strong>Metodología:</strong> Ranking de los 10 términos con significado pleno más repetidos tras lematización.</div>
         </div>
     </div>
 
@@ -95,6 +96,7 @@
             <div id="listaUnicasPalabras" class="scroll-anexo"></div>
         </div>
     </div>
+    <p class="nota-anexos">Nota: Los términos de los anexos se muestran normalizados (sin distinguir mayúsculas ni acentos) para garantizar la coherencia estadística del conteo agrupado.</p>
 </div>
 
 <script>
@@ -103,7 +105,7 @@
     let palabrasNetasPorAño = {};
     let palabrasExcluidasPorAño = {}; 
     let densidadPorAño = {};
-    const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","43","44","45","5","6","60","7","8","9","a","al","alguna","algunas","alguno","algunos","algún","ambos","ante","antes","aquel","aquellas","aquellos","aqui","bajo","bastante","bien","cada","cierta","como","con","consigue","consiguen","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleo","en","encima","entonces","entre","era","eran","es","esta","estaba","estado","estan","este","fin","fue","fueron","fui","ha","hace","hacen","hacer","han","haviendo","huvo","incluso","ir","la","largo","las","lo","los","m","mas","mayor","mientras","misma","modo","muchos","muy","nos","o","otras","otro","para","pero","poder","podria","podrian","por","porque","primero","puede","pueden","que","quien","s","sabe","saben","saber","se","ser","si","sic","siendo","sin","sobre","solamente","solo","su","sus","tambien","también","tener","tiempo","tiene","tienen","toda","todo","trabajo","tras","tuvo","ultimo","un","una","unas","uno","unos","usa","uso","va","valor","verdad","y", "habiendo", "habido", "assi", "haviendola", "hecho", "igualmente", "havia", "estas"];
+    const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","43","44","45","5","6","60","7","8","9","49","51","75","90","114","200","1753","1755","abundantes","ademas","ahora","ambas","anade","p","ni","no","a","al","alguna","algunas","alguno","algunos","algún","ambos","ante","antes","aquel","aquellas","aquellos","aqui","bajo","bastante","bien","cada","cierta","como","con","consigue","consiguen","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleo","en","encima","entonces","entre","era","eran","es","esta","estaba","estado","estan","este","fin","fue","fueron","fui","ha","hace","hacen","hacer","han","haviendo","huvo","incluso","ir","la","largo","las","lo","los","m","mas","mayor","mientras","misma","modo","muchos","muy","nos","o","otras","otro","para","pero","poder","podria","podrian","por","porque","primero","puede","pueden","que","quien","s","sabe","saben","saber","se","ser","si","sic","siendo","sin","sobre","solamente","solo","su","sus","tambien","también","tener","tiempo","tiene","tienen","toda","todo","trabajo","tras","tuvo","ultimo","un","una","unas","uno","unos","usa","uso","va","valor","verdad","y", "habiendo", "habido", "assi", "haviendola", "hecho", "igualmente", "havia", "estas"];
 
     const collator = new Intl.Collator('es', { sensitivity: 'base', numeric: true });
 
@@ -142,7 +144,7 @@
         rawTextos.forEach(item => {
             let año = item.Año || "S/D";
             if (!palabrasNetasPorAño[año]) { palabrasNetasPorAño[año] = 0; palabrasExcluidasPorAño[año] = 0; }
-            let textoLimpio = item.Transcripción.replace(/<[^>]+>/g, " ").replace(/\[\d+\]/g, " ");
+            let textoLimpio = item.Transcripción.replace(/<[^>]+>/g, " ").replace(/\[\d+\]/g, " ").replace(/\[sic\]/gi, " ");
             let palabras = textoLimpio.match(/[\p{L}\d]+/gu) || [];
             
             palabras.forEach(p => {
@@ -164,7 +166,6 @@
             densidadPorAño[año] = totalAnual > 0 ? (palabrasNetasPorAño[año] / totalAnual) * 100 : 0;
         });
 
-        // ORDEN ALFABÉTICO HUMANO REAL (A-Z)
         const unicasA = Array.from(setNetas).sort(collator.compare);
         const excluidasA = [...new Set(EXCLUIDAS)].sort(collator.compare);
 
@@ -188,7 +189,6 @@
         Chart.getChart("chartTop10")?.destroy();
         Chart.getChart("chartCobertura")?.destroy();
 
-        // 1. Gráfica CONGELADA (Sin interacciones, sin animaciones, eje flexible para que NO se corte arriba)
         new Chart(document.getElementById('chartEvolucionAnual'), {
             type: 'line',
             data: {
@@ -203,16 +203,15 @@
                 animation: false,
                 responsive: true, 
                 maintainAspectRatio: false, 
-                events: [], // Desactivar interactividad
+                events: [],
                 scales: { 
-                    yLeft: { stacked: true, beginAtZero: true, grace: '5%' }, // 'grace' evita que toque el techo
+                    yLeft: { stacked: true, beginAtZero: true }, 
                     yRight: { position: 'right', min: 0, max: 100 }
                 },
                 plugins: { tooltip: { enabled: false } }
             }
         });
 
-        // 2. Cobertura (Corte al 50%)
         const freqs = Object.values(vocabularioLemasNeto).sort((a, b) => b - a);
         const total = freqs.reduce((a, b) => a + b, 0); 
         let sum = 0;
@@ -230,7 +229,6 @@
             }
         });
 
-        // 3. Top 10
         const top10 = Object.entries(vocabularioLemasNeto).sort((a,b) => b[1]-a[1]).slice(0, 10);
         new Chart(document.getElementById('chartTop10'), {
             type: 'bar',
