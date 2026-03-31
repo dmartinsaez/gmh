@@ -259,7 +259,6 @@
             options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
         });
 
-// 3. Gráfica de Cobertura (RECORTADA ESTRICTAMENTE AL 50)
 // 3. Gráfica de Cobertura (CORRECCIÓN DEFINITIVA DEL EJE)
         const freqs = Object.values(vocabularioLemasNeto).sort((a, b) => b - a);
         const totalNetoLocal = freqs.reduce((a, b) => a + b, 0); 
@@ -306,7 +305,7 @@
                 }
             }
         });
-
+}
     function mostrarDiccionario() {
         const box = document.getElementById('visualizarExcluidas');
         box.innerHTML = "";
