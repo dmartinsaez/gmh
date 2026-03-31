@@ -108,28 +108,11 @@
     let palabrasNetasPorAño = {};
     let palabrasExcluidasPorAño = {}; 
     let densidadPorAño = {};
-    let totalPalabras = 0;
-let totalBrutasGlobal = 0;
-let totalSinStopwords = 0;
-let setUnicasNetas = new Set();
-let totalSinStopwords = 0;
-let totalUnicasSinStopwords = 0;
+    let totalBrutasGlobal = 0;
+    let totalNetasGlobal = 0;
 
     const EXCLUIDAS = ["gm","mh","1","11","12","13","14","15","16","17","18","2","20","21","23","24","25","26","27","28","30","31","33","34","35","36","37","39","4","40","41","43","44","45","5","6","60","7","8","9","a","al","alguna","algunas","alguno","algunos","algún","ambos","ante","antes","aquel","aquellas","aquellos","aqui","bajo","bastante","bien","cada","cierta","como","con","consigue","consiguen","cual","cuando","cuya","cuyo","d","de","del","dentro","desde","donde","dos","e","el","ellas","ellos","empleo","en","encima","entonces","entre","era","eran","es","esta","estaba","estado","estan","este","fin","fue","fueron","fui","ha","hace","hacen","hacer","han","haviendo","huvo","incluso","ir","la","largo","las","lo","los","m","mas","mayor","mientras","misma","modo","muchos","muy","nos","o","otras","otro","para","pero","poder","podria","podrian","por","porque","primero","puede","pueden","que","quien","s","sabe","saben","saber","se","ser","si","sic","siendo","sin","sobre","solamente","solo","su","sus","tambien","también","tener","tiempo","tiene","tienen","toda","todo","trabajo","tras","tuvo","ultimo","un","una","unas","uno","unos","usa","uso","va","valor","verdad","y"];
-    const EXCLUIDAS_SET = new Set(EXCLUIDAS);
-    function normalizacionHistorica(p) {
-    return p
-        .replace(/ss/g,'s')
-        .replace(/ph/g,'f')
-        .replace(/th/g,'t')
-        .replace(/ch/g,'c')
-        .replace(/v/g,'b')
-        .replace(/y/g,'i')
-        .replace(/q/g,'c')
-        .replace(/z/g,'c')
-        .replace(/x/g,'j')
-        .replace(/mpt/g,'nt');
-}
+
     fetch('archivo.json').then(r => r.json()).then(data => {
         let vistos = new Set();
         rawTextos = data.filter(item => {
@@ -162,57 +145,35 @@ let totalUnicasSinStopwords = 0;
                 palabrasExcluidasPorAño[año] = 0;
             }
 
-let texto = item.Transcripción
-  .replace(/<[^>]*>/g, ' ')
-  .replace(/&[a-z]+;/g, ' ')
-  .toLowerCase()
-  .normalize('NFD')
-  .replace(/[\u0300-\u036f]/g, '')
-  .replace(/[^a-zñ\s]/g, ' ')
-  .replace(/\s+/g, ' ')
-  .trim();
-
-let palabras = texto
-  .split(' ')
-  .map(p => normalizacionHistorica(p))
-  .filter(p => /^[a-zñ]+$/.test(p))
-  .filter(p => p.length >= 3)
-  .filter(p => !EXCLUIDAS_SET.has(p));
+            let palabras = item.Transcripción.replace(/<[^>]+>/g, " ").toLowerCase().match(/[a-záéíóúñ]{2,}/gi) || [];
             
-palabras.forEach(p => {
+            palabras.forEach(p => {
+                let pLimpia = p.trim();
+                totalBrutasGlobal++;
+                setUnicasBrutas.add(pLimpia);
 
-    // 1. TOTAL BRUTO
-totalPalabras++;
-setUnicasBrutas.add(p);
-
-// 2. STOPWORDS vs NO STOPWORDS
-const esStop = EXCLUIDAS_SET.has(p);
-
-if (!esStop) {
-    totalSinStopwords++;
-
-    let lemaBase = lematizarSimple(p);
-
-    vocabularioLemasNeto[lemaBase] = (vocabularioLemasNeto[lemaBase] || 0) + 1;
-    palabrasNetasPorAño[año] = (palabrasNetasPorAño[año] || 0) + 1;
-
-setUnicasNetas.add(lemaBase);}
-});
+                if (EXCLUIDAS.includes(pLimpia)) {
+                    palabrasExcluidasPorAño[año]++;
+                } else {
+                    totalNetasGlobal++;
+                    let lemaBase = lematizarSimple(pLimpia);
+                    setUnicasNetas.add(lemaBase);
+                    vocabularioLemasNeto[lemaBase] = (vocabularioLemasNeto[lemaBase] || 0) + 1;
+                    palabrasNetasPorAño[año]++;
+                }
+            });
 
             let totalAño = palabrasNetasPorAño[año] + palabrasExcluidasPorAño[año];
             densidadPorAño[año] = totalAño > 0 ? (palabrasNetasPorAño[año] / totalAño) * 100 : 0;
         });
 
-document.getElementById('m-total-bruto').innerText = totalPalabras.toLocaleString();
-
-document.getElementById('m-total-neto').innerText = totalSinStopwords.toLocaleString() + " (Crítico)";
-
-document.getElementById('m-unicas-bruto').innerText = setUnicasBrutas.size.toLocaleString();
-
-document.getElementById('m-unicas-neto').innerText = setUnicasNetas.size.toLocaleString() + " (Críticas)";
-
-document.getElementById('totalExcluidasTxt').innerText = 
-    `Diccionario: ${EXCLUIDAS.length} palabras vacías | Total eliminadas del corpus: ${(totalPalabras - totalSinStopwords).toLocaleString()}`;
+        document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
+        document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString() + " (Crítico)";
+        document.getElementById('m-unicas-bruto').innerText = setUnicasBrutas.size.toLocaleString();
+        document.getElementById('m-unicas-neto').innerText = setUnicasNetas.size.toLocaleString() + " (Críticas)";
+        
+        document.getElementById('totalExcluidasTxt').innerText = 
+            `Diccionario: ${EXCLUIDAS.length} palabras vacías | Total eliminadas del corpus: ${(totalBrutasGlobal - totalNetasGlobal).toLocaleString()}`;
     }
 
     function renderCharts() {
@@ -270,7 +231,7 @@ document.getElementById('totalExcluidasTxt').innerText =
         const dataY = [0]; const etiquetasX = [0];
         sortedFrequencies.slice(0, 50).forEach((freq, index) => {
             cumulative += freq;
-dataY.push((cumulative / totalSinStopwords) * 100);
+            dataY.push((cumulative / totalNetasGlobal) * 100);
             etiquetasX.push(index + 1);
         });
 
