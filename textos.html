@@ -108,7 +108,7 @@
 </div>
 
 <script>
-    let rawTextos = []; 
+let rawTextos = []; 
     let vocabularioLemasNeto = {}; 
     let palabrasNetasPorAño = {};
     let palabrasExcluidasPorAño = {}; 
@@ -122,10 +122,9 @@
         return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
     
-fetch('archivo.json').then(r => r.json()).then(data => {
+    fetch('archivo.json').then(r => r.json()).then(data => {
         let vistos = new Set();
-
-rawTextos = data.filter(item => {
+        rawTextos = data.filter(item => {
             if (!item.Transcripción) return false;
             let txtLimpio = item.Transcripción.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
             if (!txtLimpio || vistos.has(txtLimpio)) return false;
@@ -134,7 +133,6 @@ rawTextos = data.filter(item => {
         });
 
         totalBrutasGlobal = 0;
-    
         totalNetasGlobal = 0;
         vocabularioLemasNeto = {};
         palabrasNetasPorAño = {};
@@ -145,7 +143,7 @@ rawTextos = data.filter(item => {
         mostrarDiccionario();
     });
 
-function lematizarSimple(palabra) {
+    function lematizarSimple(palabra) {
         let p = normalizar(palabra);
         if (p.length <= 3) return p;
 
@@ -159,15 +157,14 @@ function lematizarSimple(palabra) {
         // 2. Género de persona (morfema -ora)
         if (p.endsWith("ora")) return p.slice(0, -1);
 
-        // 3. Supleciones
+        // 3. Supleciones (Casos irregulares)
         const suple = { "reina": "rey", "actriz": "actor" };
         return suple[p] || p;
     }
     
     function procesarDatos() {
-let setFormasBrutas = new Set(); 
-        let setFormasNetas = new Set(); // Para las palabras únicas que NO son vacías
-        let setLemasNetos = new Set();  // Para los conceptos agrupados
+        let setFormasNetas = new Set(); 
+        let setLemasNetos = new Set();  
 
         rawTextos.forEach(item => {
             let año = item.Año || "S/D";
@@ -178,19 +175,16 @@ let setFormasBrutas = new Set();
 
             let palabras = item.Transcripción.replace(/<[^>]+>/g, " ").toLowerCase().match(/[a-záéíóúñ0-9]+/gi) || [];
             
-palabras.forEach(p => {
+            palabras.forEach(p => {
                 let pLimpia = p.trim();
                 totalBrutasGlobal++;
-                setFormasBrutas.add(pLimpia);
 
-if (EXCLUIDAS.includes(pLimpia) || EXCLUIDAS.includes(normalizar(pLimpia))) {
-    palabrasExcluidasPorAño[año]++;
-} else {
+                if (EXCLUIDAS.includes(pLimpia) || EXCLUIDAS.includes(normalizar(pLimpia))) {
+                    palabrasExcluidasPorAño[año]++;
+                } else {
                     totalNetasGlobal++;
                     let lemaBase = lematizarSimple(pLimpia);
                     
-                    // IMPORTANTE: Guardamos la forma original en un sitio
-                    // y el lema agrupado en otro para que los números difieran
                     setFormasNetas.add(pLimpia); 
                     setLemasNetos.add(lemaBase);
                     
@@ -203,18 +197,20 @@ if (EXCLUIDAS.includes(pLimpia) || EXCLUIDAS.includes(normalizar(pLimpia))) {
             densidadPorAño[año] = totalAño > 0 ? (palabrasNetasPorAño[año] / totalAño) * 100 : 0;
         });
 
-document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
+        // Actualización de métricas en pantalla
+        document.getElementById('m-total-bruto').innerText = totalBrutasGlobal.toLocaleString();
         document.getElementById('m-total-neto').innerText = totalNetasGlobal.toLocaleString() + " (Tras exclusión)";
+        document.getElementById('m-unicas-bruto').innerText = setFormasNetas.size.toLocaleString();
+        document.getElementById('m-unicas-neto').innerText = setLemasNetos.size.toLocaleString() + " (Lemas únicos)";
         
-document.getElementById('totalExcluidasTxt').innerText = 
+        document.getElementById('totalExcluidasTxt').innerText = 
             `Diccionario: ${EXCLUIDAS.length} palabras vacías | Total eliminadas del corpus: ${(totalBrutasGlobal - totalNetasGlobal).toLocaleString()}`;
     }
 
     function renderCharts() {
-        
         const años = Object.keys(palabrasNetasPorAño).sort();
         
-        // GRÁFICO 1: COMPLEJO (COMPOSICIÓN Y DENSIDAD)
+        // GRÁFICO 1: EVOLUCIÓN
         new Chart(document.getElementById('chartEvolucionAnual'), {
             type: 'line',
             data: {
@@ -227,8 +223,7 @@ document.getElementById('totalExcluidasTxt').innerText =
                         borderColor: '#e74c3c',
                         borderWidth: 2,
                         yAxisID: 'y1',
-                        fill: false,
-                        zIndex: 10
+                        fill: false
                     },
                     {
                         label: 'Palabras Netas',
@@ -252,15 +247,13 @@ document.getElementById('totalExcluidasTxt').innerText =
                 responsive: true, 
                 maintainAspectRatio: false,
                 scales: { 
-                    y: { stacked: true, title: { display: true, text: 'Cantidad de palabras' } },
-                    y1: { position: 'right', min: 0, max: 100, title: { display: true, text: '% Contenido Crítico' }, grid: { drawOnChartArea: false } }
-                },
-                plugins: {
-                    title: { display: true, text: 'ANÁLISIS DE COMPOSICIÓN Y DENSIDAD LÉXICA' }
+                    y: { stacked: true, title: { display: true, text: 'Cantidad' } },
+                    y1: { position: 'right', min: 0, max: 100, title: { display: true, text: '%' }, grid: { drawOnChartArea: false } }
                 }
             }
         });
 
+        // GRÁFICO 2: COBERTURA
         const sortedFrequencies = Object.values(vocabularioLemasNeto).sort((a, b) => b - a);
         let cumulative = 0;
         const dataY = [0]; const etiquetasX = [0];
@@ -284,10 +277,11 @@ document.getElementById('totalExcluidasTxt').innerText =
             options: { 
                 responsive: true, 
                 maintainAspectRatio: false,
-                scales: { x: { max: 50 }, y: { beginAtZero: true } }
+                scales: { x: { max: 50 }, y: { beginAtZero: true, max: 100 } }
             }
         });
 
+        // GRÁFICO 3: TOP 10
         const top10 = Object.entries(vocabularioLemasNeto).sort((a,b) => b[1]-a[1]).slice(0, 10);
         new Chart(document.getElementById('chartTop10'), {
             type: 'bar',
@@ -301,6 +295,7 @@ document.getElementById('totalExcluidasTxt').innerText =
 
     function mostrarDiccionario() {
         const box = document.getElementById('visualizarExcluidas');
+        box.innerHTML = ""; // Limpieza previa
         [...EXCLUIDAS].sort().forEach(p => {
             const s = document.createElement('span');
             s.className = 'palabra-tag';
