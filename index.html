@@ -24,12 +24,18 @@
   font-weight: bold;
   padding: 5px 10px;
   transition: 0.3s;
-  line-height: 1.8; /* El valor exacto que tienen tus otras páginas */
+  line-height: 1.8;
+  border-bottom: 2px solid transparent; /* Reserva el espacio para el subrayado */
+}
+.nav-farinelli a:hover {
+  color: #b8860b;
+  border-bottom: 2px solid #b8860b; /* Aquí aparece el subrayado oro */
 }
 .nav-farinelli .active {
   background: #1a3a5a;
   color: white !important;
   border-radius: 4px;
+  border-bottom: 2px solid #1a3a5a; /* Evita que el botón azul sea más bajo que los otros */
 }
 
 @media (max-width: 600px) {
@@ -374,7 +380,7 @@ h1 {
 /* Contenedor central para evitar estiramiento en pantallas grandes */
 .contenedor {
   max-width: 1200px;
-  width: 100%; /* Esta línea asegura que use todo el ancho disponible igual que las otras */
+  width: 95%; /* Ajusta el ancho para que coincida con las otras páginas */
   margin: 20px auto;      
   padding: 30px; 
   background: #fdfaf3; 
