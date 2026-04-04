@@ -893,6 +893,17 @@
   {
     "Año": 1750,
     "Nº": 82,
+    "Día": "23 sept.",
+    "Título": "<i>Demofoonte</i>",
+    "Libreto": "",
+    "Compositor": "",
+    "Ocasión": "Cumpleaños de Fernando VI",
+    "Fuentes": "Libreto",
+    "Transcripción": ""
+  },
+  {
+    "Año": 1750,
+    "Nº": 83,
     "Día": "18 dic.",
     "Título": "<i>Armida...</i>",
     "Libreto": "",
@@ -903,7 +914,7 @@
   },
   {
     "Año": 1751,
-    "Nº": 83,
+    "Nº": 84,
     "Día": "20 en.",
     "Título": "¿Demofoonte?",
     "Libreto": "",
@@ -914,7 +925,7 @@
   },
   {
     "Año": 1751,
-    "Nº": 84,
+    "Nº": 85,
     "Día": "29 en.",
     "Título": "<i>Demofoonte</i>",
     "Libreto": "",
@@ -925,7 +936,7 @@
   },
   {
     "Año": 1751,
-    "Nº": 85,
+    "Nº": 86,
     "Día": "30 en.",
     "Título": "<i>Armida...</i>",
     "Libreto": "",
@@ -936,7 +947,7 @@
   },
   {
     "Año": 1751,
-    "Nº": 86,
+    "Nº": 87,
     "Día": "31 en.",
     "Título": "<i>Demofoonte</i>",
     "Libreto": "",
@@ -947,7 +958,7 @@
   },
   {
     "Año": 1751,
-    "Nº": 87,
+    "Nº": 88,
     "Día": "2 feb.",
     "Título": "¿<i>Demofoonte</i>, <i>Armida</i>?",
     "Libreto": "",
@@ -958,19 +969,8 @@
   },
   {
     "Año": 1751,
-    "Nº": 88,
-    "Día": "14 feb.",
-    "Título": "<i>Demofoonte</i>",
-    "Libreto": "",
-    "Compositor": "",
-    "Ocasión": "Carnaval",
-    "Fuentes": "GM 7, 16/2/1751: 55. K: 282.",
-    "Transcripción": "[53] “Haviendose dado principio a las diversiones del Carnaval, assistieron sus Magestades el Domingo por la noche en su Real magnifico Colisèo del Buen-Retiro à la representacion de la Opera intitulada: <i>El Demophoonte</i>, à cuya funcion concurrieron tambien muchas Damas, y Cavalleros de la primera distincion de la Corte; y ayer tuvieron sus Magestades la misma diversion” (<i>GM</i>)."
-  },
-  {
-    "Año": 1751,
     "Nº": 89,
-    "Día": "15 feb.",
+    "Día": "14 feb.",
     "Título": "<i>Demofoonte</i>",
     "Libreto": "",
     "Compositor": "",
@@ -981,18 +981,18 @@
   {
     "Año": 1751,
     "Nº": 90,
-    "Día": "16 feb.",
-    "Título": "¿<i>Demofoonte</i>?",
+    "Día": "15 feb.",
+    "Título": "<i>Demofoonte</i>",
     "Libreto": "",
     "Compositor": "",
-    "Ocasión": "Tiempo de Carnaval",
-    "Fuentes": "SE: 70.",
-    "Transcripción": ""
+    "Ocasión": "Carnaval",
+    "Fuentes": "GM 7, 16/2/1751: 55. K: 282.",
+    "Transcripción": "[53] “Haviendose dado principio a las diversiones del Carnaval, assistieron sus Magestades el Domingo por la noche en su Real magnifico Colisèo del Buen-Retiro à la representacion de la Opera intitulada: <i>El Demophoonte</i>, à cuya funcion concurrieron tambien muchas Damas, y Cavalleros de la primera distincion de la Corte; y ayer tuvieron sus Magestades la misma diversion” (<i>GM</i>)."
   },
   {
     "Año": 1751,
     "Nº": 91,
-    "Día": "17 feb.",
+    "Día": "16 feb.",
     "Título": "¿<i>Demofoonte</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1003,7 +1003,7 @@
   {
     "Año": 1751,
     "Nº": 92,
-    "Día": "19 feb.",
+    "Día": "17 feb.",
     "Título": "¿<i>Demofoonte</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1014,7 +1014,7 @@
   {
     "Año": 1751,
     "Nº": 93,
-    "Día": "21 feb.",
+    "Día": "19 feb.",
     "Título": "¿<i>Demofoonte</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1025,7 +1025,7 @@
   {
     "Año": 1751,
     "Nº": 94,
-    "Día": "22 feb.",
+    "Día": "21 feb.",
     "Título": "¿<i>Demofoonte</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1036,7 +1036,7 @@
   {
     "Año": 1751,
     "Nº": 95,
-    "Día": "23 feb.",
+    "Día": "22 feb.",
     "Título": "¿<i>Demofoonte</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1047,6 +1047,17 @@
   {
     "Año": 1751,
     "Nº": 96,
+    "Día": "23 feb.",
+    "Título": "¿<i>Demofoonte</i>?",
+    "Libreto": "",
+    "Compositor": "",
+    "Ocasión": "Tiempo de Carnaval",
+    "Fuentes": "SE: 70.",
+    "Transcripción": ""
+  },
+  {
+    "Año": 1751,
+    "Nº": 97,
     "Día": "23 sep.",
     "Título": "<i>Demetrio</i>",
     "Libreto": "Pietro Metastasio",
@@ -1057,7 +1068,7 @@
   },
   {
     "Año": 1751,
-    "Nº": 97,
+    "Nº": 98,
     "Día": "3 oct.",
     "Título": "<i>Demetrio</i>",
     "Libreto": "",
@@ -1068,7 +1079,7 @@
   },
   {
     "Año": 1751,
-    "Nº": 98,
+    "Nº": 99,
     "Día": "4 dic.",
     "Título": "<i>Armida...</i>",
     "Libreto": "",
@@ -1079,7 +1090,7 @@
   },
   {
     "Año": 1751,
-    "Nº": 99,
+    "Nº": 100,
     "Día": "25 dic.",
     "Título": "<i>Armida...</i>",
     "Libreto": "",
@@ -1090,7 +1101,7 @@
   },
   {
     "Año": 1751,
-    "Nº": 100,
+    "Nº": 101,
     "Día": "31 dic.",
     "Título": "<i>Demetrio</i>",
     "Libreto": "",
@@ -1101,7 +1112,7 @@
   },
   {
     "Año": 1752,
-    "Nº": 101,
+    "Nº": 102,
     "Día": "1 en.",
     "Título": "<i>Demetrio</i>",
     "Libreto": "",
@@ -1112,7 +1123,7 @@
   },
   {
     "Año": 1752,
-    "Nº": 102,
+    "Nº": 103,
     "Día": "2 en.",
     "Título": "<i>Demetrio</i>",
     "Libreto": "",
@@ -1123,7 +1134,7 @@
   },
   {
     "Año": 1752,
-    "Nº": 103,
+    "Nº": 104,
     "Día": "6 en.",
     "Título": "<i>Demetrio</i>",
     "Libreto": "",
@@ -1134,7 +1145,7 @@
   },
   {
     "Año": 1752,
-    "Nº": 104,
+    "Nº": 105,
     "Día": "16 en.",
     "Título": "<i>Demetrio</i>",
     "Libreto": "",
@@ -1145,19 +1156,8 @@
   },
   {
     "Año": 1752,
-    "Nº": 105,
-    "Día": "20 en.",
-    "Título": "<i>Demofoonte</i>",
-    "Libreto": "",
-    "Compositor": "",
-    "Ocasión": "Cumpleaños del Rey de las Dos Sicilias",
-    "Fuentes": "GM 4, 25/1/1752: 31. MH 1/1752: 76.",
-    "Transcripción": "[63] “El 20 se vistiò la Corte de Gala, y huvo en Palacio un numeroso lucido concurso de Grandes, Embaxadores, Ministros Estrangeros, y Personas de distincion, en celebridad del cumpleaños de S. M. [Su Magestad] el Rey de las <i>Dos-Sicilias</i>, que entrò en los 37 de su edad; y por la noche assistieron los Reyes, y toda la Corte à la Opera: <i>El Demophoonte</i>, que se representò en su Real Colisèo, y de cuya execucion quedaron Sus Magestades muy gustosos. El 23 se repitiò esta Opera, y el dia siguiente tuvieron Sus Magestades la misma diversion” (<i>MH</i>)."
-  },
-  {
-    "Año": 1752,
     "Nº": 106,
-    "Día": "23 en.",
+    "Día": "20 en.",
     "Título": "<i>Demofoonte</i>",
     "Libreto": "",
     "Compositor": "",
@@ -1168,7 +1168,7 @@
   {
     "Año": 1752,
     "Nº": 107,
-    "Día": "24 en.",
+    "Día": "23 en.",
     "Título": "<i>Demofoonte</i>",
     "Libreto": "",
     "Compositor": "",
@@ -1179,6 +1179,17 @@
   {
     "Año": 1752,
     "Nº": 108,
+    "Día": "24 en.",
+    "Título": "<i>Demofoonte</i>",
+    "Libreto": "",
+    "Compositor": "",
+    "Ocasión": "Cumpleaños del Rey de las Dos Sicilias",
+    "Fuentes": "GM 4, 25/1/1752: 31. MH 1/1752: 76.",
+    "Transcripción": "[63] “El 20 se vistiò la Corte de Gala, y huvo en Palacio un numeroso lucido concurso de Grandes, Embaxadores, Ministros Estrangeros, y Personas de distincion, en celebridad del cumpleaños de S. M. [Su Magestad] el Rey de las <i>Dos-Sicilias</i>, que entrò en los 37 de su edad; y por la noche assistieron los Reyes, y toda la Corte à la Opera: <i>El Demophoonte</i>, que se representò en su Real Colisèo, y de cuya execucion quedaron Sus Magestades muy gustosos. El 23 se repitiò esta Opera, y el dia siguiente tuvieron Sus Magestades la misma diversion” (<i>MH</i>)."
+  },
+  {
+    "Año": 1752,
+    "Nº": 109,
     "Día": "25-27 en.",
     "Título": "<i>Demetrio</i>",
     "Libreto": "",
@@ -1189,7 +1200,7 @@
   },
   {
     "Año": 1752,
-    "Nº": 109,
+    "Nº": 110,
     "Día": "28 en.",
     "Título": "¿<i>Demetrio</i>?",
     "Libreto": "",
@@ -1200,7 +1211,7 @@
   },
   {
     "Año": 1752,
-    "Nº": 110,
+    "Nº": 111,
     "Día": "30 en.",
     "Título": "<i>Demetrio</i>",
     "Libreto": "",
@@ -1211,7 +1222,7 @@
   },
   {
     "Año": 1752,
-    "Nº": 111,
+    "Nº": 112,
     "Día": "31 en.",
     "Título": "¿<i>Demetrio</i>?",
     "Libreto": "",
@@ -1222,7 +1233,7 @@
   },
   {
     "Año": 1752,
-    "Nº": 112,
+    "Nº": 113,
     "Día": "1-15 feb.",
     "Título": "¿<i>Demetrio</i>?",
     "Libreto": "",
@@ -1233,19 +1244,8 @@
   },
   {
     "Año": 1752,
-    "Nº": 113,
-    "Día": "2 feb.",
-    "Título": "¿<i>Demetrio</i>?",
-    "Libreto": "",
-    "Compositor": "",
-    "Ocasión": "Tiempo de Carnaval",
-    "Fuentes": "SE: 72.",
-    "Transcripción": ""
-  },
-  {
-    "Año": 1752,
     "Nº": 114,
-    "Día": "4 feb.",
+    "Día": "2 feb.",
     "Título": "¿<i>Demetrio</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1256,7 +1256,7 @@
   {
     "Año": 1752,
     "Nº": 115,
-    "Día": "10 feb.",
+    "Día": "4 feb.",
     "Título": "¿<i>Demetrio</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1267,7 +1267,7 @@
   {
     "Año": 1752,
     "Nº": 116,
-    "Día": "11 feb.",
+    "Día": "10 feb.",
     "Título": "¿<i>Demetrio</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1278,7 +1278,7 @@
   {
     "Año": 1752,
     "Nº": 117,
-    "Día": "13 feb.",
+    "Día": "11 feb.",
     "Título": "¿<i>Demetrio</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1289,7 +1289,7 @@
   {
     "Año": 1752,
     "Nº": 118,
-    "Día": "14 feb.",
+    "Día": "13 feb.",
     "Título": "¿<i>Demetrio</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1300,7 +1300,7 @@
   {
     "Año": 1752,
     "Nº": 119,
-    "Día": "15 feb.",
+    "Día": "14 feb.",
     "Título": "¿<i>Demetrio</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1311,6 +1311,17 @@
   {
     "Año": 1752,
     "Nº": 120,
+    "Día": "15 feb.",
+    "Título": "¿<i>Demetrio</i>?",
+    "Libreto": "",
+    "Compositor": "",
+    "Ocasión": "Tiempo de Carnaval",
+    "Fuentes": "SE: 72.",
+    "Transcripción": ""
+  },
+  {
+    "Año": 1752,
+    "Nº": 121,
     "Día": "2 ab.",
     "Título": "<i>Demetrio</i>",
     "Libreto": "",
@@ -1321,7 +1332,7 @@
   },
   {
     "Año": 1752,
-    "Nº": 121,
+    "Nº": 122,
     "Día": "4 ab.",
     "Título": "¿<i>Demetrio</i>, <i>Demofoonte</i>?",
     "Libreto": "",
@@ -1332,7 +1343,7 @@
   },
   {
     "Año": 1752,
-    "Nº": 122,
+    "Nº": 123,
     "Día": "9 ab.",
     "Título": "<i>Demofoonte</i>",
     "Libreto": "",
@@ -1343,19 +1354,8 @@
   },
   {
     "Año": 1752,
-    "Nº": 123,
-    "Día": "12 ab.",
-    "Título": "<i>Demofoonte</i>",
-    "Libreto": "",
-    "Compositor": "",
-    "Ocasión": "Tiempo pascual",
-    "Fuentes": "MH 4/1752: 78. GM 16, 18/4/1752: 128.",
-    "Transcripción": "[69] “El 9, 12 y 16 del mismo por la noche concurrieron los Reyes nuestros Señores à la Opera intitulada: <i>El Demophoonte</i>, que se representò en su magnifico Real Colisèo, y se executò con mucho lucimiento, y destreza” (<i>MH</i>).\n[70] “El Miercoles [12] de la semana passada por la noche concurrieron sus Magestades à la Opera: <i>El Demophoonte</i>, que se celebrò en su magnifico Real Colisèo; y el Domingo [16] siguiente tuvieron la misma diversion, haviendose executado en ambos con mucho lucimiento, y destreza” (<i>GM</i>)."
-  },
-  {
-    "Año": 1752,
     "Nº": 124,
-    "Día": "16 ab.",
+    "Día": "12 ab.",
     "Título": "<i>Demofoonte</i>",
     "Libreto": "",
     "Compositor": "",
@@ -1366,6 +1366,17 @@
   {
     "Año": 1752,
     "Nº": 125,
+    "Día": "16 ab.",
+    "Título": "<i>Demofoonte</i>",
+    "Libreto": "",
+    "Compositor": "",
+    "Ocasión": "Tiempo pascual",
+    "Fuentes": "MH 4/1752: 78. GM 16, 18/4/1752: 128.",
+    "Transcripción": "[69] “El 9, 12 y 16 del mismo por la noche concurrieron los Reyes nuestros Señores à la Opera intitulada: <i>El Demophoonte</i>, que se representò en su magnifico Real Colisèo, y se executò con mucho lucimiento, y destreza” (<i>MH</i>).\n[70] “El Miercoles [12] de la semana passada por la noche concurrieron sus Magestades à la Opera: <i>El Demophoonte</i>, que se celebrò en su magnifico Real Colisèo; y el Domingo [16] siguiente tuvieron la misma diversion, haviendose executado en ambos con mucho lucimiento, y destreza” (<i>GM</i>)."
+  },
+  {
+    "Año": 1752,
+    "Nº": 126,
     "Día": "23 sep.",
     "Título": "<i>Didone abbandonata</i>",
     "Libreto": "Pietro Metastasio",
@@ -1376,7 +1387,7 @@
   },
   {
     "Año": 1752,
-    "Nº": 126,
+    "Nº": 127,
     "Día": "1 oct.",
     "Título": "<i>Didone...</i>",
     "Libreto": "",
@@ -1387,7 +1398,7 @@
   },
   {
     "Año": 1752,
-    "Nº": 127,
+    "Nº": 128,
     "Día": "4 dic.",
     "Título": "<i>Didone...</i>",
     "Libreto": "",
@@ -1398,7 +1409,7 @@
   },
   {
     "Año": 1752,
-    "Nº": 128,
+    "Nº": 129,
     "Día": "18 dic.",
     "Título": "<i>Didone...</i>",
     "Libreto": "",
@@ -1409,7 +1420,7 @@
   },
   {
     "Año": 1752,
-    "Nº": 129,
+    "Nº": 130,
     "Día": "25 dic.",
     "Título": "<i>Siroe</i>",
     "Libreto": "Pietro Metastasio",
@@ -1420,7 +1431,7 @@
   },
   {
     "Año": 1753,
-    "Nº": 130,
+    "Nº": 131,
     "Día": "2 feb.",
     "Título": "<i>Demetrio</i>",
     "Libreto": "",
@@ -1431,19 +1442,8 @@
   },
   {
     "Año": 1753,
-    "Nº": 131,
-    "Día": "4 feb.",
-    "Título": "<i>Siroe</i>",
-    "Libreto": "",
-    "Compositor": "",
-    "Ocasión": "",
-    "Fuentes": "GM 6, 6/2/1753: 48.",
-    "Transcripción": "Continuación de la anterior: “El Domingo inmediato [4] oyeron los Reyes desde su Real Tribuna la Missa Mayor, que se dixo en la referida Iglesia de S. Geronymo, cantada por la Musica de su Capilla; y por la noche se representò en su Real presencia, y de toda la Corte la Opera intitulada <i>El Siroe</i>, que se repitio el Lunes [5] siguiente” (<i>GM</i>)."
-  },
-  {
-    "Año": 1753,
     "Nº": 132,
-    "Día": "5 feb.",
+    "Día": "4 feb.",
     "Título": "<i>Siroe</i>",
     "Libreto": "",
     "Compositor": "",
@@ -1454,6 +1454,17 @@
   {
     "Año": 1753,
     "Nº": 133,
+    "Día": "5 feb.",
+    "Título": "<i>Siroe</i>",
+    "Libreto": "",
+    "Compositor": "",
+    "Ocasión": "",
+    "Fuentes": "GM 6, 6/2/1753: 48.",
+    "Transcripción": "Continuación de la anterior: “El Domingo inmediato [4] oyeron los Reyes desde su Real Tribuna la Missa Mayor, que se dixo en la referida Iglesia de S. Geronymo, cantada por la Musica de su Capilla; y por la noche se representò en su Real presencia, y de toda la Corte la Opera intitulada <i>El Siroe</i>, que se repitio el Lunes [5] siguiente” (<i>GM</i>)."
+  },
+  {
+    "Año": 1753,
+    "Nº": 134,
     "Día": "6-13 feb.",
     "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -1464,19 +1475,8 @@
   },
   {
     "Año": 1753,
-    "Nº": 134,
-    "Día": "7 feb.",
-    "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
-    "Libreto": "",
-    "Compositor": "",
-    "Ocasión": "",
-    "Fuentes": "SE: 73.",
-    "Transcripción": ""
-  },
-  {
-    "Año": 1753,
     "Nº": 135,
-    "Día": "9 feb.",
+    "Día": "7 feb.",
     "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1487,7 +1487,7 @@
   {
     "Año": 1753,
     "Nº": 136,
-    "Día": "11 feb.",
+    "Día": "9 feb.",
     "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1498,7 +1498,7 @@
   {
     "Año": 1753,
     "Nº": 137,
-    "Día": "12 feb.",
+    "Día": "11 feb.",
     "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1509,6 +1509,17 @@
   {
     "Año": 1753,
     "Nº": 138,
+    "Día": "12 feb.",
+    "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
+    "Libreto": "",
+    "Compositor": "",
+    "Ocasión": "",
+    "Fuentes": "SE: 73.",
+    "Transcripción": ""
+  },
+  {
+    "Año": 1753,
+    "Nº": 139,
     "Día": "14-19 feb.",
     "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -1519,19 +1530,8 @@
   },
   {
     "Año": 1753,
-    "Nº": 139,
-    "Día": "14 feb.",
-    "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
-    "Libreto": "",
-    "Compositor": "",
-    "Ocasión": "Tiempo de Carnaval",
-    "Fuentes": "SE: 73.",
-    "Transcripción": ""
-  },
-  {
-    "Año": 1753,
     "Nº": 140,
-    "Día": "18 feb.",
+    "Día": "14 feb.",
     "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1542,7 +1542,7 @@
   {
     "Año": 1753,
     "Nº": 141,
-    "Día": "19 feb.",
+    "Día": "18 feb.",
     "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1553,6 +1553,17 @@
   {
     "Año": 1753,
     "Nº": 142,
+    "Día": "19 feb.",
+    "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
+    "Libreto": "",
+    "Compositor": "",
+    "Ocasión": "Tiempo de Carnaval",
+    "Fuentes": "SE: 73.",
+    "Transcripción": ""
+  },
+  {
+    "Año": 1753,
+    "Nº": 143,
     "Día": "21-27 feb.",
     "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -1563,19 +1574,8 @@
   },
   {
     "Año": 1753,
-    "Nº": 143,
-    "Día": "21 feb.",
-    "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
-    "Libreto": "",
-    "Compositor": "",
-    "Ocasión": "Tiempo de Carnaval",
-    "Fuentes": "SE: 73.",
-    "Transcripción": ""
-  },
-  {
-    "Año": 1753,
     "Nº": 144,
-    "Día": "24 feb.",
+    "Día": "21 feb.",
     "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1586,7 +1586,7 @@
   {
     "Año": 1753,
     "Nº": 145,
-    "Día": "25 feb.",
+    "Día": "24 feb.",
     "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1597,7 +1597,7 @@
   {
     "Año": 1753,
     "Nº": 146,
-    "Día": "26 feb.",
+    "Día": "25 feb.",
     "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1608,6 +1608,17 @@
   {
     "Año": 1753,
     "Nº": 147,
+    "Día": "26 feb.",
+    "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
+    "Libreto": "",
+    "Compositor": "",
+    "Ocasión": "Tiempo de Carnaval",
+    "Fuentes": "SE: 73.",
+    "Transcripción": ""
+  },
+  {
+    "Año": 1753,
+    "Nº": 148,
     "Día": "27 feb.-5 mar.",
     "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -1618,7 +1629,7 @@
   },
   {
     "Año": 1753,
-    "Nº": 148,
+    "Nº": 149,
     "Día": "27 feb.",
     "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -1629,7 +1640,7 @@
   },
   {
     "Año": 1753,
-    "Nº": 149,
+    "Nº": 150,
     "Día": "28 feb.",
     "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -1640,7 +1651,7 @@
   },
   {
     "Año": 1753,
-    "Nº": 150,
+    "Nº": 151,
     "Día": "1 mar.",
     "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -1651,7 +1662,7 @@
   },
   {
     "Año": 1753,
-    "Nº": 151,
+    "Nº": 152,
     "Día": "2 mar.",
     "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -1662,7 +1673,7 @@
   },
   {
     "Año": 1753,
-    "Nº": 152,
+    "Nº": 153,
     "Día": "4 mar.",
     "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -1673,7 +1684,7 @@
   },
   {
     "Año": 1753,
-    "Nº": 153,
+    "Nº": 154,
     "Día": "5 mar.",
     "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -1684,7 +1695,7 @@
   },
   {
     "Año": 1753,
-    "Nº": 154,
+    "Nº": 155,
     "Día": "6 mar.",
     "Título": "¿<i>Demetrio</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -1695,7 +1706,7 @@
   },
   {
     "Año": 1753,
-    "Nº": 155,
+    "Nº": 156,
     "Día": "23 sep.",
     "Título": "<i>Semiramide riconosciuta</i>",
     "Libreto": "Pietro Metastasio",
@@ -1706,7 +1717,7 @@
   },
   {
     "Año": 1753,
-    "Nº": 156,
+    "Nº": 157,
     "Día": "30 sep.",
     "Título": "<i>Semiramide...</i>",
     "Libreto": "",
@@ -1717,7 +1728,7 @@
   },
   {
     "Año": 1753,
-    "Nº": 157,
+    "Nº": 158,
     "Día": "7 oct.",
     "Título": "<i>Semiramide...</i>",
     "Libreto": "",
@@ -1728,7 +1739,7 @@
   },
   {
     "Año": 1753,
-    "Nº": 158,
+    "Nº": 159,
     "Día": "4 dic.",
     "Título": "<i>Semiramide...</i>",
     "Libreto": "",
@@ -1739,7 +1750,7 @@
   },
   {
     "Año": 1753,
-    "Nº": 159,
+    "Nº": 160,
     "Día": "18 dic.",
     "Título": "<i>Didone...</i>",
     "Libreto": "",
@@ -1750,7 +1761,7 @@
   },
   {
     "Año": 1753,
-    "Nº": 160,
+    "Nº": 161,
     "Día": "25 dic.",
     "Título": "<i>Didone...</i>",
     "Libreto": "",
@@ -1761,7 +1772,7 @@
   },
   {
     "Año": 1754,
-    "Nº": 161,
+    "Nº": 162,
     "Día": "¿?",
     "Título": "<i>Semiramide</i>",
     "Libreto": "",
@@ -1772,7 +1783,7 @@
   },
   {
     "Año": 1754,
-    "Nº": 162,
+    "Nº": 163,
     "Día": "1 en.",
     "Título": "¿<i>Semiramide</i>, <i>Didone</i>?",
     "Libreto": "",
@@ -1783,7 +1794,7 @@
   },
   {
     "Año": 1754,
-    "Nº": 163,
+    "Nº": 164,
     "Día": "6 en.",
     "Título": "<i>Didone...</i>",
     "Libreto": "",
@@ -1794,19 +1805,8 @@
   },
   {
     "Año": 1754,
-    "Nº": 164,
-    "Día": "9 en.",
-    "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
-    "Libreto": "",
-    "Compositor": "",
-    "Ocasión": "",
-    "Fuentes": "SE: 74.",
-    "Transcripción": ""
-  },
-  {
-    "Año": 1754,
     "Nº": 165,
-    "Día": "11 en.",
+    "Día": "9 en.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1817,7 +1817,7 @@
   {
     "Año": 1754,
     "Nº": 166,
-    "Día": "16 en.",
+    "Día": "11 en.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1828,7 +1828,7 @@
   {
     "Año": 1754,
     "Nº": 167,
-    "Día": "18 en.",
+    "Día": "16 en.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1839,6 +1839,17 @@
   {
     "Año": 1754,
     "Nº": 168,
+    "Día": "18 en.",
+    "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
+    "Libreto": "",
+    "Compositor": "",
+    "Ocasión": "",
+    "Fuentes": "SE: 74.",
+    "Transcripción": ""
+  },
+  {
+    "Año": 1754,
+    "Nº": 169,
     "Día": "20 en.",
     "Título": "<i>Siroe</i>",
     "Libreto": "",
@@ -1849,19 +1860,8 @@
   },
   {
     "Año": 1754,
-    "Nº": 169,
-    "Día": "22 en.",
-    "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
-    "Libreto": "",
-    "Compositor": "",
-    "Ocasión": "",
-    "Fuentes": "SE: 74.",
-    "Transcripción": ""
-  },
-  {
-    "Año": 1754,
     "Nº": 170,
-    "Día": "24 en.",
+    "Día": "22 en.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1872,7 +1872,7 @@
   {
     "Año": 1754,
     "Nº": 171,
-    "Día": "25 en.",
+    "Día": "24 en.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1883,7 +1883,7 @@
   {
     "Año": 1754,
     "Nº": 172,
-    "Día": "27 en.",
+    "Día": "25 en.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1894,7 +1894,7 @@
   {
     "Año": 1754,
     "Nº": 173,
-    "Día": "28 en.",
+    "Día": "27 en.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1905,6 +1905,17 @@
   {
     "Año": 1754,
     "Nº": 174,
+    "Día": "28 en.",
+    "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
+    "Libreto": "",
+    "Compositor": "",
+    "Ocasión": "",
+    "Fuentes": "SE: 74.",
+    "Transcripción": ""
+  },
+  {
+    "Año": 1754,
+    "Nº": 175,
     "Día": "¿? en.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -1915,7 +1926,7 @@
   },
   {
     "Año": 1754,
-    "Nº": 175,
+    "Nº": 176,
     "Día": "2 feb.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -1926,7 +1937,7 @@
   },
   {
     "Año": 1754,
-    "Nº": 176,
+    "Nº": 177,
     "Día": "6-12 feb.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -1937,19 +1948,8 @@
   },
   {
     "Año": 1754,
-    "Nº": 177,
-    "Día": "7 feb.",
-    "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
-    "Libreto": "",
-    "Compositor": "",
-    "Ocasión": "Tiempo de Carnaval",
-    "Fuentes": "SE: 75.",
-    "Transcripción": ""
-  },
-  {
-    "Año": 1754,
     "Nº": 178,
-    "Día": "8 feb.",
+    "Día": "7 feb.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1960,6 +1960,17 @@
   {
     "Año": 1754,
     "Nº": 179,
+    "Día": "8 feb.",
+    "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
+    "Libreto": "",
+    "Compositor": "",
+    "Ocasión": "Tiempo de Carnaval",
+    "Fuentes": "SE: 75.",
+    "Transcripción": ""
+  },
+  {
+    "Año": 1754,
+    "Nº": 180,
     "Día": "11-17 feb.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -1970,19 +1981,8 @@
   },
   {
     "Año": 1754,
-    "Nº": 180,
-    "Día": "13 feb.",
-    "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
-    "Libreto": "",
-    "Compositor": "",
-    "Ocasión": "Tiempo de Carnaval",
-    "Fuentes": "SE: 75.",
-    "Transcripción": ""
-  },
-  {
-    "Año": 1754,
     "Nº": 181,
-    "Día": "14 feb.",
+    "Día": "13 feb.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -1993,7 +1993,7 @@
   {
     "Año": 1754,
     "Nº": 182,
-    "Día": "15 feb.",
+    "Día": "14 feb.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -2004,7 +2004,7 @@
   {
     "Año": 1754,
     "Nº": 183,
-    "Día": "17 feb.",
+    "Día": "15 feb.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -2015,7 +2015,7 @@
   {
     "Año": 1754,
     "Nº": 184,
-    "Día": "18 feb.",
+    "Día": "17 feb.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -2026,6 +2026,17 @@
   {
     "Año": 1754,
     "Nº": 185,
+    "Día": "18 feb.",
+    "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
+    "Libreto": "",
+    "Compositor": "",
+    "Ocasión": "Tiempo de Carnaval",
+    "Fuentes": "SE: 75.",
+    "Transcripción": ""
+  },
+  {
+    "Año": 1754,
+    "Nº": 186,
     "Día": "19-26 feb.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -2036,19 +2047,8 @@
   },
   {
     "Año": 1754,
-    "Nº": 186,
-    "Día": "21 feb.",
-    "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
-    "Libreto": "",
-    "Compositor": "",
-    "Ocasión": "Tiempo de Carnaval",
-    "Fuentes": "SE: 75.",
-    "Transcripción": ""
-  },
-  {
-    "Año": 1754,
     "Nº": 187,
-    "Día": "24 feb.",
+    "Día": "21 feb.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -2059,7 +2059,7 @@
   {
     "Año": 1754,
     "Nº": 188,
-    "Día": "25 feb.",
+    "Día": "24 feb.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -2070,7 +2070,7 @@
   {
     "Año": 1754,
     "Nº": 189,
-    "Día": "26 feb.",
+    "Día": "25 feb.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -2081,6 +2081,17 @@
   {
     "Año": 1754,
     "Nº": 190,
+    "Día": "26 feb.",
+    "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
+    "Libreto": "",
+    "Compositor": "",
+    "Ocasión": "Tiempo de Carnaval",
+    "Fuentes": "SE: 75.",
+    "Transcripción": ""
+  },
+  {
+    "Año": 1754,
+    "Nº": 191,
     "Día": "14 ab.",
     "Título": "<i>Didone</i>...",
     "Libreto": "",
@@ -2091,7 +2102,7 @@
   },
   {
     "Año": 1754,
-    "Nº": 191,
+    "Nº": 192,
     "Día": "15-20 ab.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -2102,7 +2113,7 @@
   },
   {
     "Año": 1754,
-    "Nº": 192,
+    "Nº": 193,
     "Día": "15 ab.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -2113,19 +2124,8 @@
   },
   {
     "Año": 1754,
-    "Nº": 193,
-    "Día": "16 ab.",
-    "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
-    "Libreto": "",
-    "Compositor": "",
-    "Ocasión": "Tiempo pascual",
-    "Fuentes": "SE: 75.",
-    "Transcripción": ""
-  },
-  {
-    "Año": 1754,
     "Nº": 194,
-    "Día": "19 ab.",
+    "Día": "16 ab.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -2136,6 +2136,17 @@
   {
     "Año": 1754,
     "Nº": 195,
+    "Día": "19 ab.",
+    "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
+    "Libreto": "",
+    "Compositor": "",
+    "Ocasión": "Tiempo pascual",
+    "Fuentes": "SE: 75.",
+    "Transcripción": ""
+  },
+  {
+    "Año": 1754,
+    "Nº": 196,
     "Día": "21 ab.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -2146,7 +2157,7 @@
   },
   {
     "Año": 1754,
-    "Nº": 196,
+    "Nº": 197,
     "Día": "22 ab.",
     "Título": "¿<i>Didone</i>, <i>Siroe</i>?",
     "Libreto": "",
@@ -2157,7 +2168,7 @@
   },
   {
     "Año": 1754,
-    "Nº": 197,
+    "Nº": 198,
     "Día": "23 sep.",
     "Título": "<i>L’eroe cinese</i>",
     "Libreto": "Pietro Metastasio",
@@ -2168,7 +2179,7 @@
   },
   {
     "Año": 1754,
-    "Nº": 198,
+    "Nº": 199,
     "Día": "4 dic.",
     "Título": "<i>L’eroe...</i>",
     "Libreto": "",
@@ -2179,7 +2190,7 @@
   },
   {
     "Año": 1754,
-    "Nº": 199,
+    "Nº": 200,
     "Día": "18 dic.",
     "Título": "<i>Didone...</i>",
     "Libreto": "",
@@ -2190,7 +2201,7 @@
   },
   {
     "Año": 1754,
-    "Nº": 200,
+    "Nº": 201,
     "Día": "25 dic.",
     "Título": "<i>Didone...</i>",
     "Libreto": "",
@@ -2201,7 +2212,7 @@
   },
   {
     "Año": 1754,
-    "Nº": 201,
+    "Nº": 202,
     "Día": "31 dic.",
     "Título": "<i>Didone...</i>",
     "Libreto": "",
@@ -2212,7 +2223,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 202,
+    "Nº": 203,
     "Día": "5 en.",
     "Título": "<i>L’eroe...</i>",
     "Libreto": "",
@@ -2223,7 +2234,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 203,
+    "Nº": 204,
     "Día": "6 en.",
     "Título": "<i>L’eroe...</i>",
     "Libreto": "",
@@ -2234,7 +2245,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 204,
+    "Nº": 205,
     "Día": "10 en.",
     "Título": "<i>L’eroe...</i>",
     "Libreto": "",
@@ -2245,7 +2256,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 205,
+    "Nº": 206,
     "Día": "12 en.",
     "Título": "<i>Didone...</i>",
     "Libreto": "",
@@ -2256,7 +2267,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 206,
+    "Nº": 207,
     "Día": "13 en.",
     "Título": "<i>Didone</i>",
     "Libreto": "",
@@ -2267,7 +2278,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 207,
+    "Nº": 208,
     "Día": "15 en.",
     "Título": "¿<i>L’eroe</i>, <i>Didone</i>?",
     "Libreto": "",
@@ -2278,7 +2289,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 208,
+    "Nº": 209,
     "Día": "17 en.",
     "Título": "¿<i>L’eroe</i>, <i>Didone</i>?",
     "Libreto": "",
@@ -2289,7 +2300,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 209,
+    "Nº": 210,
     "Día": "19 en.",
     "Título": "<i>L’eroe...</i>",
     "Libreto": "",
@@ -2300,7 +2311,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 210,
+    "Nº": 211,
     "Día": "20 en.",
     "Título": "<i>Didone...</i>",
     "Libreto": "",
@@ -2311,7 +2322,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 211,
+    "Nº": 212,
     "Día": "22 en.",
     "Título": "¿<i>Didone</i>?",
     "Libreto": "",
@@ -2322,7 +2333,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 212,
+    "Nº": 213,
     "Día": "24 en.",
     "Título": "¿<i>Didone</i>?",
     "Libreto": "",
@@ -2333,7 +2344,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 213,
+    "Nº": 214,
     "Día": "28 en.",
     "Título": "¿<i>Didone</i>?",
     "Libreto": "",
@@ -2344,7 +2355,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 214,
+    "Nº": 215,
     "Día": "29 en.",
     "Título": "¿<i>Didone</i>?",
     "Libreto": "",
@@ -2355,7 +2366,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 215,
+    "Nº": 216,
     "Día": "30 en.",
     "Título": "¿<i>Didone</i>?",
     "Libreto": "",
@@ -2366,7 +2377,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 216,
+    "Nº": 217,
     "Día": "31 en.",
     "Título": "<i>Didone...</i>",
     "Libreto": "",
@@ -2377,7 +2388,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 217,
+    "Nº": 218,
     "Día": "2 feb.",
     "Título": "¿<i>Didone</i>?",
     "Libreto": "",
@@ -2388,7 +2399,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 218,
+    "Nº": 219,
     "Día": "3 feb.",
     "Título": "¿<i>Didone</i>?",
     "Libreto": "",
@@ -2399,7 +2410,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 219,
+    "Nº": 220,
     "Día": "4-10 feb.",
     "Título": "¿<i>Didone</i>?",
     "Libreto": "",
@@ -2410,19 +2421,8 @@
   },
   {
     "Año": 1755,
-    "Nº": 220,
-    "Día": "9 feb.",
-    "Título": "¿<i>Didone</i>?",
-    "Libreto": "",
-    "Compositor": "",
-    "Ocasión": "Tiempo de Carnaval",
-    "Fuentes": "SE: 76.",
-    "Transcripción": ""
-  },
-  {
-    "Año": 1755,
     "Nº": 221,
-    "Día": "10 feb.",
+    "Día": "9 feb.",
     "Título": "¿<i>Didone</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -2433,7 +2433,7 @@
   {
     "Año": 1755,
     "Nº": 222,
-    "Día": "11 feb.",
+    "Día": "10 feb.",
     "Título": "¿<i>Didone</i>?",
     "Libreto": "",
     "Compositor": "",
@@ -2444,6 +2444,17 @@
   {
     "Año": 1755,
     "Nº": 223,
+    "Día": "11 feb.",
+    "Título": "¿<i>Didone</i>?",
+    "Libreto": "",
+    "Compositor": "",
+    "Ocasión": "Tiempo de Carnaval",
+    "Fuentes": "SE: 76.",
+    "Transcripción": ""
+  },
+  {
+    "Año": 1755,
+    "Nº": 224,
     "Día": "30 mar.",
     "Título": "<i>Didone...</i>",
     "Libreto": "",
@@ -2454,7 +2465,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 224,
+    "Nº": 225,
     "Día": "31 mar.",
     "Título": "<i>Didone...</i>",
     "Libreto": "",
@@ -2465,7 +2476,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 225,
+    "Nº": 226,
     "Día": "1 ab.",
     "Título": "<i>L’eroe...</i>",
     "Libreto": "",
@@ -2476,7 +2487,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 226,
+    "Nº": 227,
     "Día": "4 ab.",
     "Título": "<i>L’eroe...</i>",
     "Libreto": "",
@@ -2487,7 +2498,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 227,
+    "Nº": 228,
     "Día": "6 ab.",
     "Título": "<i>Didone...</i>",
     "Libreto": "",
@@ -2498,7 +2509,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 228,
+    "Nº": 229,
     "Día": "7 ab.",
     "Título": "<i>L’eroe...</i>",
     "Libreto": "",
@@ -2509,7 +2520,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 229,
+    "Nº": 230,
     "Día": "11 ab.",
     "Título": "<i>L’eroe...</i>",
     "Libreto": "",
@@ -2520,7 +2531,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 230,
+    "Nº": 231,
     "Día": "13 ab.",
     "Título": "<i>L’eroe...</i>",
     "Libreto": "",
@@ -2531,7 +2542,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 231,
+    "Nº": 232,
     "Día": "23 sep.",
     "Título": "<i>Demofoonte</i>",
     "Libreto": "",
@@ -2542,7 +2553,7 @@
   },
   {
     "Año": 1755,
-    "Nº": 232,
+    "Nº": 233,
     "Día": "29 sept.-5 oct.",
     "Título": "<i>Demofoonte</i>",
     "Libreto": "",
@@ -2553,19 +2564,8 @@
   },
   {
     "Año": 1755,
-    "Nº": 233,
-    "Día": "29 sept.",
-    "Título": "<i>Demofoonte</i>",
-    "Libreto": "",
-    "Compositor": "",
-    "Ocasión": "",
-    "Fuentes": "SE: 77.",
-    "Transcripción": ""
-  },
-  {
-    "Año": 1755,
     "Nº": 234,
-    "Día": "1 oct.",
+    "Día": "29 sept.",
     "Título": "<i>Demofoonte</i>",
     "Libreto": "",
     "Compositor": "",
@@ -2576,7 +2576,7 @@
   {
     "Año": 1755,
     "Nº": 235,
-    "Día": "3 oct.",
+    "Día": "1 oct.",
     "Título": "<i>Demofoonte</i>",
     "Libreto": "",
     "Compositor": "",
@@ -2587,6 +2587,17 @@
   {
     "Año": 1755,
     "Nº": 236,
+    "Día": "3 oct.",
+    "Título": "<i>Demofoonte</i>",
+    "Libreto": "",
+    "Compositor": "",
+    "Ocasión": "",
+    "Fuentes": "SE: 77.",
+    "Transcripción": ""
+  },
+  {
+    "Año": 1755,
+    "Nº": 237,
     "Día": "5 oct.",
     "Título": "<i>Demofoonte </i>",
     "Libreto": "",
@@ -2597,7 +2608,7 @@
   },
   {
     "Año": 1756,
-    "Nº": 237,
+    "Nº": 238,
     "Día": "23 sep.",
     "Título": "<i>Nitteti</i>",
     "Libreto": "Pietro Metastasio",
@@ -2608,7 +2619,7 @@
   },
   {
     "Año": 1756,
-    "Nº": 238,
+    "Nº": 239,
     "Día": "24 sept.\n-5 oct.",
     "Título": "<i>Nitteti</i>",
     "Libreto": "",
@@ -2619,7 +2630,7 @@
   },
   {
     "Año": 1756,
-    "Nº": 239,
+    "Nº": 240,
     "Día": "26 sept.",
     "Título": "<i>¿Nitteti?</i>",
     "Libreto": "",
@@ -2630,7 +2641,7 @@
   },
   {
     "Año": 1756,
-    "Nº": 240,
+    "Nº": 241,
     "Día": "29 sept.",
     "Título": "<i>¿Nitteti?</i>",
     "Libreto": "",
@@ -2641,7 +2652,7 @@
   },
   {
     "Año": 1756,
-    "Nº": 241,
+    "Nº": 242,
     "Día": "3 oct.",
     "Título": "<i>¿Nitteti?</i>",
     "Libreto": "",
@@ -2652,7 +2663,7 @@
   },
   {
     "Año": 1756,
-    "Nº": 242,
+    "Nº": 243,
     "Día": "6 oct.",
     "Título": "<i>¿Nitteti?</i>",
     "Libreto": "",
@@ -2663,7 +2674,7 @@
   },
   {
     "Año": 1756,
-    "Nº": 243,
+    "Nº": 244,
     "Día": "4 dic.",
     "Título": "<i>Nitteti</i>",
     "Libreto": "",
@@ -2674,7 +2685,7 @@
   },
   {
     "Año": 1756,
-    "Nº": 244,
+    "Nº": 245,
     "Día": "18 dic.",
     "Título": "<i>Nitteti</i>",
     "Libreto": "",
@@ -2685,7 +2696,7 @@
   },
   {
     "Año": 1756,
-    "Nº": 245,
+    "Nº": 246,
     "Día": "25 dic.",
     "Título": "<i>Nitteti</i>",
     "Libreto": "",
@@ -2696,7 +2707,7 @@
   },
   {
     "Año": 1756,
-    "Nº": 246,
+    "Nº": 247,
     "Día": "28 dic.",
     "Título": "<i>Nitteti</i> o <i>Re pastore</i>",
     "Libreto": "",
@@ -2707,7 +2718,7 @@
   },
   {
     "Año": 1756,
-    "Nº": 247,
+    "Nº": 248,
     "Día": "¿?",
     "Título": "<i>Re pastore</i>",
     "Libreto": "Pietro Metastasio",
@@ -2718,7 +2729,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 248,
+    "Nº": 249,
     "Día": "1 en.",
     "Título": "<i>Nitteti</i> o <i>Re pastore</i>",
     "Libreto": "",
@@ -2729,7 +2740,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 249,
+    "Nº": 250,
     "Día": "2 en.",
     "Título": "<i>Nitteti</i> o <i>Re pastore</i>",
     "Libreto": "",
@@ -2740,7 +2751,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 250,
+    "Nº": 251,
     "Día": "6 en.",
     "Título": "<i>Nitteti</i>",
     "Libreto": "",
@@ -2751,7 +2762,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 251,
+    "Nº": 252,
     "Día": "9 en.",
     "Título": "<i>Nitteti</i>",
     "Libreto": "",
@@ -2762,7 +2773,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 252,
+    "Nº": 253,
     "Día": "12 en.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2773,7 +2784,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 253,
+    "Nº": 254,
     "Día": "21 en.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2784,7 +2795,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 254,
+    "Nº": 255,
     "Día": "23 en.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2795,7 +2806,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 255,
+    "Nº": 256,
     "Día": "26 en.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2806,7 +2817,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 256,
+    "Nº": 257,
     "Día": "27 en.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2817,7 +2828,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 257,
+    "Nº": 258,
     "Día": "28 en.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2828,7 +2839,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 258,
+    "Nº": 259,
     "Día": "30 en.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2839,7 +2850,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 259,
+    "Nº": 260,
     "Día": "31 en.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2850,7 +2861,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 260,
+    "Nº": 261,
     "Día": "31 en.-6 feb.",
     "Título": "<i>¿Nitteti?</i>",
     "Libreto": "",
@@ -2861,7 +2872,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 261,
+    "Nº": 262,
     "Día": "2 feb.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2872,7 +2883,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 262,
+    "Nº": 263,
     "Día": "3 feb.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2883,7 +2894,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 263,
+    "Nº": 264,
     "Día": "4 feb.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2894,7 +2905,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 264,
+    "Nº": 265,
     "Día": "6 feb.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2905,7 +2916,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 265,
+    "Nº": 266,
     "Día": "7 feb.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2916,7 +2927,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 266,
+    "Nº": 267,
     "Día": "9 feb.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2927,7 +2938,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 267,
+    "Nº": 268,
     "Día": "10 feb.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2938,7 +2949,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 268,
+    "Nº": 269,
     "Día": "11 feb.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2949,7 +2960,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 269,
+    "Nº": 270,
     "Día": "13 feb.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2960,7 +2971,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 270,
+    "Nº": 271,
     "Día": "14 feb.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2971,7 +2982,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 271,
+    "Nº": 272,
     "Día": "16 feb.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2982,7 +2993,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 272,
+    "Nº": 273,
     "Día": "17 feb.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -2993,7 +3004,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 273,
+    "Nº": 274,
     "Día": "18 feb.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -3004,7 +3015,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 274,
+    "Nº": 275,
     "Día": "19 feb.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -3015,7 +3026,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 275,
+    "Nº": 276,
     "Día": "20 feb.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -3026,7 +3037,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 276,
+    "Nº": 277,
     "Día": "21 feb.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -3037,7 +3048,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 277,
+    "Nº": 278,
     "Día": "22 feb.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -3048,7 +3059,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 278,
+    "Nº": 279,
     "Día": "10 ab.",
     "Título": "<i>Nitteti</i>",
     "Libreto": "",
@@ -3059,7 +3070,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 279,
+    "Nº": 280,
     "Día": "11 ab.",
     "Título": "<i>Nitteti</i>",
     "Libreto": "",
@@ -3070,19 +3081,8 @@
   },
   {
     "Año": 1757,
-    "Nº": 280,
-    "Día": "12 ab.",
-    "Título": "<i>Nitteti</i>",
-    "Libreto": "",
-    "Compositor": "",
-    "Ocasión": "Tiempo pascual",
-    "Fuentes": "GM 15, 12/4/1757: 120. MH 4/1757: 117-118; GM 16, 19/4/1757: 127.",
-    "Transcripción": "[130] “El <i>Domingo de Pasqua</i> [10] tuvo S. M. [Su Magestad] Capilla publica en dicha Iglesia, y oyò la Missa Mayor, que celebrò el Señor Nuncio, y cantò la Musica de la Real Capilla, assistiendo à ella la Reyna nuestra Señora desde la Tribuna; y por la noche se representò en presencia de sus Magestades, y en su Real Colisèo la Opera intitulada: <i>La Niteti</i>” (<i>GM</i> 15).\n[131] “El Martes [12] assistieron igualmente à la Missa Mayor, que se celebrò en la referida Iglesia; y esta noche, y la antecedente [11] concurrieron à la Opera, que se representò en su Real Colisèo [...], como assimismo el Domingo [10] immediato à la Misa Mayor, cantada por la Musica; y por la noche tuvieron la diversion de la Opera” (<i>GM</i> 16).\n[132] Mezcla ambas y parece incluir también los días 14-16, pero podría tratarse de una mala redacción al copiar las noticias de la <i>GM</i>: “El Martes [12] asistieron igualmente à la Misa Mayor, que se celebró en la referida Iglesia; y esta noche, y la antecedente [11] concurrieron à la Opera: y los dias Jueves, Viernes y Sabado de la Semana de Pasqua [14, 15 y 16] se celebró por la Real Capilla el Oficio de las Quarenta Horas [...]; y por la noche [¿14, 15, 16?] tuvieron la diversion de la Opera” (<i>MH</i>)."
-  },
-  {
-    "Año": 1757,
     "Nº": 281,
-    "Día": "¿14-16 ab.?",
+    "Día": "12 ab.",
     "Título": "<i>Nitteti</i>",
     "Libreto": "",
     "Compositor": "",
@@ -3093,6 +3093,17 @@
   {
     "Año": 1757,
     "Nº": 282,
+    "Día": "¿14-16 ab.?",
+    "Título": "<i>Nitteti</i>",
+    "Libreto": "",
+    "Compositor": "",
+    "Ocasión": "Tiempo pascual",
+    "Fuentes": "GM 15, 12/4/1757: 120. MH 4/1757: 117-118; GM 16, 19/4/1757: 127.",
+    "Transcripción": "[130] “El <i>Domingo de Pasqua</i> [10] tuvo S. M. [Su Magestad] Capilla publica en dicha Iglesia, y oyò la Missa Mayor, que celebrò el Señor Nuncio, y cantò la Musica de la Real Capilla, assistiendo à ella la Reyna nuestra Señora desde la Tribuna; y por la noche se representò en presencia de sus Magestades, y en su Real Colisèo la Opera intitulada: <i>La Niteti</i>” (<i>GM</i> 15).\n[131] “El Martes [12] assistieron igualmente à la Missa Mayor, que se celebrò en la referida Iglesia; y esta noche, y la antecedente [11] concurrieron à la Opera, que se representò en su Real Colisèo [...], como assimismo el Domingo [10] immediato à la Misa Mayor, cantada por la Musica; y por la noche tuvieron la diversion de la Opera” (<i>GM</i> 16).\n[132] Mezcla ambas y parece incluir también los días 14-16, pero podría tratarse de una mala redacción al copiar las noticias de la <i>GM</i>: “El Martes [12] asistieron igualmente à la Misa Mayor, que se celebró en la referida Iglesia; y esta noche, y la antecedente [11] concurrieron à la Opera: y los dias Jueves, Viernes y Sabado de la Semana de Pasqua [14, 15 y 16] se celebró por la Real Capilla el Oficio de las Quarenta Horas [...]; y por la noche [¿14, 15, 16?] tuvieron la diversion de la Opera” (<i>MH</i>)."
+  },
+  {
+    "Año": 1757,
+    "Nº": 283,
     "Día": "17 ab.",
     "Título": "¿<i>Nitteti</i>?",
     "Libreto": "",
@@ -3103,7 +3114,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 283,
+    "Nº": 284,
     "Día": "23 sep.",
     "Título": "<i>Adriano in Siria</i>",
     "Libreto": "Pietro Metastasio",
@@ -3114,7 +3125,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 284,
+    "Nº": 285,
     "Día": "25 sep.",
     "Título": "<i>Adriano...</i>",
     "Libreto": "",
@@ -3125,7 +3136,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 285,
+    "Nº": 286,
     "Día": "26 sept.\n-4 oct.",
     "Título": "<i>Adriano...</i>",
     "Libreto": "",
@@ -3136,7 +3147,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 286,
+    "Nº": 287,
     "Día": "30 sept.",
     "Título": "<i>Adriano...</i>",
     "Libreto": "",
@@ -3147,7 +3158,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 287,
+    "Nº": 288,
     "Día": "2 oct.",
     "Título": "<i>Adriano...</i>",
     "Libreto": "",
@@ -3158,7 +3169,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 288,
+    "Nº": 289,
     "Día": "4 dic.",
     "Título": "<i>Nitteti</i>",
     "Libreto": "",
@@ -3169,7 +3180,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 289,
+    "Nº": 290,
     "Día": "18 dic.",
     "Título": "<i>Nitteti</i>",
     "Libreto": "",
@@ -3180,7 +3191,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 290,
+    "Nº": 291,
     "Día": "25 dic.",
     "Título": "<i>Adriano...</i>",
     "Libreto": "",
@@ -3191,7 +3202,7 @@
   },
   {
     "Año": 1757,
-    "Nº": 291,
+    "Nº": 292,
     "Día": "28 dic.",
     "Título": "¿<i>Adriano </i>o<i> Nitteti?</i>",
     "Libreto": "",
@@ -3202,7 +3213,7 @@
   },
   {
     "Año": 1758,
-    "Nº": 292,
+    "Nº": 293,
     "Día": "27 mar.",
     "Título": "<i>Adriano...</i>",
     "Libreto": "",
@@ -3213,7 +3224,7 @@
   },
   {
     "Año": 1758,
-    "Nº": 293,
+    "Nº": 294,
     "Día": "28 mar.",
     "Título": "<i>Adriano...</i>",
     "Libreto": "",
@@ -3224,7 +3235,7 @@
   },
   {
     "Año": 1758,
-    "Nº": 294,
+    "Nº": 295,
     "Día": "31 mar.",
     "Título": "<i>Nitteti</i>",
     "Libreto": "",
@@ -3235,7 +3246,7 @@
   },
   {
     "Año": 1758,
-    "Nº": 295,
+    "Nº": 296,
     "Día": "3 ab.",
     "Título": "¿<i>Adriano </i>o<i> Nitteti?</i>",
     "Libreto": "",
@@ -3246,7 +3257,7 @@
   },
   {
     "Año": 1758,
-    "Nº": 296,
+    "Nº": 297,
     "Día": "6 ab.",
     "Título": "¿<i>Adriano </i>o<i> Nitteti?</i>",
     "Libreto": "",
@@ -3257,7 +3268,7 @@
   },
   {
     "Año": 1758,
-    "Nº": 297,
+    "Nº": 298,
     "Día": "9 ab.",
     "Título": "¿<i>Adriano </i>o<i> Nitteti?</i>",
     "Libreto": "",
@@ -3268,7 +3279,7 @@
   },
   {
     "Año": 1758,
-    "Nº": 298,
+    "Nº": 299,
     "Día": "12-17 ab.",
     "Título": "¿<i>Adriano </i>o<i> Nitteti?</i>",
     "Libreto": "",
@@ -3279,7 +3290,7 @@
   },
   {
     "Año": 1758,
-    "Nº": 299,
+    "Nº": 300,
     "Día": "12 ab.",
     "Título": "¿<i>Adriano </i>o<i> Nitteti?</i>",
     "Libreto": "",
@@ -3290,7 +3301,7 @@
   },
   {
     "Año": 1758,
-    "Nº": 300,
+    "Nº": 301,
     "Día": "14 ab.",
     "Título": "¿<i>Adriano </i>o<i> Nitteti?</i>",
     "Libreto": "",
@@ -3301,7 +3312,7 @@
   },
   {
     "Año": 1758,
-    "Nº": 301,
+    "Nº": 302,
     "Día": "16 ab.",
     "Título": "¿<i>Adriano </i>o<i> Nitteti?</i>",
     "Libreto": "",
@@ -3312,7 +3323,7 @@
   },
   {
     "Año": 1758,
-    "Nº": 302,
+    "Nº": 303,
     "Día": "19 ab.",
     "Título": "¿<i>Adriano </i>o<i> Nitteti?</i>",
     "Libreto": "",
@@ -3323,7 +3334,7 @@
   },
   {
     "Año": 1758,
-    "Nº": 303,
+    "Nº": 304,
     "Día": "21 ab.",
     "Título": "¿<i>Adriano </i>o<i> Nitteti?</i>",
     "Libreto": "",
@@ -3334,7 +3345,7 @@
   },
   {
     "Año": 1758,
-    "Nº": 304,
+    "Nº": 305,
     "Día": "23 ab.",
     "Título": "¿<i>Adriano </i>o<i> Nitteti?</i>",
     "Libreto": "",
@@ -3345,7 +3356,7 @@
   },
   {
     "Año": 1758,
-    "Nº": 305,
+    "Nº": 306,
     "Día": "26 ab.",
     "Título": "¿<i>Adriano </i>o<i> Nitteti?</i>",
     "Libreto": "",
@@ -3356,7 +3367,7 @@
   },
   {
     "Año": 1758,
-    "Nº": 306,
+    "Nº": 307,
     "Día": "28 ab.",
     "Título": "¿<i>Adriano </i>o<i> Nitteti?</i>",
     "Libreto": "",
@@ -3367,7 +3378,7 @@
   },
   {
     "Año": 1758,
-    "Nº": 307,
+    "Nº": 308,
     "Día": "30 ab.",
     "Título": "¿<i>Adriano </i>o<i> Nitteti?</i>",
     "Libreto": "",
