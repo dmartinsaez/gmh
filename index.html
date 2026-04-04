@@ -38,13 +38,18 @@
 }
 @media (max-width: 600px) {
   .nota-autor {
-  flex-direction: column;
-}
-
-.imagen-usal,
-.texto-usal {
-  width: 100%;
-}
+    flex-direction: column !important;
+    align-items: center;
+    text-align: center;
+  }
+  .texto-usal {
+    text-align: center !important;
+    width: 100%;
+  }
+  .imagen-usal {
+    width: 200px !important; /* Tamaño más adecuado para móvil */
+    margin-bottom: 10px;
+  }
   .nav-farinelli { flex-direction: column; align-items: center; gap: 5px; }
 }
 
@@ -188,23 +193,21 @@ align-self: center;
 
 
 .intro-recuadro .panel {
-    display: block;  
-    max-height: 0;   
+    display: none;  /* Esto hará que estén cerrados al cargar */
     overflow: hidden;
     padding: 0 20px;            
     background-color: #ffffff;
     border-radius: 0 0 5px 5px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     margin: 0 auto;              
-    transition: max-height 0.3s ease, padding 0.3s ease;
     text-align: justify;         
     max-width: 850px;            
     width: 100%;                 
     box-sizing: border-box;
 }
-
+    
 .intro-recuadro .panel.abierto {
-    max-height: 2000px;
+    display: block;
     padding: 15px 20px;          
     margin-bottom: 15px;         
 }
