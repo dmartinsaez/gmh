@@ -396,16 +396,21 @@ align-self: center;
 
     
 .nota-autor {
-  padding-top: 12px;
+  padding-top: 20px;
   border-top: 1px solid #ddd;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   line-height: 1.4;
   color: #555;
-  text-align: center;
   width: 100%;
   box-sizing: border-box;
-  margin: 20px 0 30px 0;
+  margin: 30px 0 10px 0;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
 }
+    
     .imagen-usal {
   width: 50%;
   height: auto;
@@ -580,13 +585,12 @@ td button.btn-ver-referencia {
     </p>
   </div>
   
-<div class="nota-autor" style="display:flex; flex-direction:row-reverse; gap:20px; align-items:center; flex-wrap:nowrap;">
-  
-  <img src="usal.png" alt="USAL" class="imagen-usal">
-
-  <div class="texto-usal">
+<div class="nota-autor">
+  <img src="usal.png" alt="USAL" class="imagen-usal" style="width: 280px; flex-shrink: 0;">
+  <div class="texto-usal" style="text-align: right; flex-grow: 1;">
     Este recurso académico y educativo ha sido creado por Daniel Martín Sáez (Universidad de Salamanca) en el marco de los proyectos LexiMus-USAL (2023-2026, PID2022-139589NB-C33) y TRANSRED (2025-2029, PID2024-158275NB-C22), financiados por el Ministerio de Ciencia e Innovación de España.
-  </div> </div>
+  </div>
+</div>
 
 </div>
 
