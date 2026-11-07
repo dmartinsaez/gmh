@@ -74,18 +74,65 @@ h1 {
         .nota-anexos { margin-top: 15px; font-size: 0.85em; color: #7f8c8d; font-style: italic; }
 
         @media (max-width: 900px) { .seccion-anexos-dupla { grid-template-columns: 1fr; } .metricas-grid { grid-template-columns: repeat(2, 1fr); } }
+.nota-autor {
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: #555;
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 40px;
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .imagen-usal {
+      width: 280px;
+      height: auto;
+      flex-shrink: 0;
+    }
+    .texto-usal {
+      width: 50%;
+      text-align: right;
+      flex-grow: 1;
+    }
+    @media (max-width: 600px) {
+      .nota-autor {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        padding: 0 !important;
+      }
+      .texto-usal {
+        text-align: center !important;
+        width: 100% !important;
+        padding: 0 10px !important;
+        box-sizing: border-box;
+      }
+      .imagen-usal {
+        width: 220px !important; 
+        margin: 0 auto 5px auto !important;
+        display: block !important;
+      }
+    }
     </style>
 </head>
 <body>
 
 <div class="contenedor">
-    <h1>Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747–1758)</h1>
+    <h1>Documentario de prensa y calendario de las representaciones de ópera italiana organizadas por Carlo Broschi Farinelli durante el reinado de Fernando VI y Bárbara de Braganza (1747-1758)</h1>
 
-    <nav class="nav-farinelli">
-        <a href="index.html">Documentario y Buscador</a>
-        <a href="analisis.html">Análisis del calendario</a>
-        <a href="textos.html" class="active">Análisis léxico</a>
-    </nav>
+<nav class="nav-farinelli">
+    <a href="index.html">Documentario y Buscador</a>
+    <a href="analisis.html">Análisis del calendario</a>
+    <a href="textos.html" class="active">Análisis léxico</a>
+    <a href="mapa.html" target="_blank" rel="noopener noreferrer">Mapa 3D</a>
+    <a href="contacto.html">Contacto</a>
+  </nav>
 
     <div class="metricas-grid">
         <div class="metrica-card">
@@ -134,6 +181,12 @@ h1 {
         </div>
     </div>
     <p class="nota-anexos">Nota: Los términos de los anexos se muestran normalizados (sin distinguir mayúsculas ni acentos) para garantizar la coherencia estadística del conteo agrupado.</p>
+<div class="nota-autor">
+      <img src="usal.png" alt="USAL" class="imagen-usal">
+      <div class="texto-usal">
+        Este recurso académico ha sido creado por Daniel Martín Sáez (Universidad de Salamanca) en el marco de los proyectos LexiMus-USAL (2023-2026, PID2022-139589NB-C33) y TransRed-USAL (2025-2029, PID2024-158275NB-C22), financiados por el Ministerio de Ciencia e Innovación de España. 
+      </div>
+    </div>
 </div>
 
 <script>
