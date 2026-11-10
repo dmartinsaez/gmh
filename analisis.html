@@ -2,8 +2,9 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+      <link rel="icon" href="favicon.png" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estadísticas y análisis - Documentario de prensa 'Farinelli'</title>
+    <title>Análisis del calendario - Documentario de prensa 'Farinelli'</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Librería SheetJS para leer archivos Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -72,11 +73,42 @@
         .txt-noches { font-size: 0.85em; font-family: sans-serif; text-align: right; color: #333; }
         .opera-detalle { display: none; padding: 20px; background: #f9f6ef; border-bottom: 2px solid var(--oro); font-size: 0.9em; line-height: 1.6; grid-column: 1 / span 4; }
 
-        .contenedor-tabla-historica { width: 100%; overflow-x: auto; background: white; border: 1px solid var(--borde); border-radius: 8px; padding: 10px; margin-bottom: 30px; box-sizing: border-box; }
-        .tabla-historica { width: 100%; border-collapse: collapse; font-family: sans-serif; font-size: 0.82em; text-align: center; }
-        .tabla-historica th, .tabla-historica td { border: 1px solid #dcdde1; padding: 8px 6px; vertical-align: middle; }
-        .tabla-historica th { background-color: #f1f2f6; color: var(--azul); font-weight: bold; text-transform: uppercase; font-size: 0.9em; }
-        .tabla-historica td:first-child { background-color: #f1f2f6; color: var(--azul); font-weight: bold; font-size: 0.95em; font-family: Georgia, serif; }
+.contenedor-tabla-historica { width: 100%; overflow-x: auto; background: white; border: 1px solid var(--borde); border-radius: 8px; padding: 10px; margin-bottom: 30px; box-sizing: border-box; }
+        
+        .tabla-historica { 
+            width: 100%; 
+            border-collapse: collapse; 
+            font-family: sans-serif; 
+            font-size: 0.82em; 
+            text-align: center;
+            table-layout: fixed; /* Obliga a que las 8 columnas repartan el espacio de forma idéntica */
+        }
+
+        /* Indicamos que cada una de las 8 columnas ocupe exactamente un 12.5% */
+        .tabla-historica th, .tabla-historica td { 
+            width: 12.5%; 
+            border: 1px solid #dcdde1; 
+            padding: 8px 4px; 
+            vertical-align: middle;
+            word-break: normal;        /* Evita que se rompan palabras a la fuerza */
+            overflow-wrap: normal;     /* Mantiene las palabras íntegras y completas */
+        }
+
+        .tabla-historica th { 
+            background-color: #f1f2f6; 
+            color: var(--azul); 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            font-size: 0.75em; /* Ligeramente más compacto para que las dobles palabras respiren mejor */
+        }
+        
+        .tabla-historica td:first-child { 
+            background-color: #f1f2f6; 
+            color: var(--azul); 
+            font-weight: bold; 
+            font-size: 0.95em; 
+            font-family: Georgia, serif; 
+        }
         
         .col-atenuada { background-color: #fafbfc; color: #7f8c8d; }
         th.col-atenuada { background-color: #f4f5f7; color: #5a6567; }
